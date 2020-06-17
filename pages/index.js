@@ -1,9 +1,11 @@
-import Head from 'next/head'
+import Head from 'next/head';
+import Link from 'next/link';
+
 
 const Home = () => (
   <div className="container">
     <Head>
-      <title>Create Next App</title>
+      <title>LPDev Testing</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
@@ -12,38 +14,10 @@ const Home = () => (
         Next.js Testing
       </h1>
 
-      <p className="description">
-        Get started by editing <code>pages/index.js</code>
-      </p>
+      <div className="description">
+        <p>This website will be the future home of my portfolio, currently live at <a href="https://lpdev.io">lpdev.io</a></p>
 
-      <div className="grid">
-        <a href="https://nextjs.org/docs" className="card">
-          <h3>Documentation &rarr;</h3>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a href="https://nextjs.org/learn" className="card">
-          <h3>Learn &rarr;</h3>
-          <p>Learn about Next.js in an interactive course with quizzes!</p>
-        </a>
-
-        <a
-          href="https://github.com/zeit/next.js/tree/master/examples"
-          className="card"
-        >
-          <h3>Examples &rarr;</h3>
-          <p>Discover and deploy boilerplate example Next.js projects.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          className="card"
-        >
-          <h3>Deploy &rarr;</h3>
-          <p>
-            Instantly deploy your Next.js site to a public URL with Vercel.
-          </p>
-        </a>
+        <Link href="/posts/first-post"><a className="button">Internal Page</a></Link>
       </div>
     </main>
 
@@ -53,7 +27,7 @@ const Home = () => (
         target="_blank"
         rel="noopener noreferrer"
       >
-        Powered by <img src="/vercel.svg" alt="Vercel Logo" />
+        &copy; LPDev {new Date().getFullYear()}
       </a>
     </footer>
 
@@ -85,16 +59,6 @@ const Home = () => (
         align-items: center;
       }
 
-      footer img {
-        margin-left: 0.5rem;
-      }
-
-      footer a {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
       a {
         color: inherit;
         text-decoration: none;
@@ -114,7 +78,7 @@ const Home = () => (
       .title {
         margin: 0;
         line-height: 1.15;
-        font-size: 4rem;
+        font-size: 3.2rem;
       }
 
       .title,
@@ -124,7 +88,7 @@ const Home = () => (
 
       .description {
         line-height: 1.5;
-        font-size: 1.5rem;
+        font-size: 1.3rem;
       }
 
       code {
@@ -136,51 +100,17 @@ const Home = () => (
           DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
       }
 
-      .grid {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-
-        max-width: 800px;
-        margin-top: 3rem;
+      .button {
+        display: inline-block;
+        background: #0077F6;
+        color: white;
+        padding: 6px 22px;
+        border-radius: 8px;
+        margin-top: 10px;
+        transition: background 0.2s linear;
       }
-
-      .card {
-        margin: 1rem;
-        flex-basis: 45%;
-        padding: 1.5rem;
-        text-align: left;
-        color: inherit;
-        text-decoration: none;
-        border: 1px solid #eaeaea;
-        border-radius: 10px;
-        transition: color 0.15s ease, border-color 0.15s ease;
-      }
-
-      .card:hover,
-      .card:focus,
-      .card:active {
-        color: #0070f3;
-        border-color: #0070f3;
-      }
-
-      .card h3 {
-        margin: 0 0 1rem 0;
-        font-size: 1.5rem;
-      }
-
-      .card p {
-        margin: 0;
-        font-size: 1.25rem;
-        line-height: 1.5;
-      }
-
-      @media (max-width: 600px) {
-        .grid {
-          width: 100%;
-          flex-direction: column;
-        }
+      .button:hover {
+        background: #2790FF;
       }
     `}</style>
 
@@ -198,6 +128,6 @@ const Home = () => (
       }
     `}</style>
   </div>
-)
+);
 
-export default Home
+export default Home;
