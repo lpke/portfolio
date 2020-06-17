@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
 
-
 const Home = () => (
   <div className="container">
     <Head>
@@ -15,7 +14,7 @@ const Home = () => (
       </h1>
 
       <div className="description">
-        <p>This website will be the future home of my portfolio, currently live at <a href="https://lpdev.io">lpdev.io</a></p>
+        <p>This website will be the future home of my portfolio, currently live at <a href="https://lpdev.io" target="_blank">lpdev.io</a></p>
 
         <Link href="/posts/first-post"><a className="button">Internal Page</a></Link>
       </div>
@@ -23,9 +22,8 @@ const Home = () => (
 
     <footer>
       <a
-        href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+        href="https://lpdev.io"
         target="_blank"
-        rel="noopener noreferrer"
       >
         &copy; LPDev {new Date().getFullYear()}
       </a>
@@ -64,14 +62,12 @@ const Home = () => (
         text-decoration: none;
       }
 
-      .title a {
+      main a {
         color: #0070f3;
         text-decoration: none;
       }
 
-      .title a:hover,
-      .title a:focus,
-      .title a:active {
+      main a:hover:not(.button) {
         text-decoration: underline;
       }
 
@@ -103,7 +99,7 @@ const Home = () => (
       .button {
         display: inline-block;
         background: #0077F6;
-        color: white;
+        color: white !important;
         padding: 6px 22px;
         border-radius: 8px;
         margin-top: 10px;
