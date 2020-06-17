@@ -15,16 +15,13 @@ const Home = () => (
 
       <div className="description">
         <p>This website will be the future home of my portfolio, currently live at <a href="https://lpdev.io" target="_blank">lpdev.io</a></p>
-
+        
         <Link href="/posts/first-post"><a className="button">Internal Page</a></Link>
       </div>
     </main>
 
     <footer>
-      <a
-        href="https://lpdev.io"
-        target="_blank"
-      >
+      <a href="https://lpdev.io" target="_blank">
         &copy; LPDev {new Date().getFullYear()}
       </a>
     </footer>
