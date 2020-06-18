@@ -17,7 +17,7 @@ const Home = () => (
     </p>
     
     <Link href="internal-page">
-      <a className="button">Internal Page</a>
+      <a className="button">Example Page</a>
     </Link>
 
     <style jsx>{`
