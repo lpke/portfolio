@@ -1,14 +1,9 @@
-import Head from 'next/head';
 import Link from 'next/link';
 import BasicContentArea from 'components/basic-content';
 
 export default function FirstPost() {
   return (
-    <BasicContentArea>
-      <Head>
-        <title>Internal Page</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <BasicContentArea title="Internal Page">
 
       <h1>Internal Page</h1>
       <p>

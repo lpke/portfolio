@@ -1,10 +1,18 @@
+import Head from 'next/head';
 import styles from 'components/basic-content.module.scss';
 
-function BasicContentArea({ children }) {
+function BasicContentArea({ children, title }) {
   return (
-    <div className={styles.container}>
-      {children}
-    </div>
+    <>
+      <Head>
+        <title>{title || 'LPDev App'}</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <div className={styles.container}>
+        {children}
+      </div>
+    </>
   );
 }
 
