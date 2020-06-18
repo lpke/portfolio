@@ -1,3 +1,5 @@
-# LPDev Portfolio
-Currently empty apart from some Next.js starter stuff.
-This repository will grow as I learn Next.js.
+# LPDev Portfolio Repository
+This is the root folder / app directory for my future replacement portfolio website.
+
+My current live portfolio was created on the Squarespace Developer Platform and is live at [lpdev.io](https://lpdev.io).
+I'm making the move to Next.js as I learn the ins and outs of the JAM Stack, React, and SSR/Static Rendering.
