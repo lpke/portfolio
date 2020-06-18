@@ -13,8 +13,7 @@ const Home = () => (
     <h1>Next.js Testing</h1>
 
     <p>
-      This website will be the future home of my portfolio, currently live at
-      <a href="https://lpdev.io" target="_blank">lpdev.io</a>
+      This website will be the future home of my portfolio, currently live at <a href="https://lpdev.io" target="_blank">lpdev.io</a>
     </p>
     
     <Link href="internal-page">
