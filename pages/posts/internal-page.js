@@ -12,9 +12,10 @@ export default function FirstPost() {
       <h1>Internal Page</h1>
       <p>
         <Link href="/">
-          <a>Back to home</a>
+          <a className="button">Back to home</a>
         </Link>
       </p>
+
     </Layout>
   );
 }

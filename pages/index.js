@@ -16,7 +16,7 @@ const Home = () => (
       <div className="description">
         <p>This website will be the future home of my portfolio, currently live at <a href="https://lpdev.io" target="_blank">lpdev.io</a></p>
         
-        <Link href="/posts/first-post"><a className="button">Internal Page</a></Link>
+        <Link href="posts/internal-page"><a className="button">Internal Page</a></Link>
       </div>
     </main>
 
@@ -54,20 +54,6 @@ const Home = () => (
         align-items: center;
       }
 
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-
-      main a {
-        color: #0070f3;
-        text-decoration: none;
-      }
-
-      main a:hover:not(.button) {
-        text-decoration: underline;
-      }
-
       .title {
         margin: 0;
         line-height: 1.15;
@@ -79,11 +65,6 @@ const Home = () => (
         text-align: center;
       }
 
-      .description {
-        line-height: 1.5;
-        font-size: 1.3rem;
-      }
-
       code {
         background: #fafafa;
         border-radius: 5px;
@@ -91,19 +72,6 @@ const Home = () => (
         font-size: 1.1rem;
         font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
           DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-      }
-
-      .button {
-        display: inline-block;
-        background: #0077F6;
-        color: white !important;
-        padding: 6px 22px;
-        border-radius: 8px;
-        margin-top: 10px;
-        transition: background 0.2s linear;
-      }
-      .button:hover {
-        background: #2790FF;
       }
     `}</style>
 
