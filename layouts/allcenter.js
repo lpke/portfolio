@@ -1,15 +1,15 @@
-function Dashboard(props) {
+function Allcenter(props) {
 
   return (
     <>
-      <div className="dash-wrapper">
+      <div className="center-wrapper">
 
         {props.children}
 
       </div>
 
       <style jsx>{`
-        .dash-wrapper {
+        .center-wrapper {
           min-height: 100vh;
           overflow-y: hidden;
           width: 100%;
@@ -19,4 +19,4 @@ function Dashboard(props) {
   );
 }
 
-export default Dashboard;
+export default Allcenter;
