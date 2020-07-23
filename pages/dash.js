@@ -14,6 +14,7 @@ function Dashboard() {
 
           <Input
             id="search"
+            className="dash-search"
             mono
           />
 
@@ -30,6 +31,13 @@ function Dashboard() {
           flex-direction: column;
           justify-items: center;
           justify-content: center;
+        }
+      `}</style>
+
+      <style jsx global>{`
+        input.input.dash-search {
+          height: 55px;
+          //...
         }
       `}</style>
     </>
