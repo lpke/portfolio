@@ -46,13 +46,6 @@ function Input(props) {
         }
 
         .input {
-          --height: 40px;
-          --darkest-background: #0a0a0b;
-          --dark-background: #121213;
-          --dark-reg-text: #515151;
-          --light-reg-text: #cfcfcf;
-          --dark-faded-text: #b1b1b1;
-
           color: #b1b1b1;
           background: #262628;
           height: 40px;
@@ -72,7 +65,7 @@ function Input(props) {
           }
 
           &.mono {
-            padding-top: 9px;
+            padding-top: 12px;
             font-family: "JetBrains Mono", monospace;
           }
 
