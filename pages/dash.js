@@ -1,5 +1,6 @@
 import Center from 'layouts/allcenter';
 import Head from 'next/head';
+import Input from 'components/input';
 
 function Dashboard() {
   return (
@@ -8,19 +9,27 @@ function Dashboard() {
         <title>Dash</title>
       </Head>
 
-      <Center>
+      <Center bgColor="#2A2A2E">
         <div className="dash-wrapper">
 
-          <h1>Dash</h1>
+          <Input
+            id="search"
+            mono
+          />
 
         </div>
       </Center>
 
       <style jsx>{`
         .dash-wrapper {
-          background: #222;
+          background: #2A2A2E;
+          color: #f7f7f7;
           width: 100%;
-          height: 100%;
+          padding: 15vmin;
+          display: flex;
+          flex-direction: column;
+          justify-items: center;
+          justify-content: center;
         }
       `}</style>
     </>

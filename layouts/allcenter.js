@@ -10,9 +10,15 @@ function Allcenter(props) {
 
       <style jsx>{`
         .center-wrapper {
+          background: ${props.bgColor};
           min-height: 100vh;
           overflow-y: hidden;
           width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-items: center;
+          justify-content: center;
+          padding: ${props.padding};
         }
       `}</style>
     </>
