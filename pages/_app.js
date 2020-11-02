@@ -17,12 +17,6 @@ class App extends React.Component {
     return (
       <>
         <Component {...pageProps} />
-
-        <footer>
-          <a href="https://lpdev.io" target="_blank">
-            &copy; LPDev {new Date().getFullYear()}
-          </a>
-        </footer>
       </>
     );
   }
