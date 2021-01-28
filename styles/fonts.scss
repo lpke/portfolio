@@ -1,0 +1,93 @@
+//#region -> Fira Sans
+@font-face {
+  font-family: "Fira Sans";
+  src: url(../public/fonts/FiraSans/FiraSans-Thin.ttf) format("truetype");
+  font-weight: 100; //thin
+}
+
+@font-face {
+  font-family: "Fira Sans";
+  src: url(../public/fonts/FiraSans/FiraSans-ExtraLight.ttf) format("truetype");
+  font-weight: 200; //extra-light
+}
+
+@font-face {
+  font-family: "Fira Sans";
+  src: url(../public/fonts/FiraSans/FiraSans-Light.ttf) format("truetype");
+  font-weight: 300; //light
+}
+
+@font-face {
+  font-family: "Fira Sans";
+  src: url(../public/fonts/FiraSans/FiraSans-Regular.ttf) format("truetype");
+  font-weight: normal; //400 regular
+}
+
+@font-face {
+  font-family: "Fira Sans";
+  src: url(../public/fonts/FiraSans/FiraSans-Medium.ttf) format("truetype");
+  font-weight: 500; //medium
+}
+
+@font-face {
+  font-family: "Fira Sans";
+  src: url(../public/fonts/FiraSans/FiraSans-SemiBold.ttf) format("truetype");
+  font-weight: 600; //semi-bold
+}
+
+@font-face {
+  font-family: "Fira Sans";
+  src: url(../public/fonts/FiraSans/FiraSans-Bold.ttf) format("truetype");
+  font-weight: bold; //700 bold
+}
+
+@font-face {
+  font-family: "Fira Sans";
+  src: url(../public/fonts/FiraSans/FiraSans-ExtraBold.ttf) format("truetype");
+  font-weight: 800; //extra-bold
+}
+
+@font-face {
+  font-family: "Fira Sans";
+  src: url(../public/fonts/FiraSans/FiraSans-Black.ttf) format("truetype");
+  font-weight: 900; //black
+}
+//#endregion <- Fira Sans
+
+//#region -> Roboto
+@font-face {
+  font-family: "Roboto";
+  src: url(../public/fonts/Roboto/Roboto-Thin.ttf) format("truetype");
+  font-weight: 100; //thin
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url(../public/fonts/Roboto/Roboto-Light.ttf) format("truetype");
+  font-weight: 300; //light
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url(../public/fonts/Roboto/Roboto-Regular.ttf) format("truetype");
+  font-weight: normal; //400 regular
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url(../public/fonts/Roboto/Roboto-Medium.ttf) format("truetype");
+  font-weight: 500; //medium
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url(../public/fonts/Roboto/Roboto-Bold.ttf) format("truetype");
+  font-weight: bold; //700 bold
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url(../public/fonts/Roboto/Roboto-Black.ttf) format("truetype");
+  font-weight: 900; //black
+}
+//#endregion <- Roboto

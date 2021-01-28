@@ -1,0 +1,55 @@
+@mixin scrollbar($thumb, $track: rgba(0, 0, 0, 0)) {
+  // Firefox (modern standard)
+  scrollbar-width: thin;
+  scrollbar-color: $thumb $track;
+
+  // Chrome & Safari (old standard)
+  &::-webkit-scrollbar {
+    width: 6px;
+    &-track {
+      background: $track;
+    }
+    &-thumb {
+      background-color: $thumb;
+      border-radius: 20px;
+      border: 3px solid $track;
+    }
+  }
+}
+
+@mixin invisScroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@mixin flex(
+  $flex-direction: row,
+  $justify-content: center,
+  $align-items: center,
+  $align-content: flex-start,
+  $flex-wrap: nowrap
+) {
+  display: flex;
+
+  flex-direction: $flex-direction;
+  // row (default), column
+
+  justify-content: $justify-content;
+  // flex-start, flex-end, center (default), space-between, space-around, space-evenly
+  // where item grouping is based from
+
+  align-items: $align-items;
+  // flex-start, flex-end, center (default), stretch, baseline
+  // how items are aligned relative to each other
+
+  align-content: $align-content;
+  // flex-start (default), flex-end, center, stretch, space-between, space-around
+  // like justify content but in relation to the whole container
+
+  flex-wrap: $flex-wrap;
+  // wrap, nowrap (default)
+}
