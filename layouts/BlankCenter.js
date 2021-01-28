@@ -22,6 +22,8 @@ export default function BlankCenter({ children }) {
           .content {
             @include flex(column);
             flex: 1;
+            width: 100%;
+            text-align: center;
           }
         }
       `}</style>
