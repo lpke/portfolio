@@ -1,4 +1,3 @@
-import BasicFooter from "components/basic-footer";
 import Center from "layouts/BlankCenter";
 
 const Home = () => (
@@ -12,8 +11,6 @@ const Home = () => (
         //...
       `}</style>
     </Center>
-
-    <BasicFooter />
   </>
 );
 
