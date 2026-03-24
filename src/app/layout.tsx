@@ -11,6 +11,10 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   title: 'Luke Perich',
   description: 'Luke Perich Portfolio',
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function RootLayout({
