@@ -1,1 +1,109 @@
 @import "tailwindcss";
+
+/*
+ * Design System: "The Kinetic Engineer" / Midnight Syntax
+ * Tailwind CSS v4 theme configuration
+ */
+
+@theme {
+  /* ── Surface Hierarchy (Material Design tonal scale) ── */
+  --color-surface: #0b1326;
+  --color-surface-dim: #0b1326;
+  --color-surface-bright: #31394d;
+  --color-surface-container-lowest: #060e20;
+  --color-surface-container-low: #131b2e;
+  --color-surface-container: #171f33;
+  --color-surface-container-high: #222a3d;
+  --color-surface-container-highest: #2d3449;
+  --color-surface-variant: #2d3449;
+  --color-surface-tint: #7bd0ff;
+
+  /* ── Primary ── */
+  --color-primary: #7bd0ff;
+  --color-primary-container: #001a27;
+  --color-primary-fixed: #c4e7ff;
+  --color-primary-fixed-dim: #7bd0ff;
+  --color-on-primary: #00354a;
+  --color-on-primary-container: #008abb;
+  --color-on-primary-fixed: #001e2c;
+  --color-on-primary-fixed-variant: #004c69;
+  --color-inverse-primary: #00668a;
+
+  /* ── Secondary ── */
+  --color-secondary: #b9c8de;
+  --color-secondary-container: #39485a;
+  --color-secondary-fixed: #d4e4fa;
+  --color-secondary-fixed-dim: #b9c8de;
+  --color-on-secondary: #233143;
+  --color-on-secondary-container: #a7b6cc;
+  --color-on-secondary-fixed: #0d1c2d;
+  --color-on-secondary-fixed-variant: #39485a;
+
+  /* ── Tertiary (accent) ── */
+  --color-tertiary: #3cddc7;
+  --color-tertiary-container: #001c18;
+  --color-tertiary-fixed: #62fae3;
+  --color-tertiary-fixed-dim: #3cddc7;
+  --color-on-tertiary: #003731;
+  --color-on-tertiary-container: #009182;
+  --color-on-tertiary-fixed: #00201c;
+  --color-on-tertiary-fixed-variant: #005047;
+
+  /* ── Error ── */
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error: #690005;
+  --color-on-error-container: #ffdad6;
+
+  /* ── Neutral / On Surface ── */
+  --color-on-surface: #dae2fd;
+  --color-on-surface-variant: #c6c6cd;
+  --color-on-background: #dae2fd;
+  --color-background: #0b1326;
+  --color-outline: #909097;
+  --color-outline-variant: #45464d;
+  --color-inverse-surface: #dae2fd;
+  --color-inverse-on-surface: #283044;
+
+  /* ── Typography ── */
+  --font-headline: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-label: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+
+  /* ── Border Radius ── */
+  --radius-DEFAULT: 0.5rem;
+  --radius-sm: 0.25rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+}
+
+/* ── Custom Utility Classes ── */
+
+/* Signature gradient for primary CTAs */
+.signature-gradient {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-on-primary-container) 100%);
+}
+
+/* Ghost border — subtle boundary per DESIGN.md */
+.ghost-border {
+  border: 1px solid color-mix(in oklch, var(--color-outline-variant) 20%, transparent);
+}
+
+/* Glass header — glassmorphism nav */
+.glass-nav {
+  background-color: color-mix(in oklch, var(--color-surface) 60%, transparent);
+  backdrop-filter: blur(24px);
+}
+
+/* Ambient shadow with surface-tint */
+.ambient-shadow {
+  box-shadow: 0 20px 50px color-mix(in oklch, var(--color-surface-tint) 8%, transparent);
+}
+
+/* Selection styling */
+::selection {
+  background-color: color-mix(in oklch, var(--color-primary) 30%, transparent);
+  color: var(--color-primary);
+}

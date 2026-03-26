@@ -1,16 +1,35 @@
 import '@/styles/globals.css';
 import type { Metadata } from 'next';
-import { Geist } from 'next/font/google';
+import { Space_Grotesk, Inter, JetBrains_Mono } from 'next/font/google';
 import Providers from './Providers';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-headline',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-body',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-mono',
 });
 
 export const metadata: Metadata = {
-  title: 'Luke Perich',
-  description: 'Luke Perich Portfolio',
+  title: {
+    default: 'Luke Perich | Senior Software Engineer',
+    template: '%s | lpdev',
+  },
+  description:
+    'Senior Front-End Developer focused on building great products and the systems that ship them. Specialising in TypeScript, React, monorepo architecture, CI/CD, and build tooling.',
   robots: {
     index: false,
     follow: false,
@@ -23,9 +42,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geistSans.variable}>
-      <body>
-        <Providers>{children}</Providers>
+    <html
+      lang="en"
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+    >
+      <body className="bg-surface font-body text-on-surface">
+        <Providers>
+          <Header />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
