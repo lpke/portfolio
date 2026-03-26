@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 export function HeroSection() {
   return (
     <section
@@ -30,22 +28,6 @@ export function HeroSection() {
             Typescript/React, and also have experience across monorepo
             architecture, CI/CD, and build tooling. Big on developer experience.
           </p>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-wrap gap-4">
-            <Link
-              href="/projects"
-              className="signature-gradient rounded-full px-8 py-4 font-headline font-bold text-on-primary transition-all hover:shadow-[0_0_20px_rgba(123,208,255,0.4)]"
-            >
-              View Showcase
-            </Link>
-            <Link
-              href="/skills"
-              className="ghost-border rounded-full px-8 py-4 font-headline font-bold text-primary transition-all hover:bg-primary/5"
-            >
-              The Stack
-            </Link>
-          </div>
 
           {/* Personality Tidbits */}
           <div className="mt-12 flex items-center gap-6">

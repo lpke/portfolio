@@ -5,7 +5,6 @@ const FOOTER_LINKS = [
   { label: 'luke@lpdev.io', href: `mailto:${SITE.email}` },
   { label: 'GitHub', href: SITE.github },
   { label: 'LinkedIn', href: SITE.linkedin },
-  { label: 'Source Code', href: SITE.sourceCode },
 ] as const;
 
 export function Footer() {
