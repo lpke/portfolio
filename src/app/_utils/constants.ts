@@ -5,10 +5,10 @@ export const SITE = {
   title: 'Luke Perich',
   role: 'Senior Software Engineer',
   email: 'luke@lpdev.io',
-  location: 'Remote / London, UK',
-  github: 'https://github.com/lpdev',
-  linkedin: 'https://www.linkedin.com/in/lukeperich',
-  sourceCode: 'https://github.com/lpdev/portfolio',
+  location: 'Remote / Sydney, AU',
+  github: 'https://github.com/lpke',
+  linkedin: 'https://www.linkedin.com/in/luke-perich',
+  sourceCode: 'https://github.com/lpke/portfolio',
 } as const;
 
 export const NAV_LINKS = [
@@ -16,5 +16,40 @@ export const NAV_LINKS = [
   { label: 'Experience', href: '/experience' },
   { label: 'Projects', href: '/projects' },
   { label: 'Skills', href: '/skills' },
-  { label: 'Contact', href: '/skills#contact' },
+  { label: 'Contact', href: '/contact' },
+] as const;
+
+export const CONTACT_LINKS = [
+  {
+    icon: '✉',
+    iconSrc: '/images/icons/send_white.svg',
+    label: 'Email',
+    value: 'luke@lpdev.io',
+    href: 'mailto:luke@lpdev.io',
+    copyContent: 'luke@lpdev.io',
+  },
+  {
+    icon: '👤',
+    iconSrc: '/images/icons/linkedin.svg',
+    label: 'LinkedIn',
+    value: '/in/luke-perich',
+    href: 'https://www.linkedin.com/in/luke-perich',
+    copyContent: 'https://www.linkedin.com/in/luke-perich',
+  },
+  {
+    icon: '</>',
+    iconSrc: '/images/icons/github_white.svg',
+    label: 'GitHub',
+    value: '@lpke',
+    href: 'https://github.com/lpke',
+    copyContent: 'https://github.com/lpke',
+  },
+  {
+    icon: '📍',
+    iconSrc: '/images/icons/location_white.svg',
+    label: 'Location',
+    value: 'Remote / Sydney, AU',
+    href: null,
+    copyContent: null,
+  },
 ] as const;

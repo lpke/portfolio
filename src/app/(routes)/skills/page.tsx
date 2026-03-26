@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
 import { PageHero } from '@/components/PageHero';
 import { SkillsGrid } from './_sections/SkillsGrid';
-import { ContactSection } from './_sections/ContactSection';
 
 export const metadata: Metadata = {
-  title: 'Skills & Contact',
+  title: 'Skills',
   description:
     'A specialized toolkit focused on building resilient architecture and fluid user experiences.',
 };
@@ -15,13 +14,12 @@ export default function SkillsPage() {
       <PageHero
         title={
           <>
-            Expertise <span className="text-primary">&amp;</span> Access
+            Expertise <span className="text-primary">&amp;</span> Tools
           </>
         }
-        subtitle="A specialized toolkit focused on building resilient architecture and fluid user experiences. Let's transform your vision into production-ready reality."
+        subtitle="A specialized toolkit focused on building resilient architecture and fluid user experiences."
       />
       <SkillsGrid />
-      <ContactSection />
     </main>
   );
 }

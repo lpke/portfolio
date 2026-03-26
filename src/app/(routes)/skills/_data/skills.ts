@@ -47,29 +47,3 @@ export const TERMINAL_LINES = [
   { text: 'Status: INFRASTRUCTURE_READY [0.8s]', color: 'primary' },
 ] as const;
 
-export const CONTACT_LINKS = [
-  {
-    icon: '✉',
-    label: 'Email',
-    value: 'luke@lpdev.io',
-    href: 'mailto:luke@lpdev.io',
-  },
-  {
-    icon: '👤',
-    label: 'LinkedIn',
-    value: '/in/lukeperich',
-    href: 'https://www.linkedin.com/in/lukeperich',
-  },
-  {
-    icon: '</>',
-    label: 'GitHub',
-    value: '@lpdev',
-    href: 'https://github.com/lpdev',
-  },
-  {
-    icon: '📍',
-    label: 'Location',
-    value: 'Remote / London, UK',
-    href: null,
-  },
-] as const;

@@ -30,10 +30,10 @@ export function Header() {
               <Link
                 key={href}
                 href={href}
-                className={`font-headline text-sm font-bold tracking-tight transition-all duration-300 ${
+className={`relative font-headline text-sm font-bold tracking-tight px-2 py-1 transition-colors duration-300 after:absolute after:inset-x-1 after:bottom-0 after:h-0.5 after:rounded-full after:bg-primary after:transition-transform after:duration-300 after:origin-center ${
                   isActive
-                    ? 'border-b-2 border-primary pb-1 text-primary'
-                    : 'rounded px-2 py-1 text-on-surface-variant/60 hover:bg-white/5 hover:text-white'
+                    ? 'text-primary after:scale-x-100'
+                    : 'text-on-surface-variant/60 after:scale-x-0 hover:bg-white/5 hover:text-white'
                 }`}
               >
                 {label}
@@ -44,7 +44,7 @@ export function Header() {
 
         {/* CTA Button */}
         <Link
-          href="/skills#contact"
+          href="/contact"
           className="signature-gradient rounded-full px-6 py-2 font-headline text-sm font-bold text-on-primary transition-all hover:shadow-[0_0_20px_rgba(123,208,255,0.4)] active:scale-95"
         >
           Get in Touch
