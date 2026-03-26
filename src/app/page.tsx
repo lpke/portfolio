@@ -4,7 +4,7 @@ import { FoundationSection } from './_sections/FoundationSection';
 
 export default function HomePage() {
   return (
-    <main className="pt-24">
+    <main>
       <HeroSection />
       <RecentWorkSection />
       <FoundationSection />

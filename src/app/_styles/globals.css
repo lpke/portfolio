@@ -97,6 +97,38 @@
   backdrop-filter: blur(24px);
 }
 
+/* Hero wave background — responsive visibility */
+.hero-waves {
+  background-image: url('/images/layered_waves.svg');
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: auto 100%;
+}
+
+@media (max-width: 1299px) and (min-width: 1125px) {
+  .hero-waves {
+    background-position: calc(100% + 15vw) center;
+  }
+}
+
+@media (max-width: 1124px) and (min-width: 950px) {
+  .hero-waves {
+    background-position: calc(100% + 30vw) center;
+  }
+}
+
+@media (max-width: 949px) and (min-width: 820px) {
+  .hero-waves {
+    background-position: calc(100% + 50vw) center;
+  }
+}
+
+@media (max-width: 819px) {
+  .hero-waves {
+    background-image: none;
+  }
+}
+
 /* Ambient shadow with surface-tint */
 .ambient-shadow {
   box-shadow: 0 20px 50px color-mix(in oklch, var(--color-surface-tint) 8%, transparent);

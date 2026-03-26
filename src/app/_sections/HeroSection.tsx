@@ -2,10 +2,12 @@ import Link from 'next/link';
 
 export function HeroSection() {
   return (
-    <section className="relative flex min-h-[800px] items-center overflow-hidden px-8">
-      <div className="mx-auto grid w-full max-w-7xl items-center gap-12 lg:grid-cols-2">
-        {/* Left Column — Copy */}
-        <div className="z-10">
+    <section
+      className="hero-waves relative flex min-h-[800px] items-center overflow-hidden px-8 pt-24"
+    >
+      <div className="mx-auto w-full max-w-7xl">
+        {/* Copy */}
+        <div className="relative z-10 max-w-2xl">
           {/* Availability Badge */}
           <div className="ghost-border mb-6 inline-flex items-center gap-2 rounded-full bg-tertiary-container px-3 py-1 text-xs font-bold text-on-tertiary-container">
             <span className="h-2 w-2 animate-pulse rounded-full bg-tertiary" />
@@ -56,26 +58,6 @@ export function HeroSection() {
             </span>
           </div>
         </div>
-
-        {/* Right Column — Hero Visual */}
-        <div className="relative hidden lg:block">
-          <div className="ghost-border relative aspect-square overflow-hidden rounded-xl bg-surface-container shadow-2xl">
-            {/* Placeholder for hero image — gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-surface-container to-tertiary/10" />
-            <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-60" />
-          </div>
-
-          {/* Floating Quote Badge */}
-          <div className="ghost-border absolute -bottom-6 -right-6 max-w-xs rounded-xl bg-surface-container p-6 shadow-2xl">
-            <p className="mb-2 font-mono text-xs uppercase tracking-widest text-tertiary">
-              Active Process
-            </p>
-            <p className="font-body text-sm italic text-on-surface">
-              &ldquo;Refactoring complex architectures into elegant, scalable
-              solutions.&rdquo;
-            </p>
-          </div>
-        </div>
       </div>
 
       {/* Background Decorative Blurs */}
@@ -84,3 +66,4 @@ export function HeroSection() {
     </section>
   );
 }
+
