@@ -60,28 +60,28 @@ export function ContactCard({
   return (
     <Wrapper
       {...linkProps}
-      className="group flex items-center gap-6 rounded-lg bg-surface-container-low p-4 transition-colors hover:bg-surface-container"
+      className="group bg-surface-container-low hover:bg-surface-container flex items-center gap-6 rounded-lg p-4 transition-colors duration-300"
     >
-      <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-surface-container text-primary transition-all duration-300 group-hover:bg-primary-container">
+      <div className="bg-surface-container text-primary relative flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 group-hover:bg-white/5">
         {copyContent ? (
           <>
             {/* Default icon — hidden on hover */}
             <img
               src={iconSrc}
               alt={label}
-              className="h-5 w-5 transition-opacity duration-200 group-hover:opacity-0"
+              className="h-5 w-5 transition-opacity duration-300 group-hover:opacity-0"
             />
             {/* Copy button — shown on hover */}
             <button
               type="button"
               onClick={handleCopy}
               aria-label={copied ? 'Copied!' : `Copy ${label}`}
-              className="absolute inset-0 flex cursor-pointer items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+              className="absolute inset-0 flex cursor-pointer items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             >
               {copied ? (
-                <span className="text-xs font-bold text-primary">✓</span>
+                <span className="text-primary text-xs font-bold">✓</span>
               ) : (
-                <CopyIcon className="h-4 w-4 text-primary" />
+                <CopyIcon className="text-primary h-4 w-4 transition-transform duration-300 group-hover:scale-125" />
               )}
             </button>
           </>
@@ -89,8 +89,8 @@ export function ContactCard({
           <img src={iconSrc} alt={label} className="h-5 w-5" />
         )}
       </div>
-      <div>
-        <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant/50">
+      <div className="text-left">
+        <p className="font-label text-on-surface-variant/50 text-[10px] tracking-widest uppercase">
           {label}
         </p>
         <p className="font-headline font-bold text-white">{value}</p>

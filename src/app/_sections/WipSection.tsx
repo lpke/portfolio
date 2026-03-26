@@ -5,18 +5,12 @@ export function WipSection() {
   return (
     <section className="relative overflow-hidden py-24 px-6 md:px-8">
       <div className="mx-auto max-w-3xl text-center">
-        {/* WIP Badge */}
-        <div className="ghost-border mb-6 inline-flex items-center gap-2 rounded-full bg-surface-container px-4 py-1.5 text-xs font-bold text-on-surface-variant">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
-          Work in Progress
-        </div>
-
         <h2 className="mb-4 font-headline text-3xl font-black tracking-tight text-white md:text-4xl">
           This site is <span className="italic text-primary">under construction</span>
         </h2>
 
         <p className="mx-auto mb-12 max-w-lg text-lg leading-relaxed text-on-surface-variant">
-          I&apos;m actively building out the full portfolio. In the meantime, feel free to reach out through any of the channels below.
+          I&apos;m actively building out my full portfolio. In the meantime, feel free to reach out through any of the channels below.
         </p>
 
         {/* Contact Cards */}
