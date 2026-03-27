@@ -19,8 +19,8 @@ export function HeroSection() {
           <p className="text-on-surface-variant mb-8 max-w-lg text-lg leading-relaxed opacity-70">
             Commerce graduate who turned to the nerd side. I build frontend
             apps, the systems that ship them, and the tools that help write
-            them. When I&apos;m not shipping, I&apos;m swimming. Addicted to the
-            pool and love to race.
+            them. When not coding, I&apos;m training — calisthenics and
+            competitive swimming.
           </p>
 
           {/* Tag Bar */}
