@@ -1,42 +1,56 @@
+import Link from 'next/link';
+
 export function HeroSection() {
   return (
-    <section className="hero-waves relative flex min-h-[780px] items-center overflow-hidden px-8 pt-24">
+    <section className="hero-waves relative flex min-h-200 items-center overflow-hidden px-8 pt-24">
       <div className="mx-auto w-full max-w-7xl">
         {/* Copy */}
         <div className="relative z-10 max-w-2xl">
-          {/* Availability Badge */}
-          {/* <div className="ghost-border mb-6 inline-flex items-center gap-2 rounded-full bg-tertiary-container px-3 py-1 text-xs font-bold text-on-tertiary-container"> */}
-          {/*   <span className="h-2 w-2 animate-pulse rounded-full bg-tertiary" /> */}
-          {/*   Available for New Projects */}
-          {/* </div> */}
-
           <h1 className="font-headline mb-4 text-6xl leading-none font-black tracking-tighter text-white md:text-8xl">
             LUKE
             <br />
             <span className="text-primary italic">PERICH</span>
           </h1>
 
-          <h2 className="font-headline text-on-surface-variant mb-6 text-2xl font-bold">
+          <h2 className="font-headline text-on-surface-variant mb-10 text-3xl font-bold">
             Senior Software Engineer
           </h2>
 
-          <p className="text-on-surface-variant mb-10 max-w-lg text-lg leading-relaxed">
-            I&apos;m a Senior Front-End Developer focused on building great
-            products and the systems that ship them. I specialise in
-            Typescript/React, and also have experience across monorepo
-            architecture, CI/CD, and build tooling. Big on developer experience.
+          <p className="text-on-surface-variant mb-8 max-w-lg text-lg leading-relaxed opacity-70">
+            Commerce graduate who turned to the nerd side. I build frontend
+            apps, the systems that ship them, and the tools that help write
+            them. When I&apos;m not shipping, I&apos;m swimming. Addicted to the
+            pool and love to race.
           </p>
 
-          {/* Personality Tidbits */}
-          <div className="mt-12 flex items-center gap-6">
-            <span className="text-on-surface-variant/60 font-mono text-sm">
-              ⌨ Avid vim-user
-            </span>
+          {/* Tag Bar */}
+          <div className="text-on-surface-variant mb-12 flex items-center gap-4">
+            <span className="font-mono text-sm">TS/React</span>
             <span className="bg-outline-variant h-1 w-1 rounded-full" />
-            <span className="text-on-surface-variant/60 font-mono text-sm">
-              🏊 Competitive Swimmer
-            </span>
+            <span className="font-mono text-sm">CI/CD</span>
+            <span className="bg-outline-variant h-1 w-1 rounded-full" />
+            <span className="font-mono text-sm">DX Tooling</span>
+            <span className="bg-outline-variant h-1 w-1 rounded-full" />
+            <span className="font-mono text-sm">⌨ Vim</span>
+            <span className="bg-outline-variant h-1 w-1 rounded-full" />
+            <span className="font-mono text-sm">🏊🏻‍♂️ 50m Free</span>
           </div>
+        </div>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-wrap gap-4">
+          <Link
+            href="/projects"
+            className="signature-gradient font-headline text-on-primary rounded-full px-8 py-4 font-bold transition-all hover:shadow-[0_0_20px_rgba(123,208,255,0.4)]"
+          >
+            View Showcase
+          </Link>
+          <Link
+            href="/skills"
+            className="ghost-border font-headline text-primary hover:bg-primary/5 rounded-full px-8 py-4 font-bold transition-all"
+          >
+            The Stack
+          </Link>
         </div>
       </div>
 

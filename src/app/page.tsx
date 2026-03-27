@@ -1,11 +1,13 @@
 import { HeroSection } from './_sections/HeroSection';
-import { WipSection } from './_sections/WipSection';
+import { RecentWorkSection } from './_sections/RecentWorkSection';
+import { FoundationSection } from './_sections/FoundationSection';
 
 export default function HomePage() {
   return (
     <main>
       <HeroSection />
-      <WipSection />
+      <RecentWorkSection />
+      <FoundationSection />
     </main>
   );
 }
