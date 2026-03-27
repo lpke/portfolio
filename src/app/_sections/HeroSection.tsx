@@ -17,8 +17,8 @@ export function HeroSection() {
           <p className="text-on-surface-variant mb-8 max-w-lg text-lg leading-relaxed opacity-70">
             Commerce graduate who turned to the nerd side. I build frontend
             apps, the systems that ship them, and the tools that help write
-            them. When I&apos;m not shipping, I&apos;m swimming. Addicted to the
-            pool and love to race.
+            them. When not coding, I&apos;m training — calisthenics and
+            competitive swimming.
           </p>
 
           {/* Tag Bar */}
@@ -29,9 +29,11 @@ export function HeroSection() {
             <span className="bg-outline-variant h-1 w-1 rounded-full" />
             <span className="font-mono text-sm">DX Tooling</span>
             <span className="bg-outline-variant h-1 w-1 rounded-full" />
-            <span className="font-mono text-sm">⌨ Vim</span>
+            <span className="font-mono text-sm">{'\u{2328}'} Vim</span>
             <span className="bg-outline-variant h-1 w-1 rounded-full" />
-            <span className="font-mono text-sm">🏊🏻‍♂️ 50m Free</span>
+            <span className="font-mono text-sm">
+              {'\u{1F3CA}\u{1F3FC}\u{200D}\u{2642}\u{FE0F}'} 50m free
+            </span>
           </div>
         </div>
       </div>
