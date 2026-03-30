@@ -1,10 +1,5 @@
-import { HomeSections } from '@/components/HomeSections';
+import { Layout } from "@/_sections/Layout";
 
 export default function HomePage() {
-  return (
-    <main>
-      <HomeSections />
-    </main>
-  );
+  return <Layout />;
 }
-

@@ -1,6 +1,5 @@
+import { Layout } from '@/_sections/Layout';
 import type { Metadata } from 'next';
-import { HomeSections } from '@/components/HomeSections';
-import { ScrollToSection } from '@/components/ScrollToSection';
 
 export const metadata: Metadata = {
   title: 'Experience',
@@ -9,10 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function ExperiencePage() {
-  return (
-    <main>
-      <HomeSections />
-      <ScrollToSection sectionId="experience" />
-    </main>
-  );
+  return <Layout scrollToId="experience" />;
 }

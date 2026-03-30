@@ -5,17 +5,15 @@ import { Experience } from '@/_sections/experience/Experience';
 import { Projects } from '@/_sections/projects/Projects';
 import { Skills } from '@/_sections/skills/Skills';
 import { Contact } from '@/_sections/contact/Contact';
+import { ScrollToSection } from '@/components/ScrollToSection';
 
-/**
- * All homepage sections in their canonical order.
- *
- * Reorder, add, or remove sections here and every route
- * (/, /experience, /projects, /skills, /contact) picks up
- * the change automatically.
- */
-export function HomeSections() {
+type LayoutProps = {
+  scrollToId?: string;
+};
+
+export function Layout({ scrollToId }: LayoutProps) {
   return (
-    <>
+    <main>
       <Hero />
       <RecentWork />
       <Foundation />
@@ -23,6 +21,8 @@ export function HomeSections() {
       <Projects />
       <Skills />
       <Contact />
-    </>
+
+      {scrollToId && <ScrollToSection sectionId={scrollToId} />}
+    </main>
   );
 }

@@ -44,7 +44,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} scroll-smooth`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} scroll-smooth`}
     >
       <body className="bg-surface font-body text-on-surface">
         <Providers>
