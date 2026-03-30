@@ -1,6 +1,12 @@
 import type { Metadata } from 'next';
-import { PageHero } from '@/components/PageHero';
-import { SkillsGrid } from './_sections/SkillsGrid';
+import { Hero } from '@/_sections/hero/Hero';
+import { RecentWork } from '@/_sections/recent-work/RecentWork';
+import { Foundation } from '@/_sections/foundation/Foundation';
+import { Experience } from '@/_sections/experience/Experience';
+import { Projects } from '@/_sections/projects/Projects';
+import { Skills } from '@/_sections/skills/Skills';
+import { Contact } from '@/_sections/contact/Contact';
+import { ScrollToSection } from '@/components/ScrollToSection';
 
 export const metadata: Metadata = {
   title: 'Skills',
@@ -10,16 +16,15 @@ export const metadata: Metadata = {
 
 export default function SkillsPage() {
   return (
-    <main className="mx-auto max-w-7xl px-6 pt-32 pb-24 md:px-8">
-      <PageHero
-        title={
-          <>
-            Expertise <span className="text-primary">&amp;</span> Tools
-          </>
-        }
-        subtitle="A specialized toolkit focused on building resilient architecture and fluid user experiences."
-      />
-      <SkillsGrid />
+    <main>
+      <ScrollToSection sectionId="skills" />
+      <Hero />
+      <RecentWork />
+      <Foundation />
+      <Experience />
+      <Projects />
+      <Skills />
+      <Contact />
     </main>
   );
 }

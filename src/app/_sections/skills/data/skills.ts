@@ -46,4 +46,3 @@ export const TERMINAL_LINES = [
   { text: '> cdk deploy --all', color: 'default' },
   { text: 'Status: INFRASTRUCTURE_READY [0.8s]', color: 'primary' },
 ] as const;
-

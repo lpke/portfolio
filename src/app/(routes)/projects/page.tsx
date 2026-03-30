@@ -1,6 +1,12 @@
 import type { Metadata } from 'next';
-import { PageHero } from '@/components/PageHero';
-import { ProjectGrid } from './_sections/ProjectGrid';
+import { Hero } from '@/_sections/hero/Hero';
+import { RecentWork } from '@/_sections/recent-work/RecentWork';
+import { Foundation } from '@/_sections/foundation/Foundation';
+import { Experience } from '@/_sections/experience/Experience';
+import { Projects } from '@/_sections/projects/Projects';
+import { Skills } from '@/_sections/skills/Skills';
+import { Contact } from '@/_sections/contact/Contact';
+import { ScrollToSection } from '@/components/ScrollToSection';
 
 export const metadata: Metadata = {
   title: 'Projects',
@@ -10,16 +16,15 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
   return (
-    <main className="mx-auto max-w-7xl px-6 pt-32 pb-20">
-      <PageHero
-        title={
-          <>
-            Selected <span className="italic text-primary">Works</span>
-          </>
-        }
-        subtitle="Exploring the intersection of high-performance backend architecture and intuitive, fluid user interfaces. Each project represents a unique challenge in precision engineering."
-      />
-      <ProjectGrid />
+    <main>
+      <ScrollToSection sectionId="projects" />
+      <Hero />
+      <RecentWork />
+      <Foundation />
+      <Experience />
+      <Projects />
+      <Skills />
+      <Contact />
     </main>
   );
 }

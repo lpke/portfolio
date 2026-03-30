@@ -1,7 +1,12 @@
 import type { Metadata } from 'next';
-import { PageHero } from '@/components/PageHero';
-import { Timeline } from './_sections/Timeline';
-import { PhilosophySection } from './_sections/PhilosophySection';
+import { Hero } from '@/_sections/hero/Hero';
+import { RecentWork } from '@/_sections/recent-work/RecentWork';
+import { Foundation } from '@/_sections/foundation/Foundation';
+import { Experience } from '@/_sections/experience/Experience';
+import { Projects } from '@/_sections/projects/Projects';
+import { Skills } from '@/_sections/skills/Skills';
+import { Contact } from '@/_sections/contact/Contact';
+import { ScrollToSection } from '@/components/ScrollToSection';
 
 export const metadata: Metadata = {
   title: 'Experience',
@@ -11,18 +16,15 @@ export const metadata: Metadata = {
 
 export default function ExperiencePage() {
   return (
-    <main className="mx-auto max-w-7xl px-6 pt-32 pb-24 md:px-12">
-      <PageHero
-        title={
-          <>
-            Career{' '}
-            <span className="italic text-primary">Timeline</span>
-          </>
-        }
-        subtitle="A chronological mapping of my technical journey, focusing on architectural precision, scalable systems, and transformative engineering leadership."
-      />
-      <Timeline />
-      <PhilosophySection />
+    <main>
+      <ScrollToSection sectionId="experience" />
+      <Hero />
+      <RecentWork />
+      <Foundation />
+      <Experience />
+      <Projects />
+      <Skills />
+      <Contact />
     </main>
   );
 }

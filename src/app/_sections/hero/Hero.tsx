@@ -1,8 +1,8 @@
-import Link from 'next/link';
+import { SectionLink } from '@/components/SectionLink';
 
-export function HeroSection() {
+export function Hero() {
   return (
-    <section className="hero-waves relative flex min-h-200 items-center overflow-hidden px-8 pt-24">
+    <section id="home" className="hero-waves relative flex min-h-200 items-center overflow-hidden px-8 pt-24">
       <div className="mx-auto w-full max-w-7xl">
         {/* Copy */}
         <div className="relative z-10 max-w-2xl">
@@ -39,18 +39,18 @@ export function HeroSection() {
 
         {/* CTA Buttons */}
         <div className="flex flex-wrap gap-4">
-          <Link
-            href="/projects"
+          <SectionLink
+            to="projects"
             className="signature-gradient font-headline text-on-primary rounded-full px-8 py-4 font-bold transition-all hover:shadow-[0_0_20px_rgba(123,208,255,0.4)]"
           >
             View Showcase
-          </Link>
-          <Link
-            href="/skills"
+          </SectionLink>
+          <SectionLink
+            to="skills"
             className="ghost-border font-headline text-primary hover:bg-primary/5 rounded-full px-8 py-4 font-bold transition-all"
           >
             The Stack
-          </Link>
+          </SectionLink>
         </div>
       </div>
 

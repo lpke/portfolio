@@ -1,6 +1,12 @@
 import type { Metadata } from 'next';
-import { PageHero } from '@/components/PageHero';
-import { ContactSection } from './_sections/ContactSection';
+import { Hero } from '@/_sections/hero/Hero';
+import { RecentWork } from '@/_sections/recent-work/RecentWork';
+import { Foundation } from '@/_sections/foundation/Foundation';
+import { Experience } from '@/_sections/experience/Experience';
+import { Projects } from '@/_sections/projects/Projects';
+import { Skills } from '@/_sections/skills/Skills';
+import { Contact } from '@/_sections/contact/Contact';
+import { ScrollToSection } from '@/components/ScrollToSection';
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -10,16 +16,15 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="mx-auto max-w-7xl px-6 pt-32 pb-24 md:px-8">
-      <PageHero
-        title={
-          <>
-            Let&apos;s <span className="text-primary">Connect</span>
-          </>
-        }
-        subtitle="Currently open to freelance opportunities and technical consultations. Usually responds within 24 hours."
-      />
-      <ContactSection />
+    <main>
+      <ScrollToSection sectionId="contact" />
+      <Hero />
+      <RecentWork />
+      <Foundation />
+      <Experience />
+      <Projects />
+      <Skills />
+      <Contact />
     </main>
   );
 }

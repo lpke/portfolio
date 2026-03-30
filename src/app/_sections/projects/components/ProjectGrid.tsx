@@ -1,6 +1,6 @@
 import { TechTag } from '@/components/TechTag';
-import { PROJECTS } from '../_data/projects';
-import type { Project } from '../_data/projects';
+import { PROJECTS } from '../data/projects';
+import type { Project } from '../data/projects';
 
 function LargeProjectCard({ project }: { project: Project }) {
   return (

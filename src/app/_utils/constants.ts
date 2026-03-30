@@ -11,13 +11,21 @@ export const SITE = {
   sourceCode: 'https://github.com/lpke/portfolio',
 } as const;
 
-export const NAV_LINKS = [
-  { label: 'Home', href: '/' },
-  { label: 'Experience', href: '/experience' },
-  { label: 'Projects', href: '/projects' },
-  { label: 'Skills', href: '/skills' },
-  { label: 'Contact', href: '/contact' },
+/**
+ * Section definitions used for navigation, scroll-tracking and URL rewriting.
+ * `path` is the clean URL shown in the address bar.
+ * `sectionId` is the DOM id of the corresponding <section>.
+ */
+export const SECTIONS = [
+  { label: 'Home',       path: '/',            sectionId: 'home' },
+  { label: 'Experience', path: '/experience',   sectionId: 'experience' },
+  { label: 'Projects',   path: '/projects',     sectionId: 'projects' },
+  { label: 'Skills',     path: '/skills',       sectionId: 'skills' },
+  { label: 'Contact',    path: '/contact',      sectionId: 'contact' },
 ] as const;
+
+/** Backwards-compatible alias used by the Header nav and anywhere else. */
+export const NAV_LINKS = SECTIONS;
 
 export const CONTACT_LINKS = [
   {

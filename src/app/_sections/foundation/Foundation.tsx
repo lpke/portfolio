@@ -31,7 +31,7 @@ const CODE_SNIPPET = `const engineer = {
   performance: "Optimized"
 };`;
 
-export function FoundationSection() {
+export function Foundation() {
   return (
     <section className="py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-8">

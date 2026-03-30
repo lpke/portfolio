@@ -1,7 +1,7 @@
-import Link from 'next/link';
+import { SectionLink } from '@/components/SectionLink';
 import { TechTag } from '@/components/TechTag';
 
-export function RecentWorkSection() {
+export function RecentWork() {
   return (
     <section className="bg-surface-container-low py-24">
       <div className="mx-auto max-w-7xl px-8">
@@ -16,12 +16,12 @@ export function RecentWorkSection() {
               and platforms.
             </p>
           </div>
-          <Link
-            href="/projects"
+          <SectionLink
+            to="projects"
             className="flex items-center gap-2 font-headline font-bold text-primary transition-all hover:gap-4"
           >
             View Archive →
-          </Link>
+          </SectionLink>
         </div>
 
         {/* Bento Grid */}

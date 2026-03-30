@@ -5,11 +5,11 @@ import {
   PRODUCT_STACK,
   TOOLS,
   TERMINAL_LINES,
-} from '../_data/skills';
+} from '../data/skills';
 
 export function SkillsGrid() {
   return (
-    <section className="mb-32 grid grid-cols-1 gap-6 md:grid-cols-3">
+    <div className="mb-32 grid grid-cols-1 gap-6 md:grid-cols-3">
       {/* ── Core & Languages (2 cols) ── */}
       <div className="group rounded-lg border border-white/5 bg-surface-container-low p-8 transition-colors duration-300 hover:bg-surface-container md:col-span-2">
         <div className="mb-8 flex items-center gap-4">
@@ -129,6 +129,6 @@ export function SkillsGrid() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

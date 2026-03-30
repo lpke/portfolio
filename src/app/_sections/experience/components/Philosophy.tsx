@@ -1,4 +1,4 @@
-export function PhilosophySection() {
+export function Philosophy() {
   return (
     <section className="mt-32 grid grid-cols-1 gap-6 md:grid-cols-3">
       {/* Philosophy Card */}

@@ -1,6 +1,6 @@
 import { TechTag } from '@/components/TechTag';
-import { EXPERIENCE_DATA } from '../_data/experience';
-import type { TimelineEntry } from '../_data/experience';
+import { EXPERIENCE_DATA } from '../data/experience';
+import type { TimelineEntry } from '../data/experience';
 
 const BADGE_STYLES = {
   current: 'bg-primary-container text-primary',
