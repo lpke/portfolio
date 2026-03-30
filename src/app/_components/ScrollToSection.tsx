@@ -1,21 +1,19 @@
-'use client';
-
-import { useEffect } from 'react';
-
 /**
- * Scrolls the page to the given section ID on mount.
- * Used by the route pages (e.g. /experience) so that landing
- * on the URL goes straight to the correct section.
+ * Renders an inline <script> that scrolls to the target section
+ * synchronously during HTML parsing — before the browser paints.
+ *
+ * This eliminates the flicker where the Hero is briefly visible
+ * when landing on a deep route like /experience.
+ *
+ * IMPORTANT: Place this component AFTER all <section> components in the
+ * route page so the target element already exists in the DOM when the
+ * script executes.
+ *
+ * This is a Server Component (no 'use client' directive).
  */
 export function ScrollToSection({ sectionId }: { sectionId: string }) {
-  useEffect(() => {
-    const el = document.getElementById(sectionId);
-    if (el) {
-      // Instant scroll on initial load — smooth would be jarring for a
-      // fresh page load since the user hasn't scrolled yet.
-      el.scrollIntoView({ behavior: 'instant' });
-    }
-  }, [sectionId]);
+  const code = `document.getElementById(${JSON.stringify(sectionId)})?.scrollIntoView();`;
 
-  return null;
+  return <script dangerouslySetInnerHTML={{ __html: code }} />;
 }
+

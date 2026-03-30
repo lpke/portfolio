@@ -25,6 +25,8 @@ const SECTION_IDS = SECTIONS.map(({ sectionId }) => sectionId);
 export function useSectionRouter() {
   const activeIdRef = useRef<string>('home');
   const isUserScrolling = useRef(true);
+  /** When true, observer notifications to listeners (navbar highlighting) are paused. */
+  const isAnimating = useRef(false);
   const activeListeners = useRef<Set<(id: string) => void>>(new Set());
 
   // --- Update URL without triggering Next.js navigation ---
@@ -45,6 +47,12 @@ export function useSectionRouter() {
       // fight with the pushState below.
       isUserScrolling.current = false;
 
+      // Pause observer-driven navbar highlighting during the animation.
+      // Immediately highlight the target section instead.
+      isAnimating.current = true;
+      activeIdRef.current = sectionId;
+      activeListeners.current.forEach((fn) => fn(sectionId));
+
       // Use pushState (not replaceState) so the back button works.
       const path = ID_TO_PATH[sectionId] ?? '/';
       if (window.location.pathname !== path) {
@@ -53,10 +61,12 @@ export function useSectionRouter() {
 
       el.scrollIntoView({ behavior: 'smooth' });
 
-      // Re-enable observer-driven URL updates after the scroll finishes.
-      // 1200ms is generous enough for long smooth scrolls.
+      // Re-enable observer-driven URL updates and navbar highlighting
+      // after the scroll finishes. 1200ms is generous enough for long
+      // smooth scrolls.
       setTimeout(() => {
         isUserScrolling.current = true;
+        isAnimating.current = false;
       }, 1200);
     },
     [],
@@ -112,8 +122,12 @@ export function useSectionRouter() {
           if (isUserScrolling.current) {
             updateUrl(bestId);
           }
-          // Notify any subscribed listeners (Header uses this for active state)
-          activeListeners.current.forEach((fn) => fn(bestId!));
+          // Only notify listeners (navbar highlighting) when not animating
+          // from a programmatic navigation — prevents the highlight from
+          // jumping through intermediate sections during smooth scroll.
+          if (!isAnimating.current) {
+            activeListeners.current.forEach((fn) => fn(bestId!));
+          }
         }
       },
       { rootMargin: '-15% 0px -40% 0px', threshold: [0, 0.1, 0.25, 0.5] },
@@ -127,9 +141,15 @@ export function useSectionRouter() {
       const el = document.getElementById(id);
       if (el) {
         isUserScrolling.current = false;
+        isAnimating.current = true;
+        activeIdRef.current = id;
+        activeListeners.current.forEach((fn) => fn(id));
+
         el.scrollIntoView({ behavior: 'smooth' });
+
         setTimeout(() => {
           isUserScrolling.current = true;
+          isAnimating.current = false;
         }, 1200);
       }
     };
@@ -144,3 +164,4 @@ export function useSectionRouter() {
 
   return { navigateTo, activeListeners, activeIdRef };
 }
+
