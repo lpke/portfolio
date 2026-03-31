@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
 
-interface CardProps {
+type CardProps = {
   children: ReactNode;
   className?: string;
   hover?: boolean;
-}
+};
 
 /** Surface-container card with ghost border and optional hover effect */
 export function Card({ children, className = '', hover = false }: CardProps) {

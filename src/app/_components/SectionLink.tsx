@@ -9,12 +9,12 @@ const ID_TO_PATH: Record<string, string> = Object.fromEntries(
   SECTIONS.map(({ sectionId, path }) => [sectionId, path]),
 );
 
-interface SectionLinkProps {
+type SectionLinkProps = {
   /** The section id to scroll to, e.g. 'projects' */
   to: string;
   children: ReactNode;
   className?: string;
-}
+};
 
 /**
  * A client-side link that smooth-scrolls to a section and updates the URL

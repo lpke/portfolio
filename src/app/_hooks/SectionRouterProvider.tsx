@@ -9,10 +9,10 @@ import {
 } from 'react';
 import { useSectionRouter } from '@/hooks/useSectionRouter';
 
-interface SectionRouterContext {
+type SectionRouterContext = {
   activeId: string;
   navigateTo: (sectionId: string) => void;
-}
+};
 
 const Ctx = createContext<SectionRouterContext>({
   activeId: 'home',

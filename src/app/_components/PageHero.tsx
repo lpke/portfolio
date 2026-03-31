@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 
-interface PageHeroProps {
+type PageHeroProps = {
   title: ReactNode;
   subtitle: string;
-}
+};
 
 /** Consistent hero banner used across all pages */
 export function PageHero({ title, subtitle }: PageHeroProps) {

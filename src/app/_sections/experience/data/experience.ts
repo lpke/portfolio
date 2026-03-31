@@ -1,4 +1,4 @@
-export interface TimelineEntry {
+export type TimelineEntry = {
   period: string;
   company: string;
   role: string;
@@ -9,7 +9,7 @@ export interface TimelineEntry {
   icon: string;
   /** Badge label style: 'current' | 'experience' | 'previous' | 'early' */
   badge: 'current' | 'experience' | 'previous' | 'early';
-}
+};
 
 export const EXPERIENCE_DATA: TimelineEntry[] = [
   {

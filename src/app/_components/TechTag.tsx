@@ -8,10 +8,10 @@ const VARIANT_STYLES: Record<Variant, string> = {
   tool: 'bg-surface-container-highest text-primary',
 };
 
-interface TechTagProps {
+type TechTagProps = {
   children: ReactNode;
   variant?: Variant;
-}
+};
 
 /** Small chip for highlighting tech stacks within cards */
 export function TechTag({ children, variant = 'tertiary' }: TechTagProps) {

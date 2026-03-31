@@ -43,6 +43,9 @@
       "@/utils/*": [
         "./src/app/_utils/*"
       ],
+      "@/sections/*": [
+        "./src/app/_sections/*"
+      ],
       "@/*": [
         "./src/app/*"
       ]

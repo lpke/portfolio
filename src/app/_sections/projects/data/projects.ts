@@ -1,4 +1,4 @@
-export interface Project {
+export type Project = {
   company: string;
   label: string;
   title: string;
@@ -9,7 +9,7 @@ export interface Project {
   size: 'large' | 'small';
   href?: string;
   ctaLabel?: string;
-}
+};
 
 export const PROJECTS: Project[] = [
   {

@@ -16,4 +16,3 @@ export function ScrollToSection({ sectionId }: { sectionId: string }) {
 
   return <script dangerouslySetInnerHTML={{ __html: code }} />;
 }
-

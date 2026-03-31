@@ -1,4 +1,4 @@
-import { Layout } from '@/_sections/Layout';
+import { Layout } from '@/sections/Layout';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {

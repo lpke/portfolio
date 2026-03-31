@@ -16,13 +16,13 @@ function CopyIcon({ className }: { className?: string }) {
   );
 }
 
-interface ContactCardProps {
+type ContactCardProps = {
   iconSrc: string;
   label: string;
   value: string;
   href: string | null;
   copyContent?: string | null;
-}
+};
 
 export function ContactCard({
   iconSrc,

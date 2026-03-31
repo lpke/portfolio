@@ -1,4 +1,4 @@
-import { Layout } from "@/_sections/Layout";
+import { Layout } from "@/sections/Layout";
 
 export default function HomePage() {
   return <Layout />;

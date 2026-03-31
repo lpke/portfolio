@@ -1,10 +1,10 @@
-import { Hero } from '@/_sections/hero/Hero';
-import { RecentWork } from '@/_sections/recent-work/RecentWork';
-import { Foundation } from '@/_sections/foundation/Foundation';
-import { Experience } from '@/_sections/experience/Experience';
-import { Projects } from '@/_sections/projects/Projects';
-import { Skills } from '@/_sections/skills/Skills';
-import { Contact } from '@/_sections/contact/Contact';
+import { Hero } from '@/sections/hero/Hero';
+import { RecentWork } from '@/sections/recent-work/RecentWork';
+import { Foundation } from '@/sections/foundation/Foundation';
+import { Experience } from '@/sections/experience/Experience';
+import { Projects } from '@/sections/projects/Projects';
+import { Skills } from '@/sections/skills/Skills';
+import { Contact } from '@/sections/contact/Contact';
 import { ScrollToSection } from '@/components/ScrollToSection';
 
 type LayoutProps = {

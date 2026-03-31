@@ -2,10 +2,10 @@
 
 import { useActionState } from 'react';
 
-interface FormState {
+type FormState = {
   message: string;
   success: boolean;
-}
+};
 
 async function submitContact(
   _prev: FormState,

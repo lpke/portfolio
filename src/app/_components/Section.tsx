@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 
-interface SectionProps {
+type SectionProps = {
   children: ReactNode;
   className?: string;
   /** Surface level for tonal hierarchy: 0 = base, 1 = low, 2 = container */
   level?: 0 | 1 | 2;
   id?: string;
-}
+};
 
 const LEVEL_BG = {
   0: 'bg-surface',
