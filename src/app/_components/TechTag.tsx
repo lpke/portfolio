@@ -17,7 +17,7 @@ type TechTagProps = {
 export function TechTag({ children, variant = 'tertiary' }: TechTagProps) {
   return (
     <span
-      className={`inline-block rounded-sm px-3 py-1 font-label text-xs font-bold uppercase tracking-wider ${VARIANT_STYLES[variant]}`}
+      className={`font-label inline-block rounded-sm px-3 py-1 text-xs font-bold tracking-wider uppercase ${VARIANT_STYLES[variant]}`}
     >
       {children}
     </span>

@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /*
  * Design System: "The Kinetic Engineer" / Midnight Syntax
@@ -66,10 +66,10 @@
   --color-inverse-on-surface: #283044;
 
   /* ── Typography ── */
-  --font-headline: "Space Grotesk", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, sans-serif;
-  --font-label: "Space Grotesk", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  --font-headline: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-label: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
 
   /* ── Border Radius ── */
   --radius-DEFAULT: 0.5rem;
@@ -83,12 +83,17 @@
 
 /* Signature gradient for primary CTAs */
 .signature-gradient {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-on-primary-container) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-on-primary-container) 100%
+  );
 }
 
 /* Ghost border — subtle boundary per DESIGN.md */
 .ghost-border {
-  border: 1px solid color-mix(in oklch, var(--color-outline-variant) 20%, transparent);
+  border: 1px solid
+    color-mix(in oklch, var(--color-outline-variant) 20%, transparent);
 }
 
 /* Glass header — glassmorphism nav */
@@ -131,7 +136,8 @@
 
 /* Ambient shadow with surface-tint */
 .ambient-shadow {
-  box-shadow: 0 20px 50px color-mix(in oklch, var(--color-surface-tint) 8%, transparent);
+  box-shadow: 0 20px 50px
+    color-mix(in oklch, var(--color-surface-tint) 8%, transparent);
 }
 
 /* Selection styling */
@@ -159,8 +165,12 @@
 
 /* Modal animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {

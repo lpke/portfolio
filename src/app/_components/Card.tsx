@@ -10,8 +10,10 @@ type CardProps = {
 export function Card({ children, className = '', hover = false }: CardProps) {
   return (
     <div
-      className={`ghost-border rounded-lg bg-surface-container p-8 ${
-        hover ? 'transition-all duration-300 hover:-translate-y-1 hover:bg-surface-container-high' : ''
+      className={`ghost-border bg-surface-container rounded-lg p-8 ${
+        hover
+          ? 'hover:bg-surface-container-high transition-all duration-300 hover:-translate-y-1'
+          : ''
       } ${className}`}
     >
       {children}

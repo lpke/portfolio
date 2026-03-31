@@ -33,7 +33,7 @@ export function Header() {
                 key={path}
                 href={path}
                 onClick={(e) => handleClick(e, sectionId)}
-                className={`relative font-headline text-sm font-bold tracking-tight px-2 py-1 transition-colors duration-300 after:absolute after:inset-x-1 after:bottom-0 after:h-0.5 after:rounded-full after:bg-primary after:transition-transform after:duration-300 after:origin-center ${
+                className={`font-headline after:bg-primary relative px-2 py-1 text-sm font-bold tracking-tight transition-colors duration-300 after:absolute after:inset-x-1 after:bottom-0 after:h-0.5 after:origin-center after:rounded-full after:transition-transform after:duration-300 ${
                   isActive
                     ? 'text-primary after:scale-x-100'
                     : 'text-on-surface-variant/60 after:scale-x-0 hover:bg-white/5 hover:text-white'
@@ -49,7 +49,7 @@ export function Header() {
         <a
           href="/contact"
           onClick={(e) => handleClick(e, 'contact')}
-          className="signature-gradient rounded-full px-6 py-2 font-headline text-sm font-bold text-on-primary transition-all hover:shadow-[0_0_20px_rgba(123,208,255,0.4)] active:scale-95"
+          className="signature-gradient font-headline text-on-primary rounded-full px-6 py-2 text-sm font-bold transition-all hover:shadow-[0_0_20px_rgba(123,208,255,0.4)] active:scale-95"
         >
           Get in Touch
         </a>
@@ -57,4 +57,3 @@ export function Header() {
     </header>
   );
 }
-

@@ -7,7 +7,7 @@ export function Projects() {
       <PageHero
         title={
           <>
-            Selected <span className="italic text-primary">Works</span>
+            Selected <span className="text-primary italic">Works</span>
           </>
         }
         subtitle="Exploring the intersection of high-performance backend architecture and intuitive, fluid user interfaces. Each project represents a unique challenge in precision engineering."

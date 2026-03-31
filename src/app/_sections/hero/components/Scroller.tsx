@@ -59,14 +59,11 @@ export function Scroller({ children, speed = 0.5 }: ScrollerProps) {
   }, []);
 
   /** Wrap offset into [0, contentWidth) range (Pac-Man style). */
-  const wrapOffset = useCallback(
-    (value: number): number => {
-      const w = contentWidthRef.current;
-      if (w <= 0) return 0;
-      return ((value % w) + w) % w;
-    },
-    [],
-  );
+  const wrapOffset = useCallback((value: number): number => {
+    const w = contentWidthRef.current;
+    if (w <= 0) return 0;
+    return ((value % w) + w) % w;
+  }, []);
 
   // Measure a single set of children.
   useEffect(() => {
@@ -124,7 +121,12 @@ export function Scroller({ children, speed = 0.5 }: ScrollerProps) {
     // --- Wheel (shift+scroll or horizontal scroll) ---
     const handleWheel = (e: WheelEvent) => {
       // Accept both explicit horizontal scroll and shift+vertical scroll.
-      const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.shiftKey ? e.deltaY : 0;
+      const dx =
+        Math.abs(e.deltaX) > Math.abs(e.deltaY)
+          ? e.deltaX
+          : e.shiftKey
+            ? e.deltaY
+            : 0;
       if (dx === 0) return;
 
       e.preventDefault();
@@ -189,7 +191,7 @@ export function Scroller({ children, speed = 0.5 }: ScrollerProps) {
 
   return (
     <div
-      className="relative select-none overflow-hidden"
+      className="relative overflow-hidden select-none"
       style={{
         cursor: cursorStyle,
         touchAction: 'pan-y',

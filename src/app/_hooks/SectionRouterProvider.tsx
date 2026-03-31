@@ -41,8 +41,6 @@ export function SectionRouterProvider({ children }: { children: ReactNode }) {
   }, [activeListeners, activeIdRef]);
 
   return (
-    <Ctx.Provider value={{ activeId, navigateTo }}>
-      {children}
-    </Ctx.Provider>
+    <Ctx.Provider value={{ activeId, navigateTo }}>{children}</Ctx.Provider>
   );
 }

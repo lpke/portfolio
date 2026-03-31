@@ -22,9 +22,9 @@ export function ContactContent() {
       </div>
 
       {/* Right Column — Contact Form */}
-      <div className="relative overflow-hidden rounded-lg border border-white/5 bg-surface-container-low p-10 shadow-2xl">
+      <div className="bg-surface-container-low relative overflow-hidden rounded-lg border border-white/5 p-10 shadow-2xl">
         {/* Decorative glow */}
-        <div className="absolute -top-16 -right-16 h-32 w-32 rounded-full bg-primary/10 blur-3xl" />
+        <div className="bg-primary/10 absolute -top-16 -right-16 h-32 w-32 rounded-full blur-3xl" />
         <ContactForm />
       </div>
     </div>

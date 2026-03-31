@@ -49,16 +49,16 @@ function TimelineNode({
     <div className={`${isLeft ? 'md:pr-12 md:text-right' : 'md:pl-12'}`}>
       {/* Date/Badge */}
       <div
-        className={`mb-2 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest ${BADGE_STYLES[entry.badge]}`}
+        className={`mb-2 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold tracking-widest uppercase ${BADGE_STYLES[entry.badge]}`}
       >
         {entry.period || badgeText}
       </div>
 
-      <h2 className="mb-1 font-headline text-3xl font-bold text-white">
+      <h2 className="font-headline mb-1 text-3xl font-bold text-white">
         {entry.company}
       </h2>
       <h3
-        className={`mb-4 font-headline text-xl font-medium italic ${
+        className={`font-headline mb-4 text-xl font-medium italic ${
           isLeft ? 'text-primary' : 'text-secondary-fixed-dim'
         }`}
       >
@@ -66,7 +66,7 @@ function TimelineNode({
       </h3>
 
       {entry.description && (
-        <p className="mb-6 text-sm leading-relaxed text-on-surface-variant">
+        <p className="text-on-surface-variant mb-6 text-sm leading-relaxed">
           {entry.description}
         </p>
       )}
@@ -87,7 +87,7 @@ function TimelineNode({
     <div className="group relative">
       {/* Timeline Node Icon */}
       <div
-        className={`absolute top-10 z-10 hidden h-10 w-10 items-center justify-center rounded-full border-2 bg-surface md:flex ${
+        className={`bg-surface absolute top-10 z-10 hidden h-10 w-10 items-center justify-center rounded-full border-2 md:flex ${
           index === 0
             ? 'border-primary'
             : 'border-outline-variant/40 group-hover:border-primary'
@@ -105,13 +105,14 @@ function TimelineNode({
       </div>
 
       {/* Highlight Card */}
-      <div className="rounded-lg border border-outline-variant/10 bg-surface-container p-8 shadow-xl transition-all duration-500 group-hover:border-primary/30">
-        {entry.highlights.length === 1 && !entry.highlights[0]!.startsWith('0') ? (
-          <p className="text-sm italic leading-relaxed text-on-surface/80">
+      <div className="border-outline-variant/10 bg-surface-container group-hover:border-primary/30 rounded-lg border p-8 shadow-xl transition-all duration-500">
+        {entry.highlights.length === 1 &&
+        !entry.highlights[0]!.startsWith('0') ? (
+          <p className="text-on-surface/80 text-sm leading-relaxed italic">
             <HighlightText text={entry.highlights[0]!} />
           </p>
         ) : (
-          <ul className="space-y-4 text-sm leading-relaxed text-on-surface/80">
+          <ul className="text-on-surface/80 space-y-4 text-sm leading-relaxed">
             {entry.highlights.map((highlight, i) => (
               <li key={i} className="flex gap-3">
                 <span
@@ -151,7 +152,7 @@ export function Timeline() {
   return (
     <div className="relative">
       {/* Central vertical line */}
-      <div className="absolute top-0 bottom-0 left-0 hidden w-px -translate-x-1/2 bg-gradient-to-b from-primary/50 via-outline-variant/20 to-transparent md:left-1/2 md:block" />
+      <div className="from-primary/50 via-outline-variant/20 absolute top-0 bottom-0 left-0 hidden w-px -translate-x-1/2 bg-gradient-to-b to-transparent md:left-1/2 md:block" />
 
       <div className="relative space-y-24">
         {EXPERIENCE_DATA.map((entry, index) => (

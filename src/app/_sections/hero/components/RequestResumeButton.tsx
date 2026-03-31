@@ -6,9 +6,9 @@ import { createPortal } from 'react-dom';
 const ANIM_MS = 300;
 
 export function RequestResumeButton() {
-  const [phase, setPhase] = useState<
-    'closed' | 'opening' | 'open' | 'closing'
-  >('closed');
+  const [phase, setPhase] = useState<'closed' | 'opening' | 'open' | 'closing'>(
+    'closed',
+  );
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
@@ -288,7 +288,9 @@ export function RequestResumeButton() {
                   onClick={handleSubmit}
                   disabled={!email || submitted}
                   className="signature-gradient text-on-primary rounded-full px-6 py-2 text-base font-bold transition-all hover:shadow-[0_0_12px_rgba(123,208,255,0.4)] disabled:opacity-40"
-                  style={{ cursor: !email || submitted ? 'default' : 'pointer' }}
+                  style={{
+                    cursor: !email || submitted ? 'default' : 'pointer',
+                  }}
                 >
                   {submitted ? '\u2713 Sent' : 'Request CV'}
                 </button>
@@ -318,4 +320,3 @@ export function RequestResumeButton() {
     </div>
   );
 }
-

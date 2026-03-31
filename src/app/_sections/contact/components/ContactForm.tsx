@@ -21,7 +21,7 @@ async function submitContact(
   }
 
   // Placeholder — replace with actual submission logic
-  return { message: 'Message sent! I\'ll be in touch soon.', success: true };
+  return { message: "Message sent! I'll be in touch soon.", success: true };
 }
 
 const INITIAL_STATE: FormState = { message: '', success: false };
@@ -38,7 +38,7 @@ export function ContactForm() {
       <div className="space-y-2">
         <label
           htmlFor="name"
-          className="font-label text-xs uppercase tracking-widest text-on-surface-variant/60"
+          className="font-label text-on-surface-variant/60 text-xs tracking-widest uppercase"
         >
           Full Name
         </label>
@@ -48,7 +48,7 @@ export function ContactForm() {
           type="text"
           required
           placeholder="Enter your name"
-          className="w-full rounded-sm border border-white/10 bg-surface-container-lowest px-4 py-3 text-on-surface outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary"
+          className="bg-surface-container-lowest text-on-surface focus:border-primary focus:ring-primary w-full rounded-sm border border-white/10 px-4 py-3 transition-all outline-none focus:ring-1"
         />
       </div>
 
@@ -56,7 +56,7 @@ export function ContactForm() {
       <div className="space-y-2">
         <label
           htmlFor="email"
-          className="font-label text-xs uppercase tracking-widest text-on-surface-variant/60"
+          className="font-label text-on-surface-variant/60 text-xs tracking-widest uppercase"
         >
           Email Address
         </label>
@@ -66,7 +66,7 @@ export function ContactForm() {
           type="email"
           required
           placeholder="your@email.com"
-          className="w-full rounded-sm border border-white/10 bg-surface-container-lowest px-4 py-3 text-on-surface outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary"
+          className="bg-surface-container-lowest text-on-surface focus:border-primary focus:ring-primary w-full rounded-sm border border-white/10 px-4 py-3 transition-all outline-none focus:ring-1"
         />
       </div>
 
@@ -74,7 +74,7 @@ export function ContactForm() {
       <div className="space-y-2">
         <label
           htmlFor="details"
-          className="font-label text-xs uppercase tracking-widest text-on-surface-variant/60"
+          className="font-label text-on-surface-variant/60 text-xs tracking-widest uppercase"
         >
           Project Details
         </label>
@@ -84,7 +84,7 @@ export function ContactForm() {
           required
           rows={4}
           placeholder="Tell me about your project..."
-          className="w-full resize-none rounded-sm border border-white/10 bg-surface-container-lowest px-4 py-3 text-on-surface outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary"
+          className="bg-surface-container-lowest text-on-surface focus:border-primary focus:ring-primary w-full resize-none rounded-sm border border-white/10 px-4 py-3 transition-all outline-none focus:ring-1"
         />
       </div>
 
@@ -92,7 +92,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="signature-gradient flex w-full items-center justify-center gap-2 rounded-full py-4 font-headline font-bold text-on-primary transition-all hover:shadow-[0_10px_30px_rgba(123,208,255,0.2)] disabled:opacity-50"
+        className="signature-gradient font-headline text-on-primary flex w-full items-center justify-center gap-2 rounded-full py-4 font-bold transition-all hover:shadow-[0_10px_30px_rgba(123,208,255,0.2)] disabled:opacity-50"
       >
         {isPending ? 'Sending…' : 'Send Message'} ➤
       </button>

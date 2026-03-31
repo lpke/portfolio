@@ -132,7 +132,14 @@ export const SKILL_CARDS: SkillCardData[] = [
         { label: 'Manual debt', value: '0%' },
         { label: 'Build cycle', value: 'Fast' },
       ],
-      tags: ['GitHub Actions', 'Docker', 'Node.js CLI', 'Turborepo', 'Husky', 'Vitest'],
+      tags: [
+        'GitHub Actions',
+        'Docker',
+        'Node.js CLI',
+        'Turborepo',
+        'Husky',
+        'Vitest',
+      ],
     },
   },
   {
@@ -143,7 +150,8 @@ export const SKILL_CARDS: SkillCardData[] = [
     iconKey: 'testing',
     hasModal: true,
     modal: {
-      tagline: 'Establishing comprehensive testing cultures for zero-regression deployments.',
+      tagline:
+        'Establishing comprehensive testing cultures for zero-regression deployments.',
       competencies: [
         {
           label: 'Unit & integration testing',
@@ -182,7 +190,8 @@ export const SKILL_CARDS: SkillCardData[] = [
     iconKey: 'experimentation',
     hasModal: true,
     modal: {
-      tagline: 'Data-driven product decisions without compromising performance.',
+      tagline:
+        'Data-driven product decisions without compromising performance.',
       competencies: [
         {
           label: 'A/B testing',

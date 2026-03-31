@@ -33,20 +33,20 @@ export function SkillCard({ skill }: SkillCardProps) {
             setIsModalOpen(true);
           }
         }}
-        className={`ghost-border group relative flex h-full flex-col rounded-lg bg-surface-container p-6 transition-all duration-300 ${
+        className={`ghost-border group bg-surface-container relative flex h-full flex-col rounded-lg p-6 transition-all duration-300 ${
           isClickable
-            ? 'cursor-pointer hover:-translate-y-1 hover:bg-surface-container-high hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)]'
+            ? 'hover:bg-surface-container-high cursor-pointer hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)]'
             : ''
         }`}
       >
         {/* Icon */}
-        <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        <div className="bg-primary/10 text-primary mb-5 flex h-10 w-10 items-center justify-center rounded-lg">
           {getSkillIcon(skill.iconKey)}
         </div>
 
         {/* Expand icon — top-right, visible on hover */}
         {isClickable && (
-          <span className="absolute top-5 right-5 text-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <span className="text-primary absolute top-5 right-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             <ExpandIcon />
           </span>
         )}
@@ -57,13 +57,13 @@ export function SkillCard({ skill }: SkillCardProps) {
         </h3>
 
         {/* Summary */}
-        <p className="mb-4 flex-1 text-sm leading-relaxed text-on-surface-variant">
+        <p className="text-on-surface-variant mb-4 flex-1 text-sm leading-relaxed">
           {skill.summary}
         </p>
 
         {/* Hover CTA */}
         {isClickable && (
-          <span className="mt-auto font-label text-xs font-bold uppercase tracking-widest text-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <span className="font-label text-primary mt-auto text-xs font-bold tracking-widest uppercase opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             View Details →
           </span>
         )}
@@ -71,10 +71,7 @@ export function SkillCard({ skill }: SkillCardProps) {
 
       {/* Modal */}
       {isModalOpen && (
-        <SkillDetailModal
-          skill={skill}
-          onClose={() => setIsModalOpen(false)}
-        />
+        <SkillDetailModal skill={skill} onClose={() => setIsModalOpen(false)} />
       )}
     </>
   );

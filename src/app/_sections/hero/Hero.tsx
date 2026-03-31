@@ -4,7 +4,10 @@ import { RequestResumeButton } from './components/RequestResumeButton';
 
 export function Hero() {
   return (
-    <section id="home" className="hero-waves relative flex min-h-200 items-center overflow-hidden px-8 pt-24">
+    <section
+      id="home"
+      className="hero-waves relative flex min-h-200 items-center overflow-hidden px-8 pt-24"
+    >
       <div className="mx-auto w-full max-w-7xl">
         {/* Copy */}
         <div className="relative z-10 max-w-2xl">
@@ -47,4 +50,3 @@ export function Hero() {
     </section>
   );
 }
-
