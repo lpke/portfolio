@@ -71,7 +71,7 @@ export function SkillCard({ skill }: SkillCardProps) {
 
       {/* Modal */}
       {isModalOpen && (
-        <SkillDetailModal skill={skill} onClose={() => setIsModalOpen(false)} />
+<SkillDetailModal skill={skill} onCloseAction={() => setIsModalOpen(false)} />
       )}
     </>
   );

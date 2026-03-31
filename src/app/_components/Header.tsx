@@ -14,7 +14,10 @@ export function Header() {
     };
 
   return (
-    <header className="glass-nav ambient-shadow fixed top-0 z-50 w-full">
+<header
+      className="glass-nav ambient-shadow fixed top-0 z-50 w-full"
+      style={{ paddingRight: 'var(--scrollbar-gutter, 0px)' }}
+    >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-8 py-4">
         {/* Logo */}
         <Link

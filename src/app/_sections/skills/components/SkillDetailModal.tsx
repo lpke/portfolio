@@ -1,42 +1,67 @@
 'use client';
 
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 import type { SkillCardData } from '../data/skills';
 import { getSkillIcon } from './SkillIcons';
 import { TechTag } from '@/components/TechTag';
 
+const ENTER_MS = 250;
+const EXIT_MS = 200;
+const GROW_ENTER_MS = 180;
+const GROW_EXIT_MS = 150;
+
 type SkillDetailModalProps = {
   skill: SkillCardData;
-  onClose: () => void;
+  onCloseAction: () => void;
 };
 
 /**
  * Modal overlay for skill card details.
- * - Desktop: centred floating modal
- * - Mobile: slides up from the bottom with rounded top corners
+ * - Desktop: centred floating modal with grow in/out animation
+ * - Mobile: slides up from the bottom (and slides back down on close)
  */
-export function SkillDetailModal({ skill, onClose }: SkillDetailModalProps) {
+export function SkillDetailModal({
+  skill,
+  onCloseAction,
+}: SkillDetailModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
+  const [isClosing, setIsClosing] = useState(false);
   const modal = skill.modal;
+
+  const handleClose = useCallback(() => {
+    if (isClosing) return;
+    setIsClosing(true);
+    setTimeout(() => onCloseAction(), EXIT_MS);
+  }, [isClosing, onCloseAction]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') handleClose();
     },
-    [onClose],
+    [handleClose],
   );
 
   useEffect(() => {
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+
     document.addEventListener('keydown', handleKeyDown);
+    document.documentElement.style.setProperty(
+      '--scrollbar-gutter',
+      `${scrollbarWidth}px`,
+    );
     document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
+      document.documentElement.style.removeProperty('--scrollbar-gutter');
       document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
     };
   }, [handleKeyDown]);
 
   const handleOverlayClick = (e: React.MouseEvent) => {
-    if (e.target === overlayRef.current) onClose();
+    if (e.target === overlayRef.current) handleClose();
   };
 
   if (!modal) return null;
@@ -45,12 +70,34 @@ export function SkillDetailModal({ skill, onClose }: SkillDetailModalProps) {
     <div
       ref={overlayRef}
       onClick={handleOverlayClick}
-      className="fixed inset-0 z-[100] flex items-end justify-center bg-black/60 backdrop-blur-sm md:items-center"
-      style={{ animation: 'fadeIn 0.15s ease-out' }}
+      className="fixed inset-0 z-100 flex items-end justify-center bg-black/60 backdrop-blur-sm md:items-center"
+      style={{
+        animation: `${isClosing ? 'fadeOut' : 'fadeIn'} ${isClosing ? EXIT_MS : ENTER_MS}ms ease-out both`,
+      }}
     >
+      {/* Inject CSS custom properties for animation name + duration per breakpoint */}
+      <style>{`
+        @media (max-width: 767px) {
+          [data-skill-modal-panel] {
+            --modal-anim: ${isClosing ? 'slideDown' : 'slideUp'};
+            --modal-dur: ${isClosing ? EXIT_MS : ENTER_MS}ms;
+          }
+        }
+        @media (min-width: 768px) {
+          [data-skill-modal-panel] {
+            --modal-anim: ${isClosing ? 'growOut' : 'growIn'};
+            --modal-dur: ${isClosing ? GROW_EXIT_MS : GROW_ENTER_MS}ms;
+          }
+        }
+      `}</style>
       <div
+        data-skill-modal-panel
         className="bg-surface-container relative flex max-h-[90vh] w-full flex-col overflow-hidden rounded-t-2xl border border-white/10 shadow-2xl md:max-w-2xl md:rounded-2xl"
-        style={{ animation: 'slideUp 0.25s ease-out' }}
+        style={
+          {
+            animation: `var(--modal-anim) var(--modal-dur) ease-out both`,
+          } as React.CSSProperties
+        }
       >
         {/* Header */}
         <div className="flex items-start gap-4 border-b border-white/5 px-6 pt-6 pb-5 md:px-8">
@@ -65,7 +112,7 @@ export function SkillDetailModal({ skill, onClose }: SkillDetailModalProps) {
           </div>
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="text-on-surface-variant/50 flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-white/10 hover:text-white"
             aria-label="Close modal"
           >
@@ -136,7 +183,7 @@ export function SkillDetailModal({ skill, onClose }: SkillDetailModalProps) {
         <div className="flex items-center justify-end gap-3 border-t border-white/5 px-6 py-4 md:px-8">
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="font-headline text-on-surface-variant/60 text-sm font-bold transition-colors hover:text-white"
           >
             Close Details
