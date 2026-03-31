@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useCallback } from 'react';
 
 function CopyIcon({ className }: { className?: string }) {
@@ -66,9 +67,11 @@ export function ContactCard({
         {copyContent ? (
           <>
             {/* Default icon — hidden on hover */}
-            <img
+            <Image
               src={iconSrc}
               alt={label}
+              width={20}
+              height={20}
               className="h-5 w-5 transition-opacity duration-300 group-hover:opacity-0"
             />
             {/* Copy button — shown on hover */}
@@ -86,7 +89,7 @@ export function ContactCard({
             </button>
           </>
         ) : (
-          <img src={iconSrc} alt={label} className="h-5 w-5" />
+          <Image src={iconSrc} alt={label} width={20} height={20} className="h-5 w-5" />
         )}
       </div>
       <div className="text-left">

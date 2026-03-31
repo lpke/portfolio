@@ -28,15 +28,18 @@ export function SectionRouterProvider({ children }: { children: ReactNode }) {
   const [activeId, setActiveId] = useState('home');
 
   useEffect(() => {
+    // Copy ref value so the cleanup function sees the same Set
+    const listeners = activeListeners.current;
+
     // Subscribe to activeId changes from the IntersectionObserver
     const listener = (id: string) => setActiveId(id);
-    activeListeners.current.add(listener);
+    listeners.add(listener);
 
     // Seed with the current value
     setActiveId(activeIdRef.current);
 
     return () => {
-      activeListeners.current.delete(listener);
+      listeners.delete(listener);
     };
   }, [activeListeners, activeIdRef]);
 
