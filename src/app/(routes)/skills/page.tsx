@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function WhatIDoPage() {
-  return <Layout scrollToId="what-i-do" />;
+  return <Layout scrollToId="skills" />;
 }

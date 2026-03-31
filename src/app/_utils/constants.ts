@@ -18,7 +18,7 @@ export const SITE = {
  */
 export const SECTIONS = [
   { label: 'Home', path: '/', sectionId: 'home' },
-  { label: 'What I Do', path: '/what-i-do', sectionId: 'what-i-do' },
+  { label: 'What I Do', path: '/skills', sectionId: 'skills' },
   { label: 'Contact', path: '/contact', sectionId: 'contact' },
 ] as const;
 

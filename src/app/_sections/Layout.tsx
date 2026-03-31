@@ -1,5 +1,5 @@
 import { Hero } from '@/sections/hero/Hero';
-import { WhatIDo } from '@/sections/what-i-do/WhatIDo';
+import { WhatIDo } from '@/sections/skills/WhatIDo';
 import { Contact } from '@/sections/contact/Contact';
 import { ScrollToSection } from '@/components/ScrollToSection';
 
