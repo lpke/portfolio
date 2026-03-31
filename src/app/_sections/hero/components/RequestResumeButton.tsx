@@ -134,112 +134,7 @@ function PanelForm({
 }
 
 /* ────────────────────────────────────────────
- * Mobile form — toolbar top, email bottom
- * ──────────────────────────────────────────── */
-function MobilePanelForm({
-  email,
-  setEmail,
-  message,
-  setMessage,
-  showMessage,
-  setShowMessage,
-  submitted,
-  handleSubmit,
-  emailInputRef,
-}: {
-  email: string;
-  setEmail: (v: string) => void;
-  message: string;
-  setMessage: (v: string) => void;
-  showMessage: boolean;
-  setShowMessage: (v: boolean) => void;
-  submitted: boolean;
-  handleSubmit: () => void;
-  emailInputRef: React.RefObject<HTMLInputElement | null>;
-}) {
-  return (
-    <>
-      {/* Toolbar — toggle + submit */}
-      <div className="bg-surface-container flex items-center justify-between px-4 py-3">
-        <button
-          type="button"
-          onClick={() => setShowMessage(!showMessage)}
-          className="flex items-center gap-2"
-        >
-          <span
-            className={`relative inline-flex h-6 w-10 shrink-0 rounded-full transition-colors duration-200 ${
-              showMessage
-                ? 'bg-primary/60'
-                : 'bg-surface-container-highest'
-            }`}
-          >
-            <span
-              className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-white shadow transition-transform duration-200 ${
-                showMessage ? 'translate-x-4' : ''
-              }`}
-            />
-          </span>
-          <span className="text-on-surface-variant/50 text-sm font-medium">
-            Add message
-          </span>
-        </button>
-
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={!email || submitted}
-          className="signature-gradient text-on-primary rounded-full px-6 py-2 text-base font-bold transition-all hover:shadow-[0_0_12px_rgba(123,208,255,0.4)] disabled:opacity-40"
-          style={{ cursor: !email || submitted ? 'default' : 'pointer' }}
-        >
-          {submitted ? '\u2713 Sent' : 'Request CV'}
-        </button>
-      </div>
-
-      {/* Message area */}
-      <div
-        className="grid transition-[grid-template-rows] duration-300 ease-in-out"
-        style={{ gridTemplateRows: showMessage ? '1fr' : '0fr' }}
-      >
-        <div className="overflow-hidden">
-          <div className="bg-surface-container-lowest border-t border-white/5">
-            <textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Include an optional message..."
-              rows={3}
-              className="text-on-surface placeholder:text-on-surface-variant/40 w-full resize-none bg-transparent px-4 py-3.5 text-base outline-none"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Email row */}
-      <div className="bg-surface-container-lowest flex items-center gap-3 px-4">
-        <svg
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className="text-on-surface-variant/40 h-5 w-5 shrink-0"
-        >
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z" />
-        </svg>
-        <input
-          ref={emailInputRef}
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="your@email.com"
-          className="text-on-surface placeholder:text-on-surface-variant/40 flex-1 bg-transparent py-4 text-base outline-none"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !showMessage) handleSubmit();
-          }}
-        />
-      </div>
-    </>
-  );
-}
-
-/* ────────────────────────────────────────────
- * Mobile bottom-sheet
+ * Mobile top-sheet
  * ──────────────────────────────────────────── */
 function MobileSheet({
   phase,
@@ -269,7 +164,7 @@ function MobileSheet({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex flex-col justify-end"
+      className="fixed inset-0 z-50 flex flex-col justify-start"
       style={{
         pointerEvents: isOpen ? 'auto' : 'none',
       }}
@@ -288,15 +183,15 @@ function MobileSheet({
       {/* Sheet */}
       <div
         ref={sheetRef}
-        className="bg-surface-container relative z-10 w-full overflow-hidden rounded-t-2xl border-t border-x border-white/10 shadow-2xl"
+        className="bg-surface-container relative z-10 w-full overflow-hidden rounded-b-2xl border-b border-x border-white/10 shadow-2xl"
         style={{
           transform:
-            isOpen ? 'translateY(0)' : isClosing ? 'translateY(100%)' : 'translateY(100%)',
+            isOpen ? 'translateY(0)' : isClosing ? 'translateY(-100%)' : 'translateY(-100%)',
           opacity: isOpen || isClosing ? 1 : 0,
           transition: `transform ${ANIM_MS}ms cubic-bezier(0.4,0,0.2,1), opacity ${ANIM_MS * 0.5}ms ease`,
           pointerEvents: isOpen ? 'auto' : 'none',
-          // Safe-area for devices with home indicator
-          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          // Safe-area for devices with notch
+          paddingTop: 'env(safe-area-inset-top, 0px)',
         }}
       >
         {children}
@@ -370,7 +265,7 @@ export function RequestResumeButton() {
     if (phase !== 'open') return;
     const t = setTimeout(() => {
       setMorphHeight(null);
-      emailInputRef.current?.focus();
+      emailInputRef.current?.focus({ preventScroll: true });
     }, ANIM_MS);
     return () => clearTimeout(t);
   }, [phase]);
@@ -464,7 +359,7 @@ export function RequestResumeButton() {
     emailInputRef,
   };
 
-  // ── Mobile portal (bottom sheet) ──
+  // ── Mobile portal (top sheet) ──
   const mobilePortal = isMobile ? (
     <MobileSheet phase={phase} close={close}>
       <PanelForm {...formProps} mobile />
