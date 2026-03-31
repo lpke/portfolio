@@ -23,8 +23,14 @@ export function ContactContent() {
 
       {/* Right Column — Contact Form */}
       <div className="bg-surface-container-low relative overflow-hidden rounded-lg border border-white/5 p-10 shadow-2xl">
-        {/* Decorative glow */}
-        <div className="bg-primary/10 absolute -top-16 -right-16 h-32 w-32 rounded-full blur-3xl" />
+        {/* Decorative glow — static radial gradient instead of blur filter */}
+        <div
+          className="absolute -top-40 -right-40 h-80 w-80 rounded-full"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(123,208,255,0.04) 0%, rgba(123,208,255,0.02) 30%, transparent 60%)',
+          }}
+        />
         <ContactForm />
       </div>
     </div>
