@@ -17,11 +17,9 @@ export const SITE = {
  * `sectionId` is the DOM id of the corresponding <section>.
  */
 export const SECTIONS = [
-  { label: 'Home',       path: '/',            sectionId: 'home' },
-  { label: 'Experience', path: '/experience',   sectionId: 'experience' },
-  { label: 'Projects',   path: '/projects',     sectionId: 'projects' },
-  { label: 'Skills',     path: '/skills',       sectionId: 'skills' },
-  { label: 'Contact',    path: '/contact',      sectionId: 'contact' },
+  { label: 'Home',       path: '/',           sectionId: 'home' },
+  { label: 'What I Do',  path: '/what-i-do',  sectionId: 'what-i-do' },
+  { label: 'Contact',    path: '/contact',    sectionId: 'contact' },
 ] as const;
 
 /** Backwards-compatible alias used by the Header nav and anywhere else. */

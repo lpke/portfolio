@@ -1,9 +1,5 @@
 import { Hero } from '@/sections/hero/Hero';
-import { RecentWork } from '@/sections/recent-work/RecentWork';
-import { Foundation } from '@/sections/foundation/Foundation';
-import { Experience } from '@/sections/experience/Experience';
-import { Projects } from '@/sections/projects/Projects';
-import { Skills } from '@/sections/skills/Skills';
+import { WhatIDo } from '@/sections/what-i-do/WhatIDo';
 import { Contact } from '@/sections/contact/Contact';
 import { ScrollToSection } from '@/components/ScrollToSection';
 
@@ -15,11 +11,7 @@ export function Layout({ scrollToId }: LayoutProps) {
   return (
     <main>
       <Hero />
-      <RecentWork />
-      <Foundation />
-      <Experience />
-      <Projects />
-      <Skills />
+      <WhatIDo />
       <Contact />
 
       {scrollToId && <ScrollToSection sectionId={scrollToId} />}

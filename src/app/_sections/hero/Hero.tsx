@@ -1,4 +1,6 @@
 import { SectionLink } from '@/components/SectionLink';
+import { ToolsBar } from './components/ToolsBar';
+import { RequestResumeButton } from './components/RequestResumeButton';
 
 export function Hero() {
   return (
@@ -23,34 +25,19 @@ export function Hero() {
             competitive swimming.
           </p>
 
-          {/* Tag Bar */}
-          <div className="text-on-surface-variant mb-12 flex items-center gap-4">
-            <span className="font-mono text-sm">TS/React</span>
-            <span className="bg-outline-variant h-1 w-1 rounded-full" />
-            <span className="font-mono text-sm">CI/CD</span>
-            <span className="bg-outline-variant h-1 w-1 rounded-full" />
-            <span className="font-mono text-sm">DX Tooling</span>
-            <span className="bg-outline-variant h-1 w-1 rounded-full" />
-            <span className="font-mono text-sm">⌨ Vim</span>
-            <span className="bg-outline-variant h-1 w-1 rounded-full" />
-            <span className="font-mono text-sm">🏊🏻‍♂️ 50m Free</span>
-          </div>
+          {/* Tools Bar */}
+          <ToolsBar />
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap items-start gap-4">
           <SectionLink
-            to="projects"
+            to="contact"
             className="signature-gradient font-headline text-on-primary rounded-full px-8 py-4 font-bold transition-all hover:shadow-[0_0_20px_rgba(123,208,255,0.4)]"
           >
-            View Showcase
+            Contact Me
           </SectionLink>
-          <SectionLink
-            to="skills"
-            className="ghost-border font-headline text-primary hover:bg-primary/5 rounded-full px-8 py-4 font-bold transition-all"
-          >
-            The Stack
-          </SectionLink>
+          <RequestResumeButton />
         </div>
       </div>
 
@@ -60,3 +47,4 @@ export function Hero() {
     </section>
   );
 }
+
