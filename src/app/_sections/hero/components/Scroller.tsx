@@ -1,6 +1,12 @@
 'use client';
 
-import { useRef, useEffect, useCallback, type ReactNode } from 'react';
+import {
+  useRef,
+  useEffect,
+  useCallback,
+  useState,
+  type ReactNode,
+} from 'react';
 
 type ScrollerProps = {
   children: ReactNode;
@@ -8,77 +14,196 @@ type ScrollerProps = {
   speed?: number;
 };
 
+/** How long (ms) to pause auto-scroll after user interaction. */
+const PAUSE_DURATION = 2000;
+
+/** Width of the fade-out edges in pixels. */
+const FADE_WIDTH = 64;
+
+/** Extra safety margin past the fade edges to prevent 1px content peek. */
+const SAFETY_MARGIN = 2;
+
 /**
  * Horizontal auto-scrolling container with faded edges.
  *
- * - Auto-scrolls slowly to the right, looping seamlessly.
- * - Supports native shift+scroll on desktop.
- * - Supports touch drag on mobile (native overflow-x-auto).
- * - Pauses auto-scroll while the user interacts.
+ * - Auto-scrolls using translateX for reliable, jank-free infinite looping.
+ * - Click-and-drag on any device (desktop included).
+ * - Shift+scroll on desktop and touch-drag on mobile.
+ * - Pauses auto-scroll while the user interacts, resumes after a delay.
+ * - Uses CSS mask-image for background-agnostic opacity fade on edges.
+ * - Content is not selectable.
  */
 export function Scroller({ children, speed = 0.5 }: ScrollerProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>(0);
+  const offsetRef = useRef(0);
+  const contentWidthRef = useRef(0);
   const isPaused = useRef(false);
-  const pauseTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const pauseTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const lastTimestamp = useRef<number | null>(null);
+
+  // Drag state
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartOffset = useRef(0);
+
+  const [cursorStyle, setCursorStyle] = useState<'grab' | 'grabbing'>('grab');
 
   const pauseAutoScroll = useCallback(() => {
     isPaused.current = true;
+    lastTimestamp.current = null;
     clearTimeout(pauseTimeout.current);
     pauseTimeout.current = setTimeout(() => {
       isPaused.current = false;
-    }, 3000);
+    }, PAUSE_DURATION);
   }, []);
 
+  /** Wrap offset into [0, contentWidth) range (Pac-Man style). */
+  const wrapOffset = useCallback(
+    (value: number): number => {
+      const w = contentWidthRef.current;
+      if (w <= 0) return 0;
+      return ((value % w) + w) % w;
+    },
+    [],
+  );
+
+  // Measure a single set of children.
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
+    const track = trackRef.current;
+    if (!track) return;
 
-    const tick = () => {
-      if (!isPaused.current && el.scrollWidth > el.clientWidth) {
-        el.scrollLeft += speed;
+    const measure = () => {
+      // The track contains 3 copies; measure one third.
+      const w = track.scrollWidth / 3;
+      contentWidthRef.current = w;
+    };
 
-        // Loop: when we've scrolled past the first set, jump back
-        if (el.scrollLeft >= el.scrollWidth / 2) {
-          el.scrollLeft = 0;
+    measure();
+
+    const ro = new ResizeObserver(measure);
+    ro.observe(track);
+    return () => ro.disconnect();
+  }, []);
+
+  // Animation loop.
+  useEffect(() => {
+    const tick = (timestamp: number) => {
+      if (!isPaused.current && contentWidthRef.current > 0) {
+        if (lastTimestamp.current !== null) {
+          // Normalise speed to ~60fps regardless of actual frame rate.
+          const delta = (timestamp - lastTimestamp.current) / (1000 / 60);
+          offsetRef.current = wrapOffset(offsetRef.current + speed * delta);
         }
+        lastTimestamp.current = timestamp;
+
+        const track = trackRef.current;
+        if (track) {
+          track.style.transform = `translate3d(${-offsetRef.current}px, 0, 0)`;
+        }
+      } else {
+        lastTimestamp.current = null;
       }
+
       animationRef.current = requestAnimationFrame(tick);
     };
 
     animationRef.current = requestAnimationFrame(tick);
 
-    // Pause on user interaction
-    const handleWheel = () => pauseAutoScroll();
-    const handleTouchStart = () => pauseAutoScroll();
-    const handlePointerDown = () => pauseAutoScroll();
-
-    el.addEventListener('wheel', handleWheel, { passive: true });
-    el.addEventListener('touchstart', handleTouchStart, { passive: true });
-    el.addEventListener('pointerdown', handlePointerDown);
-
     return () => {
       cancelAnimationFrame(animationRef.current);
       clearTimeout(pauseTimeout.current);
-      el.removeEventListener('wheel', handleWheel);
-      el.removeEventListener('touchstart', handleTouchStart);
-      el.removeEventListener('pointerdown', handlePointerDown);
     };
-  }, [speed, pauseAutoScroll]);
+  }, [speed, wrapOffset]);
+
+  // User interaction handlers.
+  useEffect(() => {
+    const container = trackRef.current?.parentElement;
+    if (!container) return;
+
+    // --- Wheel (shift+scroll or horizontal scroll) ---
+    const handleWheel = (e: WheelEvent) => {
+      // Accept both explicit horizontal scroll and shift+vertical scroll.
+      const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.shiftKey ? e.deltaY : 0;
+      if (dx === 0) return;
+
+      e.preventDefault();
+      offsetRef.current = wrapOffset(offsetRef.current + dx);
+
+      const track = trackRef.current;
+      if (track) {
+        track.style.transform = `translate3d(${-offsetRef.current}px, 0, 0)`;
+      }
+
+      pauseAutoScroll();
+    };
+
+    // --- Pointer drag (works for mouse AND touch) ---
+    const handlePointerDown = (e: PointerEvent) => {
+      isDragging.current = true;
+      setCursorStyle('grabbing');
+      dragStartX.current = e.clientX;
+      dragStartOffset.current = offsetRef.current;
+      container.setPointerCapture(e.pointerId);
+      pauseAutoScroll();
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      if (!isDragging.current) return;
+      const dx = dragStartX.current - e.clientX;
+      offsetRef.current = wrapOffset(dragStartOffset.current + dx);
+
+      const track = trackRef.current;
+      if (track) {
+        track.style.transform = `translate3d(${-offsetRef.current}px, 0, 0)`;
+      }
+    };
+
+    const handlePointerUp = () => {
+      if (!isDragging.current) return;
+      isDragging.current = false;
+      setCursorStyle('grab');
+      pauseAutoScroll();
+    };
+
+    // Use non-passive wheel so we can preventDefault for horizontal scroll.
+    container.addEventListener('wheel', handleWheel, { passive: false });
+    container.addEventListener('pointerdown', handlePointerDown);
+    container.addEventListener('pointermove', handlePointerMove);
+    container.addEventListener('pointerup', handlePointerUp);
+    container.addEventListener('pointercancel', handlePointerUp);
+
+    return () => {
+      container.removeEventListener('wheel', handleWheel);
+      container.removeEventListener('pointerdown', handlePointerDown);
+      container.removeEventListener('pointermove', handlePointerMove);
+      container.removeEventListener('pointerup', handlePointerUp);
+      container.removeEventListener('pointercancel', handlePointerUp);
+    };
+  }, [pauseAutoScroll, wrapOffset]);
+
+  const maskStyle: React.CSSProperties = {
+    maskImage: `linear-gradient(to right, transparent 0px, black ${FADE_WIDTH + SAFETY_MARGIN}px, black calc(100% - ${FADE_WIDTH + SAFETY_MARGIN}px), transparent 100%)`,
+    WebkitMaskImage: `linear-gradient(to right, transparent 0px, black ${FADE_WIDTH + SAFETY_MARGIN}px, black calc(100% - ${FADE_WIDTH + SAFETY_MARGIN}px), transparent 100%)`,
+  };
 
   return (
-    <div className="relative">
-      {/* Left fade */}
-      <div className="pointer-events-none absolute top-0 bottom-0 left-0 z-10 w-16 bg-gradient-to-r from-surface to-transparent" />
-      {/* Right fade */}
-      <div className="pointer-events-none absolute top-0 bottom-0 right-0 z-10 w-16 bg-gradient-to-l from-surface to-transparent" />
-
+    <div
+      className="relative select-none overflow-hidden"
+      style={{
+        cursor: cursorStyle,
+        touchAction: 'pan-y',
+        ...maskStyle,
+      }}
+    >
       <div
-        ref={scrollRef}
-        className="scrollbar-hide flex overflow-x-auto scroll-smooth"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        ref={trackRef}
+        className="flex w-max will-change-transform"
+        style={{ transform: 'translate3d(0, 0, 0)' }}
+        aria-hidden
       >
-        {/* Render children twice for seamless loop */}
+        {/* Render children 3× for seamless wrapping in both directions. */}
+        {children}
         {children}
         {children}
       </div>
