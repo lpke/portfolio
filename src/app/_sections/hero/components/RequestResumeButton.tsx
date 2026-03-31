@@ -1,26 +1,93 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+
+const ANIM_MS = 300;
 
 export function RequestResumeButton() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [phase, setPhase] = useState<'closed' | 'opening' | 'open' | 'closing'>(
+    'closed',
+  );
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const panelContentRef = useRef<HTMLDivElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+
+  const [btnRect, setBtnRect] = useState<DOMRect | null>(null);
+  const [panelSize, setPanelSize] = useState<{ w: number; h: number } | null>(
+    null,
+  );
+
+  const isVisible = phase !== 'closed';
+
+  const measureButton = useCallback(() => {
+    if (!triggerRef.current) return null;
+    return triggerRef.current.getBoundingClientRect();
+  }, []);
+
+  const measurePanel = useCallback(() => {
+    if (!panelContentRef.current) return;
+    const rect = panelContentRef.current.getBoundingClientRect();
+    setPanelSize({ w: Math.max(rect.width, 320), h: rect.height });
+  }, []);
+
+  // ── Open ──
+  const open = useCallback(() => {
+    const rect = measureButton();
+    if (!rect) return;
+    setBtnRect(rect);
+    setPhase('opening');
+  }, [measureButton]);
+
+  useEffect(() => {
+    if (phase !== 'opening' || !btnRect) return;
+    const raf = requestAnimationFrame(() => {
+      measurePanel();
+      requestAnimationFrame(() => setPhase('open'));
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [phase, btnRect, measurePanel]);
+
+  useEffect(() => {
+    if (phase === 'open') {
+      const t = setTimeout(() => emailInputRef.current?.focus(), ANIM_MS);
+      return () => clearTimeout(t);
+    }
+  }, [phase]);
+
+  // ── Close ──
+  const close = useCallback(() => {
+    const rect = measureButton();
+    if (rect) setBtnRect(rect);
+    setPhase('closing');
+    setTimeout(() => {
+      setPhase('closed');
+      setPanelSize(null);
+    }, ANIM_MS);
+  }, [measureButton]);
+
+  // Click outside
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
+      if (phase !== 'open') return;
+      const target = e.target as Node;
       if (
-        isOpen &&
         containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
+        !containerRef.current.contains(target) &&
+        panelRef.current &&
+        !panelRef.current.contains(target)
       ) {
-        setIsOpen(false);
+        close();
       }
     },
-    [isOpen],
+    [phase, close],
   );
 
   useEffect(() => {
@@ -28,116 +95,224 @@ export function RequestResumeButton() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [handleClickOutside]);
 
+  // Reposition on scroll / resize
+  const updateBtnRect = useCallback(() => {
+    const rect = measureButton();
+    if (rect) setBtnRect(rect);
+  }, [measureButton]);
+
+  useEffect(() => {
+    if (!isVisible) return;
+    window.addEventListener('scroll', updateBtnRect, true);
+    window.addEventListener('resize', updateBtnRect);
+    return () => {
+      window.removeEventListener('scroll', updateBtnRect, true);
+      window.removeEventListener('resize', updateBtnRect);
+    };
+  }, [isVisible, updateBtnRect]);
+
+  // Re-measure panel as message area animates — poll during the transition
+  useEffect(() => {
+    if (phase !== 'open') return;
+    // Measure at start, middle, and end of the 300ms CSS transition
+    const t1 = setTimeout(() => measurePanel(), 10);
+    const t2 = setTimeout(() => measurePanel(), 150);
+    const t3 = setTimeout(() => measurePanel(), 320);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, [showMessage, phase, measurePanel]);
+
   const handleSubmit = () => {
     if (!email) return;
-    // TODO: Wire up to a real endpoint
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
-      setIsOpen(false);
+      close();
       setEmail('');
       setMessage('');
       setShowMessage(false);
-    }, 2000);
+    }, 1400);
   };
 
-  return (
-    <div ref={containerRef} className="relative">
-      {/* Trigger Button */}
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="ghost-border font-headline text-primary hover:bg-primary/5 rounded-full px-8 py-4 font-bold transition-all"
-        style={{ borderColor: 'rgba(123, 208, 255, 0.3)' }}
-      >
-        Request Resume
-      </button>
+  // ── Morph geometry ──
+  const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
+  const scrollX = typeof window !== 'undefined' ? window.scrollX : 0;
 
-      {/* Floating Panel */}
-      {isOpen && (
-        <div
-          className="absolute top-full left-0 z-50 mt-3 w-80 overflow-hidden rounded-xl border border-white/10 bg-surface-container shadow-2xl"
-          style={{
-            animation: 'fadeSlideIn 0.2s ease-out',
-          }}
-        >
-          {/* Header */}
-          <div className="flex items-center justify-between px-5 pt-4 pb-3">
-            <span className="font-label text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/50">
-              Add Message
-            </span>
-            <button
-              type="button"
-              onClick={() => setShowMessage(!showMessage)}
-              aria-label="Toggle message"
-              className={`relative h-6 w-11 rounded-full transition-colors duration-200 ${
-                showMessage ? 'bg-primary/60' : 'bg-surface-container-highest'
-              }`}
+  const collapsed = btnRect
+    ? {
+        top: btnRect.top + scrollY,
+        left: btnRect.left + scrollX,
+        width: btnRect.width,
+        height: btnRect.height,
+        borderRadius: btnRect.height / 2,
+      }
+    : null;
+
+  const expanded =
+    btnRect && panelSize
+      ? {
+          top: btnRect.top + scrollY,
+          left: btnRect.left + scrollX,
+          width: panelSize.w,
+          height: panelSize.h,
+          borderRadius: 12,
+        }
+      : null;
+
+  const isAtExpanded = phase === 'open';
+  const morphTarget = isAtExpanded ? (expanded ?? collapsed) : collapsed;
+
+  const portal =
+    isVisible && btnRect
+      ? createPortal(
+          <div
+            ref={panelRef}
+            className="z-9999 overflow-hidden border shadow-2xl"
+            style={{
+              position: 'absolute',
+              top: morphTarget?.top ?? 0,
+              left: morphTarget?.left ?? 0,
+              width: morphTarget?.width ?? 0,
+              height: morphTarget?.height ?? 'auto',
+              borderRadius: morphTarget?.borderRadius ?? btnRect.height / 2,
+              borderColor: 'rgba(255, 255, 255, 0.2)',
+              transitionProperty: 'top, left, width, height, border-radius',
+              transitionTimingFunction: 'cubic-bezier(0.4,0,0.2,1)',
+              transitionDuration: `${ANIM_MS}ms`,
+              transitionDelay: '0ms',
+              pointerEvents: phase === 'open' ? 'auto' : 'none',
+            }}
+          >
+            {/* Collapsed: ghost button label */}
+            <div
+              className="font-headline text-primary absolute inset-0 flex cursor-pointer items-center justify-center font-bold"
+              style={{
+                opacity: phase === 'open' ? 0 : 1,
+                transitionProperty: 'opacity',
+                transitionDuration: `${phase === 'open' ? ANIM_MS * 0.25 : ANIM_MS * 0.5}ms`,
+                transitionTimingFunction: 'ease',
+                transitionDelay:
+                  phase === 'closing' ? `${ANIM_MS * 0.4}ms` : '0ms',
+                pointerEvents: 'none',
+              }}
             >
-              <span
-                className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform duration-200 ${
-                  showMessage ? 'translate-x-5' : ''
-                }`}
-              />
-            </button>
-          </div>
+              Request CV
+            </div>
 
-          {/* Email + Message Input Area */}
-          <div className="px-4 pb-4">
-            <div className="overflow-hidden rounded-xl border border-white/10 bg-surface-container-lowest">
+            {/* Expanded panel content */}
+            <div
+              ref={panelContentRef}
+              style={{
+                opacity: phase === 'open' ? 1 : 0,
+                transitionProperty: 'opacity',
+                transitionDuration: `${ANIM_MS * 0.5}ms`,
+                transitionTimingFunction: 'ease',
+                transitionDelay:
+                  phase === 'open' ? `${ANIM_MS * 0.35}ms` : '0ms',
+                width: 320,
+              }}
+            >
               {/* Email row */}
-              <div className="flex items-center gap-3 px-4">
+              <div className="bg-surface-container-lowest flex items-center gap-3 px-4">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="text-on-surface-variant/40 h-4 w-4 shrink-0"
+                >
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z" />
+                </svg>
                 <input
+                  ref={emailInputRef}
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
-                  className="flex-1 bg-transparent py-3 text-sm text-on-surface outline-none placeholder:text-on-surface-variant/40"
+                  className="text-on-surface placeholder:text-on-surface-variant/40 flex-1 bg-transparent py-3.5 text-sm outline-none"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !showMessage) handleSubmit();
                   }}
                 />
+              </div>
+
+              {/* Message area */}
+              <div
+                className="overflow-hidden transition-all duration-300 ease-in-out"
+                style={{
+                  maxHeight: showMessage ? '140px' : '0',
+                  opacity: showMessage ? 1 : 0,
+                }}
+              >
+                <div className="bg-surface-container-lowest border-t border-white/5">
+                  <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Write an optional message..."
+                    rows={3}
+                    className="text-on-surface placeholder:text-on-surface-variant/40 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="bg-surface-container flex items-center justify-between px-4 py-3">
+                <button
+                  type="button"
+                  onClick={() => setShowMessage(!showMessage)}
+                  className="flex items-center gap-2"
+                >
+                  <span
+                    className={`relative inline-flex h-5 w-9 shrink-0 rounded-full transition-colors duration-200 ${
+                      showMessage
+                        ? 'bg-primary/60'
+                        : 'bg-surface-container-highest'
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-white shadow transition-transform duration-200 ${
+                        showMessage ? 'translate-x-4' : ''
+                      }`}
+                    />
+                  </span>
+                  <span className="text-on-surface-variant/50 text-xs font-medium">
+                    Add message
+                  </span>
+                </button>
+
                 <button
                   type="button"
                   onClick={handleSubmit}
                   disabled={!email || submitted}
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-on-primary-container text-on-primary transition-all hover:shadow-[0_0_12px_rgba(123,208,255,0.4)] disabled:opacity-40"
+                  className="signature-gradient text-on-primary rounded-full px-5 py-1.5 text-sm font-bold transition-all hover:shadow-[0_0_12px_rgba(123,208,255,0.4)] disabled:opacity-40"
+                  style={{ cursor: !email || submitted ? 'default' : 'pointer' }}
                 >
-                  {submitted ? (
-                    <span className="text-xs">✓</span>
-                  ) : (
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="h-4 w-4"
-                    >
-                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                    </svg>
-                  )}
+                  {submitted ? '\u2713 Sent' : 'Request CV'}
                 </button>
               </div>
-
-              {/* Message area — animated reveal */}
-              <div
-                className="overflow-hidden transition-all duration-300 ease-in-out"
-                style={{
-                  maxHeight: showMessage ? '120px' : '0',
-                  opacity: showMessage ? 1 : 0,
-                }}
-              >
-                <div className="mx-4 border-t border-white/10" />
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Write an optional message..."
-                  rows={3}
-                  className="w-full resize-none bg-transparent px-4 py-3 text-sm text-on-surface outline-none placeholder:text-on-surface-variant/40"
-                />
-              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )
+      : null;
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        ref={triggerRef}
+        type="button"
+        onClick={open}
+        className="ghost-border font-headline text-primary hover:bg-primary/5 cursor-pointer rounded-full px-8 py-4 font-bold"
+        style={{
+          borderColor: 'rgba(255, 255, 255, 0.2)',
+          visibility: isVisible ? 'hidden' : 'visible',
+        }}
+      >
+        Request CV
+      </button>
+
+      {portal}
     </div>
   );
 }
