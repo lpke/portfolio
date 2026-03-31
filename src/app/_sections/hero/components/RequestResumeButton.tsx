@@ -6,9 +6,9 @@ import { createPortal } from 'react-dom';
 const ANIM_MS = 300;
 
 export function RequestResumeButton() {
-  const [phase, setPhase] = useState<'closed' | 'opening' | 'open' | 'closing'>(
-    'closed',
-  );
+  const [phase, setPhase] = useState<
+    'closed' | 'opening' | 'open' | 'closing'
+  >('closed');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
@@ -21,21 +21,14 @@ export function RequestResumeButton() {
   const emailInputRef = useRef<HTMLInputElement>(null);
 
   const [btnRect, setBtnRect] = useState<DOMRect | null>(null);
-  const [panelSize, setPanelSize] = useState<{ w: number; h: number } | null>(
-    null,
-  );
+  // Snapshot of panel size captured once right before the morph starts
+  const [morphHeight, setMorphHeight] = useState<number | null>(null);
 
   const isVisible = phase !== 'closed';
 
   const measureButton = useCallback(() => {
     if (!triggerRef.current) return null;
     return triggerRef.current.getBoundingClientRect();
-  }, []);
-
-  const measurePanel = useCallback(() => {
-    if (!panelContentRef.current) return;
-    const rect = panelContentRef.current.getBoundingClientRect();
-    setPanelSize({ w: Math.max(rect.width, 320), h: rect.height });
   }, []);
 
   // ── Open ──
@@ -48,29 +41,46 @@ export function RequestResumeButton() {
 
   useEffect(() => {
     if (phase !== 'opening' || !btnRect) return;
+    // Wait one frame for the panel to render at collapsed size,
+    // then measure the content's natural height and trigger morph.
     const raf = requestAnimationFrame(() => {
-      measurePanel();
+      if (panelContentRef.current) {
+        const rect = panelContentRef.current.getBoundingClientRect();
+        setMorphHeight(rect.height);
+      }
       requestAnimationFrame(() => setPhase('open'));
     });
     return () => cancelAnimationFrame(raf);
-  }, [phase, btnRect, measurePanel]);
+  }, [phase, btnRect]);
 
+  // After the morph animation completes, clear the explicit height
+  // so the container uses height:auto and naturally follows content.
   useEffect(() => {
-    if (phase === 'open') {
-      const t = setTimeout(() => emailInputRef.current?.focus(), ANIM_MS);
-      return () => clearTimeout(t);
-    }
+    if (phase !== 'open') return;
+    const t = setTimeout(() => {
+      setMorphHeight(null);
+      emailInputRef.current?.focus();
+    }, ANIM_MS);
+    return () => clearTimeout(t);
   }, [phase]);
 
   // ── Close ──
   const close = useCallback(() => {
+    // Snapshot the current content height so we can transition FROM it
+    if (panelContentRef.current) {
+      const rect = panelContentRef.current.getBoundingClientRect();
+      setMorphHeight(rect.height);
+    }
     const rect = measureButton();
     if (rect) setBtnRect(rect);
-    setPhase('closing');
-    setTimeout(() => {
-      setPhase('closed');
-      setPanelSize(null);
-    }, ANIM_MS);
+    // Let the browser apply the explicit height first, then collapse
+    requestAnimationFrame(() => {
+      setPhase('closing');
+      setTimeout(() => {
+        setPhase('closed');
+        setMorphHeight(null);
+      }, ANIM_MS);
+    });
   }, [measureButton]);
 
   // Click outside
@@ -111,20 +121,6 @@ export function RequestResumeButton() {
     };
   }, [isVisible, updateBtnRect]);
 
-  // Re-measure panel as message area animates — poll during the transition
-  useEffect(() => {
-    if (phase !== 'open') return;
-    // Measure at start, middle, and end of the 300ms CSS transition
-    const t1 = setTimeout(() => measurePanel(), 10);
-    const t2 = setTimeout(() => measurePanel(), 150);
-    const t3 = setTimeout(() => measurePanel(), 320);
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-    };
-  }, [showMessage, phase, measurePanel]);
-
   const handleSubmit = () => {
     if (!email) return;
     setSubmitted(true);
@@ -151,35 +147,40 @@ export function RequestResumeButton() {
       }
     : null;
 
-  const expanded =
-    btnRect && panelSize
-      ? {
-          top: btnRect.top + scrollY,
-          left: btnRect.left + scrollX,
-          width: panelSize.w,
-          height: panelSize.h,
-          borderRadius: 12,
-        }
-      : null;
+  const expanded = btnRect
+    ? {
+        top: btnRect.top + scrollY,
+        left: btnRect.left + scrollX,
+        width: 320,
+        height: morphHeight,
+        borderRadius: 12,
+      }
+    : null;
 
-  const isAtExpanded = phase === 'open';
-  const morphTarget = isAtExpanded ? (expanded ?? collapsed) : collapsed;
+  const isMorphedOpen = phase === 'open';
+  const morphTarget = isMorphedOpen ? (expanded ?? collapsed) : collapsed;
+
+  // When phase is 'open' and morphHeight is null, the morph animation is done
+  // and we let the container auto-size.
+  const useAutoHeight = phase === 'open' && morphHeight === null;
 
   const portal =
     isVisible && btnRect
       ? createPortal(
           <div
             ref={panelRef}
-            className="z-9999 overflow-hidden border shadow-2xl"
+            className="z-40 overflow-hidden border shadow-2xl"
             style={{
               position: 'absolute',
               top: morphTarget?.top ?? 0,
               left: morphTarget?.left ?? 0,
               width: morphTarget?.width ?? 0,
-              height: morphTarget?.height ?? 'auto',
+              height: useAutoHeight ? 'auto' : (morphTarget?.height ?? 0),
               borderRadius: morphTarget?.borderRadius ?? btnRect.height / 2,
               borderColor: 'rgba(255, 255, 255, 0.2)',
-              transitionProperty: 'top, left, width, height, border-radius',
+              transitionProperty: useAutoHeight
+                ? 'top, left, width, border-radius'
+                : 'top, left, width, height, border-radius',
               transitionTimingFunction: 'cubic-bezier(0.4,0,0.2,1)',
               transitionDuration: `${ANIM_MS}ms`,
               transitionDelay: '0ms',
@@ -239,20 +240,21 @@ export function RequestResumeButton() {
 
               {/* Message area */}
               <div
-                className="overflow-hidden transition-all duration-300 ease-in-out"
+                className="grid transition-[grid-template-rows] duration-300 ease-in-out"
                 style={{
-                  maxHeight: showMessage ? '140px' : '0',
-                  opacity: showMessage ? 1 : 0,
+                  gridTemplateRows: showMessage ? '1fr' : '0fr',
                 }}
               >
-                <div className="bg-surface-container-lowest border-t border-white/5">
-                  <textarea
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Write an optional message..."
-                    rows={3}
-                    className="text-on-surface placeholder:text-on-surface-variant/40 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none"
-                  />
+                <div className="overflow-hidden">
+                  <div className="bg-surface-container-lowest border-t border-white/5">
+                    <textarea
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder="Write an optional message..."
+                      rows={3}
+                      className="text-on-surface placeholder:text-on-surface-variant/40 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -316,3 +318,4 @@ export function RequestResumeButton() {
     </div>
   );
 }
+
