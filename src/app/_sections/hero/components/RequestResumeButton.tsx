@@ -151,7 +151,7 @@ export function RequestResumeButton() {
     ? {
         top: btnRect.top + scrollY,
         left: btnRect.left + scrollX,
-        width: 320,
+        width: 360,
         height: morphHeight,
         borderRadius: 12,
       }
@@ -213,7 +213,7 @@ export function RequestResumeButton() {
                 transitionTimingFunction: 'ease',
                 transitionDelay:
                   phase === 'open' ? `${ANIM_MS * 0.35}ms` : '0ms',
-                width: 320,
+                width: 360,
               }}
             >
               {/* Email row */}
@@ -221,7 +221,7 @@ export function RequestResumeButton() {
                 <svg
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  className="text-on-surface-variant/40 h-4 w-4 shrink-0"
+                  className="text-on-surface-variant/40 h-5 w-5 shrink-0"
                 >
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z" />
                 </svg>
@@ -231,7 +231,7 @@ export function RequestResumeButton() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
-                  className="text-on-surface placeholder:text-on-surface-variant/40 flex-1 bg-transparent py-3.5 text-sm outline-none"
+                  className="text-on-surface placeholder:text-on-surface-variant/40 flex-1 bg-transparent py-4 text-base outline-none"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !showMessage) handleSubmit();
                   }}
@@ -250,9 +250,9 @@ export function RequestResumeButton() {
                     <textarea
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Write an optional message..."
+                      placeholder="Include an optional message..."
                       rows={3}
-                      className="text-on-surface placeholder:text-on-surface-variant/40 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none"
+                      className="text-on-surface placeholder:text-on-surface-variant/40 w-full resize-none bg-transparent px-4 py-3.5 text-base outline-none"
                     />
                   </div>
                 </div>
@@ -266,19 +266,19 @@ export function RequestResumeButton() {
                   className="flex items-center gap-2"
                 >
                   <span
-                    className={`relative inline-flex h-5 w-9 shrink-0 rounded-full transition-colors duration-200 ${
+                    className={`relative inline-flex h-6 w-10 shrink-0 rounded-full transition-colors duration-200 ${
                       showMessage
                         ? 'bg-primary/60'
                         : 'bg-surface-container-highest'
                     }`}
                   >
                     <span
-                      className={`absolute top-1 left-1 h-3 w-3 rounded-full bg-white shadow transition-transform duration-200 ${
+                      className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-white shadow transition-transform duration-200 ${
                         showMessage ? 'translate-x-4' : ''
                       }`}
                     />
                   </span>
-                  <span className="text-on-surface-variant/50 text-xs font-medium">
+                  <span className="text-on-surface-variant/50 text-sm font-medium">
                     Add message
                   </span>
                 </button>
@@ -287,7 +287,7 @@ export function RequestResumeButton() {
                   type="button"
                   onClick={handleSubmit}
                   disabled={!email || submitted}
-                  className="signature-gradient text-on-primary rounded-full px-5 py-1.5 text-sm font-bold transition-all hover:shadow-[0_0_12px_rgba(123,208,255,0.4)] disabled:opacity-40"
+                  className="signature-gradient text-on-primary rounded-full px-6 py-2 text-base font-bold transition-all hover:shadow-[0_0_12px_rgba(123,208,255,0.4)] disabled:opacity-40"
                   style={{ cursor: !email || submitted ? 'default' : 'pointer' }}
                 >
                   {submitted ? '\u2713 Sent' : 'Request CV'}
