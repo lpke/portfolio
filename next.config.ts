@@ -12,6 +12,7 @@ const nextConfig: NextConfig = withMDX({
       320, 420, 768, 1024, 1200, 1440, 1920, 2560, 3000, 3500, 4000,
     ],
   },
+  allowedDevOrigins: ['192.168.20.18'],
 });
 
 export default nextConfig;
