@@ -1,22 +1,24 @@
 import { PageHero } from '@/components/PageHero';
-import { SKILL_CARDS } from './data/skills';
-import { SkillCardGrid } from './components/SkillCardGrid';
+import { Skills } from './components/Skills';
+import { SHOWCASE_SKILLS } from './data/showcaseSkills';
 
 export function WhatIDo() {
   return (
-    <section
-      id="skills"
-      className="mx-auto max-w-7xl px-6 pt-32 pb-24 md:px-8"
-    >
-      <PageHero
-        title={
-          <>
-            What I <span className="text-primary italic">do</span>
-          </>
-        }
-        subtitle="My areas of specialisation. Click a card to learn more about my professional experience and related skills in that area."
-      />
-      <SkillCardGrid skills={SKILL_CARDS} />
+    <section id="skills" className="px-4 pt-32 pb-24 sm:px-6 md:px-8">
+      <div className="mx-auto max-w-7xl">
+        <PageHero
+          title={
+            <>
+              What I <span className="text-primary italic">do</span>
+            </>
+          }
+          subtitle="Select a focus area to see how I approach the work, the tools I reach for, and the systems I tend to build."
+        />
+      </div>
+
+      <div className="mx-auto max-w-[96rem]">
+        <Skills skills={SHOWCASE_SKILLS} />
+      </div>
     </section>
   );
 }
