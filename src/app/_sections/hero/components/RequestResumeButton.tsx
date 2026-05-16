@@ -1,12 +1,25 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback, useSyncExternalStore } from 'react';
-import { createPortal } from 'react-dom';
+import {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useLayoutEffect,
+  useSyncExternalStore,
+} from 'react';
+import { createPortal, flushSync } from 'react-dom';
 
 const ANIM_MS = 300;
 const MOBILE_BREAKPOINT = 640; // Tailwind `sm`
 
 const mobileQuery = `(max-width: ${MOBILE_BREAKPOINT - 1}px)`;
+
+type FocusableFormField = HTMLInputElement | HTMLTextAreaElement;
+
+function isCompleteEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+}
 
 function subscribeMobile(cb: () => void) {
   const mql = window.matchMedia(mobileQuery);
@@ -23,7 +36,11 @@ function getServerSnapshotMobile() {
 }
 
 function useIsMobile() {
-  return useSyncExternalStore(subscribeMobile, getSnapshotMobile, getServerSnapshotMobile);
+  return useSyncExternalStore(
+    subscribeMobile,
+    getSnapshotMobile,
+    getServerSnapshotMobile,
+  );
 }
 
 /* ────────────────────────────────────────────
@@ -39,6 +56,9 @@ function PanelForm({
   submitted,
   handleSubmit,
   emailInputRef,
+  messageInputRef,
+  isEmailValid,
+  focusFieldWithoutScroll,
   mobile = false,
 }: {
   email: string;
@@ -50,8 +70,41 @@ function PanelForm({
   submitted: boolean;
   handleSubmit: () => void;
   emailInputRef: React.RefObject<HTMLInputElement | null>;
+  messageInputRef: React.RefObject<HTMLTextAreaElement | null>;
+  isEmailValid: boolean;
+  focusFieldWithoutScroll: (
+    field: FocusableFormField,
+    options?: { select?: boolean },
+  ) => void;
   mobile?: boolean;
 }) {
+  const handleMobileFieldPointerDown = (
+    e: React.PointerEvent<FocusableFormField>,
+  ) => {
+    if (!mobile) return;
+    if (document.activeElement === e.currentTarget) return;
+
+    e.preventDefault();
+    focusFieldWithoutScroll(e.currentTarget);
+  };
+
+  const handleMessageToggle = () => {
+    if (showMessage) {
+      setShowMessage(false);
+      return;
+    }
+
+    flushSync(() => setShowMessage(true));
+    if (isEmailValid && messageInputRef.current) {
+      focusFieldWithoutScroll(messageInputRef.current);
+      return;
+    }
+
+    if (emailInputRef.current) {
+      focusFieldWithoutScroll(emailInputRef.current, { select: !email });
+    }
+  };
+
   return (
     <>
       {/* Email row */}
@@ -66,10 +119,17 @@ function PanelForm({
         <input
           ref={emailInputRef}
           type="email"
+          required
+          inputMode="email"
+          autoComplete="email"
+          autoCapitalize="none"
+          spellCheck={false}
+          aria-invalid={email.length > 0 && !isEmailValid}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="your@email.com"
           className={`text-on-surface placeholder:text-on-surface-variant/40 flex-1 bg-transparent text-base outline-none ${mobile ? 'py-5' : 'py-4'}`}
+          onPointerDown={handleMobileFieldPointerDown}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !showMessage) handleSubmit();
           }}
@@ -84,28 +144,30 @@ function PanelForm({
         <div className="overflow-hidden">
           <div className="bg-surface-container-lowest border-t border-white/5">
             <textarea
+              ref={messageInputRef}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Include an optional message..."
               rows={3}
               className="text-on-surface placeholder:text-on-surface-variant/40 w-full resize-none bg-transparent px-4 py-3.5 text-base outline-none"
+              onPointerDown={handleMobileFieldPointerDown}
             />
           </div>
         </div>
       </div>
 
       {/* Footer */}
-      <div className={`bg-surface-container flex items-center justify-between px-4 py-3 ${mobile ? 'pb-5' : ''}`}>
+      <div
+        className={`bg-surface-container flex items-center justify-between px-4 py-3 ${mobile ? 'pb-5' : ''}`}
+      >
         <button
           type="button"
-          onClick={() => setShowMessage(!showMessage)}
+          onClick={handleMessageToggle}
           className="flex items-center gap-2"
         >
           <span
             className={`relative inline-flex h-6 w-10 shrink-0 rounded-full transition-colors duration-200 ${
-              showMessage
-                ? 'bg-primary/60'
-                : 'bg-surface-container-highest'
+              showMessage ? 'bg-primary/60' : 'bg-surface-container-highest'
             }`}
           >
             <span
@@ -122,9 +184,11 @@ function PanelForm({
         <button
           type="button"
           onClick={handleSubmit}
-          disabled={!email || submitted}
+          disabled={!isEmailValid || submitted}
           className="signature-gradient text-on-primary rounded-full px-6 py-2 text-base font-bold transition-all hover:shadow-[0_0_12px_rgba(123,208,255,0.4)] disabled:opacity-40"
-          style={{ cursor: !email || submitted ? 'default' : 'pointer' }}
+          style={{
+            cursor: !isEmailValid || submitted ? 'default' : 'pointer',
+          }}
         >
           {submitted ? '\u2713 Sent' : 'Request CV'}
         </button>
@@ -134,9 +198,41 @@ function PanelForm({
 }
 
 /* ────────────────────────────────────────────
- * Mobile top-sheet
+ * Mobile floating dialog
  * ──────────────────────────────────────────── */
-function MobileSheet({
+function useFixedBodyLock(active: boolean) {
+  useLayoutEffect(() => {
+    if (!active) return;
+
+    const { body, documentElement } = document;
+    const scrollbarWidth = window.innerWidth - documentElement.clientWidth;
+    const previousBody = {
+      overflow: body.style.overflow,
+      paddingRight: body.style.paddingRight,
+      overscrollBehavior: body.style.overscrollBehavior,
+      touchAction: body.style.touchAction,
+    };
+    const previousRootOverscroll = documentElement.style.overscrollBehavior;
+
+    body.style.overflow = 'hidden';
+    body.style.overscrollBehavior = 'none';
+    body.style.touchAction = 'none';
+    if (scrollbarWidth > 0) {
+      body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+    documentElement.style.overscrollBehavior = 'none';
+
+    return () => {
+      body.style.overflow = previousBody.overflow;
+      body.style.paddingRight = previousBody.paddingRight;
+      body.style.overscrollBehavior = previousBody.overscrollBehavior;
+      body.style.touchAction = previousBody.touchAction;
+      documentElement.style.overscrollBehavior = previousRootOverscroll;
+    };
+  }, [active]);
+}
+
+function MobileDialog({
   phase,
   close,
   children,
@@ -145,33 +241,46 @@ function MobileSheet({
   close: () => void;
   children: React.ReactNode;
 }) {
-  const sheetRef = useRef<HTMLDivElement>(null);
+  const active = phase !== 'closed';
 
-  // Prevent body scroll while sheet is visible
+  useFixedBodyLock(active);
+
   useEffect(() => {
-    if (phase === 'closed') return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
+    if (!active) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') close();
     };
-  }, [phase]);
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [active, close]);
 
   if (phase === 'closed') return null;
 
+  const isOpening = phase === 'opening';
   const isOpen = phase === 'open';
   const isClosing = phase === 'closing';
+  const isInteractive = isOpening || isOpen;
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex flex-col justify-start"
+      className="fixed inset-0 z-50 flex items-start justify-center px-4"
       style={{
-        pointerEvents: isOpen ? 'auto' : 'none',
+        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 3.5rem)',
+        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 1.5rem)',
+        pointerEvents: isInteractive ? 'auto' : 'none',
+        touchAction: 'none',
       }}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Request CV"
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/40 transition-opacity"
+        className="absolute inset-0 bg-black/55 backdrop-blur-sm transition-opacity"
         style={{
           opacity: isOpen ? 1 : 0,
           transitionDuration: `${ANIM_MS}ms`,
@@ -180,20 +289,41 @@ function MobileSheet({
         onClick={close}
       />
 
-      {/* Sheet */}
+      {/* Dialog */}
       <div
-        ref={sheetRef}
-        className="bg-surface-container relative z-10 w-full overflow-hidden rounded-b-2xl border-b border-x border-white/10 shadow-2xl"
+        className="bg-surface-container relative z-10 w-full max-w-sm overflow-hidden rounded-2xl border border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.45)]"
         style={{
-          transform:
-            isOpen ? 'translateY(0)' : isClosing ? 'translateY(-100%)' : 'translateY(-100%)',
-          opacity: isOpen || isClosing ? 1 : 0,
-          transition: `transform ${ANIM_MS}ms cubic-bezier(0.4,0,0.2,1), opacity ${ANIM_MS * 0.5}ms ease`,
-          pointerEvents: isOpen ? 'auto' : 'none',
-          // Safe-area for devices with notch
-          paddingTop: 'env(safe-area-inset-top, 0px)',
+          transform: isOpen ? 'scale(1)' : 'scale(0.96)',
+          opacity: isClosing ? 0 : 1,
+          transition: `transform ${ANIM_MS}ms cubic-bezier(0.16,1,0.3,1), opacity ${ANIM_MS * 0.6}ms ease`,
+          pointerEvents: isInteractive ? 'auto' : 'none',
         }}
       >
+        <div className="flex items-center justify-between border-b border-white/5 px-4 py-3">
+          <p className="font-headline text-base font-bold text-white">
+            Request CV
+          </p>
+          <button
+            type="button"
+            onClick={close}
+            className="text-on-surface-variant/55 flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/10 hover:text-white"
+            aria-label="Close request CV dialog"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              className="h-5 w-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
         {children}
       </div>
     </div>,
@@ -220,11 +350,39 @@ export function RequestResumeButton() {
   const panelRef = useRef<HTMLDivElement>(null);
   const panelContentRef = useRef<HTMLDivElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
+  const messageInputRef = useRef<HTMLTextAreaElement>(null);
 
   const [btnRect, setBtnRect] = useState<DOMRect | null>(null);
   const [morphHeight, setMorphHeight] = useState<number | null>(null);
 
   const isVisible = phase !== 'closed';
+  const isEmailValid = isCompleteEmail(email);
+
+  const focusFieldWithoutScroll = useCallback(
+    (field: FocusableFormField, options: { select?: boolean } = {}) => {
+      const scrollX = window.scrollX;
+      const scrollY = window.scrollY;
+
+      field.focus({ preventScroll: true });
+      if (options.select && 'select' in field) {
+        field.select();
+      }
+
+      requestAnimationFrame(() => {
+        if (window.scrollX !== scrollX || window.scrollY !== scrollY) {
+          window.scrollTo(scrollX, scrollY);
+        }
+      });
+    },
+    [],
+  );
+
+  const focusEmailInput = useCallback(() => {
+    const input = emailInputRef.current;
+    if (!input) return;
+
+    focusFieldWithoutScroll(input, { select: true });
+  }, [focusFieldWithoutScroll]);
 
   const measureButton = useCallback(() => {
     if (!triggerRef.current) return null;
@@ -234,17 +392,16 @@ export function RequestResumeButton() {
   // ── Open ──
   const open = useCallback(() => {
     if (isMobile) {
-      setPhase('opening');
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => setPhase('open'));
-      });
+      flushSync(() => setPhase('opening'));
+      focusEmailInput();
+      requestAnimationFrame(() => setPhase('open'));
       return;
     }
     const rect = measureButton();
     if (!rect) return;
     setBtnRect(rect);
     setPhase('opening');
-  }, [isMobile, measureButton]);
+  }, [focusEmailInput, isMobile, measureButton]);
 
   // Desktop morph: measure panel then transition
   useEffect(() => {
@@ -262,17 +419,21 @@ export function RequestResumeButton() {
 
   // After morph completes, clear height & focus
   useEffect(() => {
+    if (isMobile) return;
     if (phase !== 'open') return;
     const t = setTimeout(() => {
       setMorphHeight(null);
-      emailInputRef.current?.focus({ preventScroll: true });
+      focusEmailInput();
     }, ANIM_MS);
     return () => clearTimeout(t);
-  }, [phase]);
+  }, [focusEmailInput, isMobile, phase]);
 
   // ── Close ──
   const close = useCallback(() => {
     if (isMobile) {
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
       setPhase('closing');
       setTimeout(() => {
         setPhase('closed');
@@ -335,7 +496,11 @@ export function RequestResumeButton() {
   }, [isMobile, isVisible, updateBtnRect]);
 
   const handleSubmit = () => {
-    if (!email) return;
+    if (!isEmailValid) {
+      focusEmailInput();
+      return;
+    }
+
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
@@ -357,13 +522,16 @@ export function RequestResumeButton() {
     submitted,
     handleSubmit,
     emailInputRef,
+    messageInputRef,
+    isEmailValid,
+    focusFieldWithoutScroll,
   };
 
-  // ── Mobile portal (top sheet) ──
+  // ── Mobile portal (floating dialog) ──
   const mobilePortal = isMobile ? (
-    <MobileSheet phase={phase} close={close}>
+    <MobileDialog phase={phase} close={close}>
       <PanelForm {...formProps} mobile />
-    </MobileSheet>
+    </MobileDialog>
   ) : null;
 
   // ── Desktop portal (morph animation — original behaviour) ──
@@ -473,4 +641,3 @@ export function RequestResumeButton() {
     </div>
   );
 }
-
