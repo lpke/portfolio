@@ -213,7 +213,7 @@ function SkillRail({
             }}
             onClick={() => onSelect(skill.id)}
             className={cx(
-              'grid w-full grid-cols-[1.75rem_minmax(0,1fr)] items-start gap-2.5 rounded-lg border border-transparent px-4 py-4 text-left transition-[background-color,border-color,color,box-shadow,min-height] duration-300',
+              'grid w-full cursor-pointer grid-cols-[1.75rem_minmax(0,1fr)] items-start gap-2.5 rounded-lg border border-transparent px-4 py-4 text-left transition-[background-color,border-color,color,box-shadow,min-height] duration-300',
               isSelected ? 'min-h-[8.75rem]' : 'min-h-[4.25rem]',
               getRailItemClass(isSelected),
             )}

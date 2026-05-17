@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { SKILLS, type SkillData } from '../data/skills';
 import { getSkillIcon } from './SkillIcons';
 import {
@@ -18,9 +18,7 @@ export function AccordionIndexSkills({
 }: {
   withShell?: boolean;
 }) {
-  const [openIds, setOpenIds] = useState<Set<string>>(
-    () => new Set(SKILLS[0] ? [SKILLS[0].id] : []),
-  );
+  const [openIds, setOpenIds] = useState<Set<string>>(() => new Set());
 
   const toggleSkill = (id: string) => {
     setOpenIds((current) => {
@@ -45,7 +43,7 @@ export function AccordionIndexSkills({
         <SkillsHeading />
       </div>
 
-      <div className="relative grid w-full gap-2 pb-6">
+      <div className="relative grid w-full gap-3 pb-6">
         {SKILLS.map((skill) => {
           const isOpen = openIds.has(skill.id);
 
@@ -78,13 +76,78 @@ function MobileSkillPanel({
   isOpen: boolean;
   onToggle: (id: string) => void;
 }) {
+  const tapStartRef = useRef<{
+    pointerId: number;
+    startedAt: number;
+    x: number;
+    y: number;
+    moved: boolean;
+  } | null>(null);
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLElement>) => {
+    tapStartRef.current = {
+      pointerId: event.pointerId,
+      startedAt: Date.now(),
+      x: event.clientX,
+      y: event.clientY,
+      moved: false,
+    };
+  };
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLElement>) => {
+    const start = tapStartRef.current;
+
+    if (!start || start.pointerId !== event.pointerId) {
+      return;
+    }
+
+    const movement = Math.hypot(event.clientX - start.x, event.clientY - start.y);
+
+    if (movement > 8) {
+      start.moved = true;
+    }
+  };
+
+  const handlePointerUp = (event: React.PointerEvent<HTMLElement>) => {
+    const start = tapStartRef.current;
+    tapStartRef.current = null;
+
+    if (!start || start.pointerId !== event.pointerId) {
+      return;
+    }
+
+    const isShortTap = Date.now() - start.startedAt < 450;
+    const selectedText = window.getSelection()?.toString().trim();
+
+    if (isShortTap && !start.moved && !selectedText) {
+      onToggle(skill.id);
+    }
+  };
+
+  const handlePointerCancel = () => {
+    tapStartRef.current = null;
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
+
+    event.preventDefault();
+    onToggle(skill.id);
+  };
+
   return (
     <article
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
       className={cx(
-        'relative overflow-hidden border-x-0 border-y transition-[background-color,border-color,box-shadow] duration-300',
+        'relative overflow-hidden border-x-0 border-y transition-[background-color,border-color,border-radius,box-shadow,margin] duration-300',
         isOpen
-          ? 'border-white/15 bg-white/[0.075] shadow-[0_14px_32px_rgba(0,0,0,0.18)]'
-          : 'bg-surface-container-high/80 border-white/10',
+          ? 'mx-0 rounded-none border-white/15 bg-white/[0.075] shadow-[0_14px_32px_rgba(0,0,0,0.18)]'
+          : 'bg-surface-container-high/80 mx-2 rounded-lg border-white/10',
       )}
       style={getSkillStyle(skill)}
     >
@@ -99,8 +162,11 @@ function MobileSkillPanel({
         type="button"
         aria-expanded={isOpen}
         aria-controls={`skill-panel-${skill.id}`}
-        onClick={() => onToggle(skill.id)}
-        className="relative grid w-full grid-cols-[1.75rem_minmax(0,1fr)_1.75rem] items-start gap-3 px-4 py-4 text-left transition-colors duration-300"
+        onKeyDown={handleKeyDown}
+        className={cx(
+          'relative grid w-full grid-cols-[1.75rem_minmax(0,1fr)_1.75rem] items-start gap-3 py-4 text-left transition-[color,padding] duration-300',
+          isOpen ? 'px-6' : 'px-4',
+        )}
       >
         <SkillStateIcon skill={skill} isOpen={isOpen} />
 
@@ -126,7 +192,12 @@ function MobileSkillPanel({
         )}
       >
         <div className="min-h-0 overflow-hidden">
-          <div className="border-t border-white/10 px-4 pt-4 pb-5">
+          <div
+            className={cx(
+              'border-t border-white/10 pt-4 pb-5 transition-[padding] duration-300',
+              isOpen ? 'px-6' : 'px-4',
+            )}
+          >
             <p className="text-on-surface-variant text-sm leading-relaxed">
               {skill.detail}
             </p>
