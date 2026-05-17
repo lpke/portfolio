@@ -2,11 +2,11 @@ import { Layout } from '@/sections/Layout';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'What I Do',
+  title: 'Skills',
   description:
-    'Areas of specialisation — frontend architecture, DX tooling, testing, performance, and more.',
+    'Frontend architecture, UI engineering, DX tooling, testing, experimentation, performance, and CMS delivery skills.',
 };
 
-export default function WhatIDoPage() {
+export default function SkillsPage() {
   return <Layout scrollToId="skills" />;
 }

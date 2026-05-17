@@ -1,8 +1,8 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { getSkillIcon } from '../components/SkillIcons';
-import type { SkillVariantData } from './data';
+import { getSkillIcon } from './SkillIcons';
+import type { SkillData } from '../data/skills';
 
-type VariantShellProps = {
+type SkillsShellProps = {
   children: ReactNode;
   className?: string;
 };
@@ -16,14 +16,14 @@ export function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(' ');
 }
 
-export function getSkillStyle(skill: SkillVariantData): SkillTokenStyle {
+export function getSkillStyle(skill: SkillData): SkillTokenStyle {
   return {
     '--skill-accent': skill.accent,
     '--skill-accent-soft': skill.accentSoft,
   };
 }
 
-export function VariantShell({ children, className }: VariantShellProps) {
+export function SkillsShell({ children, className }: SkillsShellProps) {
   return (
     <section id="skills" className={className}>
       {children}
@@ -31,7 +31,7 @@ export function VariantShell({ children, className }: VariantShellProps) {
   );
 }
 
-export function SkillsVariantHeading() {
+export function SkillsHeading() {
   return (
     <header>
       <h1 className="font-headline text-5xl font-black tracking-tighter text-white md:text-7xl lg:text-8xl">
@@ -45,7 +45,7 @@ export function SkillIconBadge({
   skill,
   className,
 }: {
-  skill: SkillVariantData;
+  skill: SkillData;
   className?: string;
 }) {
   return (
@@ -87,42 +87,11 @@ export function StackChips({
   );
 }
 
-export function MetricStrip({
-  skill,
-  compact = false,
-}: {
-  skill: SkillVariantData;
-  compact?: boolean;
-}) {
-  return (
-    <div
-      className={cx(
-        'grid gap-2',
-        compact ? 'grid-cols-3' : 'grid-cols-1 sm:grid-cols-3',
-      )}
-    >
-      {skill.metrics.map((metric) => (
-        <div
-          key={metric.label}
-          className="rounded border border-white/10 bg-white/[0.035] p-3"
-        >
-          <div className="font-headline text-xl font-black text-[var(--skill-accent)]">
-            {metric.value}
-          </div>
-          <div className="font-label text-on-surface-variant/70 mt-1 text-[10px] font-bold tracking-widest uppercase">
-            {metric.label}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export function CompetencyList({
   skill,
   limit,
 }: {
-  skill: SkillVariantData;
+  skill: SkillData;
   limit?: number;
 }) {
   const visible =
@@ -152,7 +121,7 @@ export function CompetencyList({
   );
 }
 
-export function ExampleList({ skill }: { skill: SkillVariantData }) {
+export function ExampleList({ skill }: { skill: SkillData }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       {skill.examples.map((example) => (
@@ -172,55 +141,6 @@ export function ExampleList({ skill }: { skill: SkillVariantData }) {
   );
 }
 
-export function DetailPanel({
-  skill,
-  titlePrefix,
-  className,
-}: {
-  skill: SkillVariantData;
-  titlePrefix?: string;
-  className?: string;
-}) {
-  return (
-    <article
-      className={cx(
-        'bg-surface-container-low/80 rounded-lg border border-white/10 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.24)]',
-        className,
-      )}
-      style={getSkillStyle(skill)}
-    >
-      <div className="flex items-start gap-4">
-        <SkillIconBadge skill={skill} />
-        <div className="min-w-0">
-          {titlePrefix && (
-            <p className="font-label mb-1 text-[10px] font-bold tracking-widest text-[var(--skill-accent)] uppercase">
-              {titlePrefix}
-            </p>
-          )}
-          <h3 className="font-headline text-2xl font-black tracking-tight text-white">
-            {skill.title}
-          </h3>
-          <p className="text-on-surface-variant mt-3 max-w-3xl text-sm leading-relaxed sm:text-base">
-            {skill.detail}
-          </p>
-        </div>
-      </div>
-
-      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
-        <CompetencyList skill={skill} limit={3} />
-        <div className="space-y-4">
-          <MetricStrip skill={skill} compact />
-          <StackChips items={skill.stack} />
-        </div>
-      </div>
-
-      <div className="mt-6">
-        <ExampleList skill={skill} />
-      </div>
-    </article>
-  );
-}
-
 export function ChevronIcon({ open }: { open?: boolean }) {
   return (
     <svg
@@ -237,27 +157,6 @@ export function ChevronIcon({ open }: { open?: boolean }) {
       strokeWidth="2"
     >
       <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
-}
-
-export function ArrowIcon({
-  direction = 'right',
-}: {
-  direction?: 'left' | 'right';
-}) {
-  return (
-    <svg
-      aria-hidden="true"
-      className={cx('h-5 w-5', direction === 'left' && 'rotate-180')}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"
-    >
-      <path d="M5 12h14M13 5l7 7-7 7" />
     </svg>
   );
 }

@@ -1,5 +1,5 @@
 import { Hero } from '@/sections/hero/Hero';
-import { WhatIDo } from '@/sections/skills/WhatIDo';
+import { Skills } from '@/sections/skills/Skills';
 import { Contact } from '@/sections/contact/Contact';
 import { ScrollToSection } from '@/components/ScrollToSection';
 
@@ -11,7 +11,7 @@ export function Layout({ scrollToId }: LayoutProps) {
   return (
     <main>
       <Hero />
-      <WhatIDo />
+      <Skills />
       <Contact />
 
       {scrollToId && <ScrollToSection sectionId={scrollToId} />}

@@ -1,18 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { VARIANT_SKILLS } from '../data';
+import { SKILLS } from '../data/skills';
 import {
   ChevronIcon,
   CompetencyList,
   ExampleList,
-  SkillsVariantHeading,
+  SkillsHeading,
   SkillIconBadge,
   StackChips,
-  VariantShell,
+  SkillsShell,
   cx,
   getSkillStyle,
-} from '../shared';
+} from './shared';
 
 export function AccordionIndexSkills({
   withShell = true,
@@ -29,10 +29,10 @@ export function AccordionIndexSkills({
     <div className="ghost-border relative overflow-hidden bg-[#0b1322]">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.055),transparent_36%,rgba(255,255,255,0.025))]" />
       <div className="relative mx-auto max-w-7xl px-4 pt-24 pb-10 sm:px-6 md:px-8">
-        <SkillsVariantHeading />
+        <SkillsHeading />
       </div>
       <div className="divide-y divide-white/10">
-        {VARIANT_SKILLS.map((skill) => {
+        {SKILLS.map((skill) => {
           const isOpen = openId === skill.id;
 
           return (
@@ -127,5 +127,5 @@ export function AccordionIndexSkills({
     return content;
   }
 
-  return <VariantShell>{content}</VariantShell>;
+  return <SkillsShell>{content}</SkillsShell>;
 }
