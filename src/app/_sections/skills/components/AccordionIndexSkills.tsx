@@ -18,10 +18,22 @@ export function AccordionIndexSkills({
 }: {
   withShell?: boolean;
 }) {
-  const [openId, setOpenId] = useState<string | null>(SKILLS[0]?.id ?? null);
+  const [openIds, setOpenIds] = useState<Set<string>>(
+    () => new Set(SKILLS[0] ? [SKILLS[0].id] : []),
+  );
 
   const toggleSkill = (id: string) => {
-    setOpenId((current) => (current === id ? null : id));
+    setOpenIds((current) => {
+      const next = new Set(current);
+
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+
+      return next;
+    });
   };
 
   const content = (
@@ -33,9 +45,9 @@ export function AccordionIndexSkills({
         <SkillsHeading />
       </div>
 
-      <div className="relative mx-auto grid max-w-2xl gap-3 px-4 pb-6 sm:px-6">
+      <div className="relative grid w-full gap-2 pb-6">
         {SKILLS.map((skill) => {
-          const isOpen = openId === skill.id;
+          const isOpen = openIds.has(skill.id);
 
           return (
             <MobileSkillPanel
@@ -69,17 +81,17 @@ function MobileSkillPanel({
   return (
     <article
       className={cx(
-        'relative overflow-hidden rounded border transition-[background-color,border-color,box-shadow] duration-300',
+        'relative overflow-hidden border-x-0 border-y transition-[background-color,border-color,box-shadow] duration-300',
         isOpen
-          ? 'border-white/20 bg-white/[0.11] shadow-[0_18px_44px_rgba(0,0,0,0.22)]'
+          ? 'border-white/15 bg-white/[0.075] shadow-[0_14px_32px_rgba(0,0,0,0.18)]'
           : 'bg-surface-container-high/80 border-white/10',
       )}
       style={getSkillStyle(skill)}
     >
       <div
         className={cx(
-          'pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_92%_0%,var(--skill-accent-soft),transparent_44%)] transition-opacity duration-300',
-          isOpen ? 'opacity-100' : 'opacity-0',
+          'pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_92%_-8%,var(--skill-accent-soft),transparent_56%)] transition-opacity duration-300',
+          isOpen ? 'opacity-45' : 'opacity-0',
         )}
       />
 
@@ -146,21 +158,15 @@ function SkillStateIcon({
 }) {
   return (
     <span className="mt-0.5 grid h-7 w-7 place-items-center">
-      {isOpen ? (
-        <span
-          className="grid h-6 w-6 place-items-center text-[var(--skill-accent)] [&>svg]:h-5 [&>svg]:w-5"
-          aria-hidden="true"
-        >
-          {getSkillIcon(skill.iconKey)}
-        </span>
-      ) : (
-        <span
-          className="text-on-surface-variant/55 grid h-[1.125rem] w-[1.125rem] place-items-center rounded-full border border-white/10 bg-white/[0.025] text-sm leading-none"
-          aria-hidden="true"
-        >
-          +
-        </span>
-      )}
+      <span
+        className={cx(
+          'grid h-6 w-6 place-items-center transition-colors duration-300 [&>svg]:h-5 [&>svg]:w-5',
+          isOpen ? 'text-[var(--skill-accent)]' : 'text-on-surface-variant/55',
+        )}
+        aria-hidden="true"
+      >
+        {getSkillIcon(skill.iconKey)}
+      </span>
     </span>
   );
 }
