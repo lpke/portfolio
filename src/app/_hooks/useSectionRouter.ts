@@ -15,6 +15,9 @@ const PATH_TO_ID: Record<string, string> = Object.fromEntries(
 
 const SECTION_IDS = SECTIONS.map(({ sectionId }) => sectionId);
 
+const isSectionUrlSyncDisabled = () =>
+  window.location.pathname.startsWith('/skills-variant');
+
 /**
  * Keeps the browser URL in sync with the currently visible section and
  * handles initial scroll-to-section when the page loads with a section path.
@@ -31,6 +34,8 @@ export function useSectionRouter() {
 
   // --- Update URL without triggering Next.js navigation ---
   const updateUrl = useCallback((sectionId: string) => {
+    if (isSectionUrlSyncDisabled()) return;
+
     const path = ID_TO_PATH[sectionId] ?? '/';
     if (window.location.pathname !== path) {
       window.history.replaceState(null, '', path);
@@ -54,7 +59,7 @@ export function useSectionRouter() {
 
     // Use pushState (not replaceState) so the back button works.
     const path = ID_TO_PATH[sectionId] ?? '/';
-    if (window.location.pathname !== path) {
+    if (!isSectionUrlSyncDisabled() && window.location.pathname !== path) {
       window.history.pushState(null, '', path);
     }
 
@@ -134,6 +139,8 @@ export function useSectionRouter() {
 
     // --- Handle browser back/forward ---
     const handlePopState = () => {
+      if (isSectionUrlSyncDisabled()) return;
+
       const id = PATH_TO_ID[window.location.pathname] ?? 'home';
       const el = document.getElementById(id);
       if (el) {
