@@ -54,13 +54,13 @@ export function AccordionIndexSkills({
                 aria-controls={`field-note-${skill.id}`}
                 onClick={() => toggleSkill(skill.id)}
                 className={cx(
-                  'relative grid w-full grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 text-left transition-[background-color,color,padding] duration-300',
+                  'relative block w-full border-y py-4 text-left transition-[background-color,border-color,color] duration-300',
                   isOpen
-                    ? 'bg-white/[0.13] py-4'
-                    : 'bg-surface-container-high/85 py-2.5 hover:bg-white/[0.10]',
+                    ? 'border-white/20 bg-white/[0.13]'
+                    : 'bg-surface-container-high/85 border-transparent hover:bg-white/[0.10]',
                 )}
               >
-                <span className="mx-auto grid w-full max-w-7xl grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2.5 px-1 sm:px-3 md:px-5">
+                <span className="mx-auto grid w-full max-w-7xl grid-cols-[2rem_minmax(0,1fr)_auto] items-start gap-2.5 px-4 sm:px-6 md:px-8">
                   <SkillIconBadge
                     skill={skill}
                     className={cx(

@@ -528,10 +528,14 @@ function SkillRail({
             role="tab"
             aria-selected={isSelected}
             aria-controls={`immersive-${config.id}-panel`}
+            onMouseDown={(event) => {
+              if (event.button !== 0) return;
+              onSelect(skill.id);
+            }}
             onClick={() => onSelect(skill.id)}
             className={cx(
-              'grid w-full grid-cols-[1.75rem_minmax(0,1fr)] gap-2.5 rounded-lg border border-transparent text-left transition-[background-color,color,box-shadow,min-height,padding] duration-300',
-              isSelected ? 'min-h-[8.75rem] px-4 py-5' : 'min-h-12 px-3 py-2.5',
+              'grid w-full grid-cols-[1.75rem_minmax(0,1fr)] items-start gap-2.5 rounded-lg border border-transparent px-4 py-4 text-left transition-[background-color,border-color,color,box-shadow,min-height] duration-300',
+              isSelected ? 'min-h-[8.75rem]' : 'min-h-[4.25rem]',
               getRailItemClass(isSelected),
             )}
             style={getSkillStyle(skill)}
@@ -556,7 +560,7 @@ function SkillRail({
               ) : null}
             </span>
 
-            <span className="min-w-0 self-center">
+            <span className="min-w-0">
               <span className="font-headline block truncate text-lg font-bold text-white">
                 {skill.title}
               </span>
@@ -618,7 +622,7 @@ function getRailItemClass(isSelected: boolean) {
     return base;
   }
 
-  return 'bg-white/[0.13] text-white shadow-[0_18px_45px_rgba(0,0,0,0.24)]';
+  return 'border-white/20 bg-white/[0.13] text-white shadow-[0_18px_45px_rgba(0,0,0,0.24)]';
 }
 
 function ImmersiveContent({
