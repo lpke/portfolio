@@ -35,8 +35,8 @@ type RailTextStyle = CSSProperties & {
 const IMMERSIVE_LAYOUT: ImmersiveLayout = {
   id: 'primary',
   panelClassName: 'bg-[#0b1322]',
-  contentAlignClassName: 'lg:pl-[23rem]',
-  descriptionClassName: 'text-base',
+  contentAlignClassName: 'lg:pl-[24rem]',
+  descriptionClassName: 'text-[1.25rem]',
   railWidthClassName: 'lg:w-[19.5rem]',
   contentMaxClassName: 'max-w-4xl',
   competencyLimit: 99,
@@ -199,7 +199,7 @@ function SkillRail({
       role="tablist"
       aria-label="Skill focus areas"
       onKeyDown={onKeyDown}
-      className="grid flex-1 gap-2"
+      className="grid flex-1 gap-3"
     >
       {SKILLS.map((skill) => {
         const isSelected = skill.id === selectedId;
@@ -243,9 +243,9 @@ function SkillRail({
             >
               <span
                 className={cx(
-                  'font-headline block truncate text-xl font-bold',
+                  'font-headline block truncate text-[1.4rem] font-bold',
                   isSelected
-                    ? 'text-xl text-[var(--skill-accent)] [text-shadow:0_2px_8px_rgba(0,0,0,0.45)]'
+                    ? 'text-[var(--skill-accent)] [text-shadow:0_2px_8px_rgba(0,0,0,0.45)]'
                     : 'text-white',
                 )}
               >
@@ -312,7 +312,7 @@ function ImmersiveContent({
     >
       <p
         className={cx(
-          'text-on-surface-variant max-w-3xl leading-relaxed',
+          'max-w-3xl leading-relaxed text-white/90',
           layout.descriptionClassName,
         )}
       >

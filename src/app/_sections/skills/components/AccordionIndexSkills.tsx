@@ -185,10 +185,20 @@ function MobileSkillPanel({
           <SkillStateIcon skill={skill} isOpen={isOpen} />
 
           <span className="min-w-0">
-            <span className="font-headline block text-xl leading-tight font-bold tracking-tight text-white">
+            <span
+              className={cx(
+                'font-headline block text-xl leading-tight font-bold tracking-tight transition-colors duration-300',
+                isOpen ? 'text-[var(--skill-accent)]' : 'text-white',
+              )}
+            >
               {skill.title}
             </span>
-            <span className="text-on-surface-variant mt-2 block text-sm leading-relaxed">
+            <span
+              className={cx(
+                'text-on-surface-variant block overflow-hidden text-sm leading-relaxed transition-[max-height,margin,opacity] duration-300',
+                isOpen ? 'mt-0 max-h-0 opacity-0' : 'mt-2 max-h-20 opacity-100',
+              )}
+            >
               {skill.summary}
             </span>
           </span>
@@ -214,7 +224,7 @@ function MobileSkillPanel({
                 isOpen ? 'px-6' : 'px-4',
               )}
             >
-              <p className="text-on-surface-variant text-sm leading-relaxed">
+              <p className="text-xl leading-relaxed font-medium text-white/90">
                 {skill.detail}
               </p>
 
