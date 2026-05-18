@@ -104,27 +104,227 @@
 
 /* Hero wave background — responsive visibility */
 .hero-waves {
-  background-image: url('/images/layered_waves.svg');
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(11, 19, 38, 0.98) 0%,
+      rgba(11, 19, 38, 0.86) 48%,
+      rgba(11, 19, 38, 0.72) 100%
+    ),
+    url('/images/layered_waves.svg');
+  background-repeat: no-repeat, no-repeat;
+  background-position: center, right center;
+  background-size: cover, auto 100%;
+}
+
+.hero-shell {
+  isolation: isolate;
+}
+
+.hero-shell::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 9rem;
+  pointer-events: none;
+  content: '';
+  background: linear-gradient(to bottom, transparent, var(--color-surface));
+}
+
+.hero-grid {
+  z-index: -2;
+  opacity: 0.55;
+  background-image:
+    linear-gradient(rgba(123, 208, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(60, 221, 199, 0.06) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 12%,
+    black 78%,
+    transparent
+  );
+}
+
+.hero-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: heroReveal 720ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.hero-delay-1 {
+  animation-delay: 100ms;
+}
+
+.hero-delay-2 {
+  animation-delay: 180ms;
+}
+
+.hero-delay-3 {
+  animation-delay: 260ms;
+}
+
+.hero-delay-4 {
+  animation-delay: 340ms;
+}
+
+.hero-delay-5 {
+  animation-delay: 420ms;
+}
+
+.hero-delay-6 {
+  animation-delay: 520ms;
+}
+
+.hero-title-accent {
+  color: transparent;
+  background: linear-gradient(
+    90deg,
+    #7bd0ff,
+    #c7a5ff,
+    #3cddc7,
+    #9ee493,
+    #f7d774,
+    #ffb4ab,
+    var(--color-primary-fixed),
+    #7bd0ff
+  );
+  background-size: 360% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.hero-type-text {
+  display: inline-block;
+  padding-right: 0.26em;
+  clip-path: inset(0 100% 0 0);
+  will-change: clip-path;
+  animation:
+    heroTypeIn 950ms cubic-bezier(0.16, 1, 0.3, 1) 520ms forwards,
+    heroAccentShift 8s ease-in-out infinite;
+}
+
+.hero-portrait {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(123, 208, 255, 0.36);
+  border-radius: 9999px;
+  background-image:
+    linear-gradient(
+      135deg,
+      rgba(123, 208, 255, 0.08),
+      rgba(6, 14, 32, 0.06)
+    ),
+    url('/images/lp-pop.png'),
+    linear-gradient(
+      135deg,
+      var(--color-surface-container-high),
+      var(--color-primary-container)
+    );
   background-repeat: no-repeat;
-  background-position: right center;
-  background-size: auto 100%;
+  background-position: center;
+  background-size: cover;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.24),
+    0 0 32px rgba(123, 208, 255, 0.18);
+}
+
+.hero-scroll-line {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 2.75rem;
+  overflow: hidden;
+  background: rgba(198, 198, 205, 0.16);
+}
+
+.hero-scroll-line::after {
+  position: absolute;
+  top: -45%;
+  left: 0;
+  width: 1px;
+  height: 45%;
+  content: '';
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(123, 208, 255, 0.92)
+  );
+  animation: heroScrollLine 1.8s ease-in-out infinite;
+}
+
+@keyframes heroReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroAccentShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes heroTypeIn {
+  to {
+    clip-path: inset(0 -0.34em 0 0);
+  }
+}
+
+@keyframes heroScrollLine {
+  0% {
+    transform: translateY(0);
+  }
+  70%,
+  100% {
+    transform: translateY(320%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-shell *,
+  .hero-shell::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .hero-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero-type-text {
+    clip-path: inset(0 -0.34em 0 0) !important;
+  }
+
+  .hero-scroll-line::after {
+    animation: none !important;
+  }
 }
 
 @media (max-width: 1299px) and (min-width: 1125px) {
   .hero-waves {
-    background-position: calc(100% + 15vw) center;
+    background-position: center, calc(100% + 15vw) center;
   }
 }
 
 @media (max-width: 1124px) and (min-width: 950px) {
   .hero-waves {
-    background-position: calc(100% + 30vw) center;
+    background-position: center, calc(100% + 30vw) center;
   }
 }
 
 @media (max-width: 949px) and (min-width: 820px) {
   .hero-waves {
-    background-position: calc(100% + 50vw) center;
+    background-position: center, calc(100% + 50vw) center;
   }
 }
 
