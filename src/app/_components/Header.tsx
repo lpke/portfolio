@@ -18,12 +18,12 @@ export function Header() {
       className="glass-nav ambient-shadow fixed top-0 z-50 w-full"
       style={{ paddingRight: 'var(--scrollbar-gutter, 0px)' }}
     >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-8 py-4">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 md:px-8 py-4">
         {/* Logo */}
         <Link
           href="/"
           onNavigate={handleNavigate('home')}
-          className="font-headline text-2xl font-black tracking-tighter text-white"
+          className="font-headline text-xl font-black tracking-tighter text-white/90"
         >
           {SITE.name}
         </Link>

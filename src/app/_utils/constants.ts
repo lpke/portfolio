@@ -1,7 +1,7 @@
 /** Shared site-wide data constants */
 
 export const SITE = {
-  name: 'lpdev',
+  name: 'Luke Perich',
   title: 'Luke Perich',
   role: 'Senior Software Engineer',
   email: 'luke@lpdev.io',
