@@ -44,20 +44,20 @@ export function ContactCard({
 
   const content = (
     <>
-      <div className="text-primary bg-surface-container group-hover/contact-card:bg-white/5 flex h-10 w-10 shrink-0 items-center justify-center rounded-md transition-colors duration-200">
+      <div className="text-primary flex h-11 w-11 shrink-0 items-center justify-center">
         <Image
           src={iconSrc}
           alt=""
           width={20}
           height={20}
-          className="h-4.5 w-4.5"
+          className="h-5.5 w-5.5 drop-shadow-[0_3px_5px_rgba(0,0,0,0.35)]"
         />
       </div>
       <div className="min-w-0 flex-1 text-left">
-        <p className="font-label text-on-surface-variant/50 text-[10px] tracking-widest uppercase">
+        <p className="font-label text-on-surface-variant/70 text-xs tracking-widest uppercase">
           {label}
         </p>
-        <p className="font-headline truncate text-sm font-bold text-white">
+        <p className="font-headline truncate text-base font-bold text-white">
           {value}
         </p>
       </div>
@@ -66,27 +66,27 @@ export function ContactCard({
 
   return (
     <div
-      className="group/contact-card bg-surface-container-low/55 relative overflow-hidden rounded-md ring-1 ring-white/5 ring-inset"
+      className="group/contact-card bg-surface-container-low/80 relative overflow-hidden rounded-md shadow-[0_14px_32px_rgba(0,0,0,0.18)] ring-1 ring-white/10 ring-inset transition-shadow duration-200 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)] hover:ring-white/20"
     >
       <span
         aria-hidden="true"
-        className="bg-surface-container pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 group-hover/contact-card:opacity-100"
+        className="pointer-events-none absolute inset-0 bg-white/[0.08] opacity-0 transition-opacity duration-200 group-hover/contact-card:opacity-100"
       />
       {href ? (
         <a
           href={href}
           target={href.startsWith('mailto') ? undefined : '_blank'}
           rel={href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
-          className={`focus-visible:ring-primary/35 relative flex min-w-0 items-center gap-4 px-4 py-3 outline-none focus-visible:ring-2 ${
-            copyContent ? 'pr-24' : ''
+          className={`focus-visible:ring-primary/35 relative flex min-w-0 items-center gap-4 px-5 py-4 outline-none focus-visible:ring-2 ${
+            copyContent ? 'pr-28' : ''
           }`}
         >
           {content}
         </a>
       ) : (
         <div
-          className={`relative flex min-w-0 items-center gap-4 px-4 py-3 ${
-            copyContent ? 'pr-24' : ''
+          className={`relative flex min-w-0 items-center gap-4 px-5 py-4 ${
+            copyContent ? 'pr-28' : ''
           }`}
         >
           {content}
@@ -98,7 +98,7 @@ export function ContactCard({
           type="button"
           onClick={handleCopy}
           aria-label={copied ? `${label} copied` : `Copy ${label}`}
-          className="text-on-surface-variant hover:text-primary hover:bg-primary/8 focus-visible:text-primary focus-visible:bg-primary/10 focus-visible:ring-primary/35 absolute top-0 right-0 bottom-0 flex w-20 cursor-pointer items-center justify-center text-xs font-semibold transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none"
+          className="text-on-surface-variant hover:text-primary hover:bg-primary/8 focus-visible:text-primary focus-visible:bg-primary/10 focus-visible:ring-primary/35 absolute top-0 right-0 bottom-0 flex w-24 cursor-pointer items-center justify-center text-sm font-semibold transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none"
         >
           <span
             aria-hidden="true"

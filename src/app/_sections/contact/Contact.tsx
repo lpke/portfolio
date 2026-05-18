@@ -13,7 +13,6 @@ export function Contact() {
             Let&apos;s <span className="text-primary">Connect</span>
           </>
         }
-        subtitle="Currently open to freelance opportunities and technical consultations. Usually responds within 24 hours."
       />
       <ContactContent />
     </section>

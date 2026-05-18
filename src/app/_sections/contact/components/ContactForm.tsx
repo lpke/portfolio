@@ -33,13 +33,13 @@ export function ContactForm() {
   );
 
   const inputClassName =
-    'bg-surface-container-lowest/70 text-on-surface placeholder:text-on-surface-variant/30 focus:border-primary/80 focus:bg-surface-container-lowest focus:ring-primary/35 w-full rounded-md border border-white/10 px-3.5 py-2.5 text-sm transition-colors outline-none focus:ring-2';
+    'bg-surface-container-lowest/70 text-on-surface placeholder:text-on-surface-variant/35 focus:border-white/28 focus:bg-surface-container-lowest focus:shadow-[0_8px_18px_rgba(0,0,0,0.18)] w-full rounded-md border border-white/10 px-4 py-3 text-base transition-[background-color,border-color,box-shadow] outline-none';
   const labelClassName =
-    'font-label text-on-surface-variant/55 text-[11px] tracking-widest uppercase';
+    'font-label text-on-surface-variant/65 text-xs tracking-widest uppercase';
 
   return (
-    <form action={formAction} className="relative z-10 space-y-4">
-      <div className="grid gap-4 sm:grid-cols-2">
+    <form action={formAction} className="relative z-10 space-y-5">
+      <div className="grid gap-5 sm:grid-cols-2">
         {/* Full Name */}
         <div className="space-y-1.5">
           <label htmlFor="name" className={labelClassName}>
@@ -50,7 +50,7 @@ export function ContactForm() {
             name="name"
             type="text"
             required
-            placeholder="Luke Skywalker"
+            placeholder="Your name"
             className={inputClassName}
           />
         </div>
@@ -74,7 +74,7 @@ export function ContactForm() {
       {/* Project Details */}
       <div className="space-y-1.5">
         <label htmlFor="details" className={labelClassName}>
-          What are you building?
+          Message
         </label>
         <textarea
           id="details"
@@ -82,7 +82,7 @@ export function ContactForm() {
           required
           rows={5}
           placeholder="A few details, goals, timeline, or links."
-          className={`${inputClassName} min-h-32 resize-y leading-relaxed`}
+          className={`${inputClassName} min-h-40 resize-y leading-relaxed`}
         />
       </div>
 
@@ -91,7 +91,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="signature-gradient font-headline text-on-primary inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full px-6 text-sm font-bold transition-all hover:shadow-[0_0_18px_rgba(123,208,255,0.28)] disabled:cursor-default disabled:opacity-50"
+          className="signature-gradient font-headline text-on-primary inline-flex min-h-12 cursor-pointer items-center justify-center rounded-full px-7 text-base font-bold transition-all hover:shadow-[0_0_18px_rgba(123,208,255,0.28)] disabled:cursor-default disabled:opacity-50"
         >
           {isPending ? 'Sending...' : 'Send message'}
         </button>
@@ -99,7 +99,7 @@ export function ContactForm() {
         {/* Feedback */}
         {state.message && (
           <p
-            className={`text-sm ${state.success ? 'text-tertiary' : 'text-error'}`}
+            className={`text-base ${state.success ? 'text-tertiary' : 'text-error'}`}
           >
             {state.message}
           </p>
