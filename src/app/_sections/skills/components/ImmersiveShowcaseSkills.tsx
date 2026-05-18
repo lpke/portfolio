@@ -37,7 +37,7 @@ const IMMERSIVE_LAYOUT: ImmersiveLayout = {
   competencyLimit: 3,
 };
 
-const FADE_MS = 100;
+const FADE_MS = 170;
 
 export function ImmersiveShowcaseSkills({
   withShell = true,
@@ -213,8 +213,10 @@ function SkillRail({
             }}
             onClick={() => onSelect(skill.id)}
             className={cx(
-              'grid w-full cursor-pointer grid-cols-[1.75rem_minmax(0,1fr)] items-start gap-2.5 rounded-lg border border-transparent px-4 py-4 text-left transition-[background-color,border-color,color,box-shadow,min-height] duration-300',
-              isSelected ? 'min-h-[8.75rem]' : 'min-h-[4.25rem]',
+              'grid w-full cursor-pointer grid-cols-[1.75rem_minmax(0,1fr)] items-start gap-2.5 justify-self-start rounded-lg border border-transparent px-4 py-4 text-left transition-[width,background-color,border-color,color,box-shadow,min-height] duration-500',
+              isSelected
+                ? 'min-h-[8.75rem] lg:w-[calc(100%+0.875rem)]'
+                : 'min-h-[4.25rem] lg:w-full',
               getRailItemClass(isSelected),
             )}
             style={getSkillStyle(skill)}
@@ -232,14 +234,14 @@ function SkillRail({
               )}
             </span>
 
-            <span className="min-w-0">
+            <span className="min-w-0 lg:w-[calc(19.5rem-4.75rem)]">
               <span className="font-headline block truncate text-lg font-bold text-white">
                 {skill.title}
               </span>
 
               <span
                 className={cx(
-                  'grid transition-[grid-template-rows,opacity,margin-top] duration-200',
+                  'grid transition-[grid-template-rows,opacity,margin-top] duration-300',
                   isSelected
                     ? 'mt-2 grid-rows-[1fr] opacity-100'
                     : 'mt-0 grid-rows-[0fr] opacity-0',
@@ -283,7 +285,7 @@ function ImmersiveContent({
       role="tabpanel"
       aria-labelledby={`immersive-${layout.id}-tab-${skill.id}`}
       className={cx(
-        'w-full py-4 transition-opacity duration-150 ease-out lg:py-10',
+        'w-full py-4 transition-opacity duration-250 ease-out lg:py-10',
         layout.contentMaxClassName,
         isVisible ? 'opacity-100' : 'opacity-0',
       )}
