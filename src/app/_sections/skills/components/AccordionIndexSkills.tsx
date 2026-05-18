@@ -1,11 +1,12 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SKILLS, type SkillData } from '../data/skills';
 import { getSkillIcon } from './SkillIcons';
 import {
   ChevronIcon,
+  GithubIcon,
   SkillsHeading,
   StackChips,
   SkillsShell,
@@ -73,6 +74,9 @@ function MobileSkillPanel({
   isOpen: boolean;
   onToggle: (id: string) => void;
 }) {
+  const [isSummaryCollapsed, setIsSummaryCollapsed] = useState(isOpen);
+  const [isSummaryVisible, setIsSummaryVisible] = useState(!isOpen);
+  const [isContentVisible, setIsContentVisible] = useState(isOpen);
   const tapStartRef = useRef<{
     pointerId: number;
     startedAt: number;
@@ -80,6 +84,25 @@ function MobileSkillPanel({
     y: number;
     moved: boolean;
   } | null>(null);
+
+  useEffect(() => {
+    const timers: Array<ReturnType<typeof setTimeout>> = [];
+
+    if (isOpen) {
+      timers.push(setTimeout(() => setIsSummaryVisible(false), 0));
+      timers.push(setTimeout(() => setIsContentVisible(false), 0));
+      timers.push(setTimeout(() => setIsSummaryCollapsed(true), 300));
+      timers.push(setTimeout(() => setIsContentVisible(true), 360));
+    } else {
+      timers.push(setTimeout(() => setIsContentVisible(false), 0));
+      timers.push(setTimeout(() => setIsSummaryCollapsed(false), 0));
+      timers.push(setTimeout(() => setIsSummaryVisible(true), 260));
+    }
+
+    return () => {
+      timers.forEach(clearTimeout);
+    };
+  }, [isOpen]);
 
   const handlePointerDown = (event: React.PointerEvent<HTMLElement>) => {
     tapStartRef.current = {
@@ -138,17 +161,13 @@ function MobileSkillPanel({
   };
 
   return (
-    <div
-      className={cx(
-        'relative transition-[margin] duration-500 ease-out',
-        isOpen && '-mx-2',
-      )}
-    >
+    <div className="relative">
       <div
         className={cx(
-          'pointer-events-none absolute inset-0 z-0 rounded-lg transition-shadow duration-500 ease-out',
+          'pointer-events-none absolute inset-y-0 z-0 rounded-lg transition-[box-shadow,inset] duration-500 ease-out',
           isOpen &&
-            'shadow-[0_3px_10px_rgba(0,0,0,0.72),0_18px_36px_rgba(0,0,0,0.62),0_34px_90px_rgba(0,0,0,0.6)]',
+            '-inset-x-2 shadow-[0_3px_10px_rgba(0,0,0,0.72),0_18px_36px_rgba(0,0,0,0.62),0_34px_90px_rgba(0,0,0,0.6)]',
+          !isOpen && 'inset-x-0',
         )}
       />
 
@@ -157,18 +176,21 @@ function MobileSkillPanel({
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerCancel}
-        className={cx(
-          'relative isolate z-10 overflow-hidden rounded-lg border transition-[background-color,border-color] duration-500 ease-out',
-          isOpen
-            ? 'border-white/15 bg-white/[0.075]'
-            : 'bg-surface-container-high/80 border-white/10',
-        )}
+        className="relative isolate z-10 rounded-lg"
         style={getSkillStyle(skill)}
       >
         <div
           className={cx(
-            'pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_92%_-8%,var(--skill-accent-soft),transparent_56%)] transition-opacity duration-300',
-            isOpen ? 'opacity-45' : 'opacity-0',
+            'bg-surface-container-high/80 pointer-events-none absolute inset-y-0 rounded-lg border border-white/10 transition-[background-color,border-color,inset] duration-500 ease-out',
+            isOpen
+              ? '-inset-x-2 border-white/15 bg-white/[0.075]'
+              : 'inset-x-0',
+          )}
+        />
+        <div
+          className={cx(
+            'pointer-events-none absolute inset-y-0 rounded-lg bg-[radial-gradient(circle_at_92%_-8%,var(--skill-accent-soft),transparent_56%)] transition-[inset,opacity] duration-300',
+            isOpen ? '-inset-x-2 opacity-45' : 'inset-x-0 opacity-0',
           )}
         />
 
@@ -177,10 +199,7 @@ function MobileSkillPanel({
           aria-expanded={isOpen}
           aria-controls={`skill-panel-${skill.id}`}
           onKeyDown={handleKeyDown}
-          className={cx(
-            'relative grid w-full grid-cols-[1.75rem_minmax(0,1fr)_1.75rem] items-start gap-3 py-4 text-left transition-[color,padding] duration-500 ease-out',
-            isOpen ? 'px-6' : 'px-4',
-          )}
+          className="relative grid w-full grid-cols-[1.75rem_minmax(0,1fr)_1.75rem] items-start gap-3 px-4 py-4 text-left transition-colors duration-300 ease-out"
         >
           <SkillStateIcon skill={skill} isOpen={isOpen} />
 
@@ -195,8 +214,10 @@ function MobileSkillPanel({
             </span>
             <span
               className={cx(
-                'text-on-surface-variant block overflow-hidden text-sm leading-relaxed transition-[max-height,margin,opacity] duration-300',
-                isOpen ? 'mt-0 max-h-0 opacity-0' : 'mt-2 max-h-20 opacity-100',
+                'text-on-surface-variant block overflow-hidden text-sm leading-relaxed transition-opacity',
+                isSummaryVisible ? 'duration-500' : 'duration-300',
+                isSummaryVisible ? 'opacity-100' : 'opacity-0',
+                isSummaryCollapsed ? 'mt-0 max-h-0' : 'mt-2 max-h-20',
               )}
             >
               {skill.summary}
@@ -211,7 +232,7 @@ function MobileSkillPanel({
         <div
           id={`skill-panel-${skill.id}`}
           className={cx(
-            'relative grid transition-[grid-template-rows,opacity] duration-300',
+            'relative grid transition-[grid-template-rows,opacity] duration-500',
             isOpen
               ? 'grid-rows-[1fr] opacity-100'
               : 'grid-rows-[0fr] opacity-0',
@@ -220,21 +241,21 @@ function MobileSkillPanel({
           <div className="min-h-0 overflow-hidden">
             <div
               className={cx(
-                'border-t border-white/10 pt-4 pb-5 transition-[padding] duration-500 ease-out',
-                isOpen ? 'px-6' : 'px-4',
+                'px-4 pt-0 pb-5 transition-opacity duration-300',
+                isContentVisible ? 'opacity-100' : 'opacity-0',
               )}
             >
-              <p className="text-xl leading-relaxed font-medium text-white/90">
+              <p className="text-base leading-relaxed font-medium text-white/90">
                 {skill.detail}
               </p>
-
-              <StackChips items={skill.stack} className="mt-4" />
 
               <MobileCompetencyList skill={skill} />
 
               <MobileContentSection title="Examples">
                 <MobileExampleList skill={skill} />
               </MobileContentSection>
+
+              <StackChips items={skill.stack} className="mt-6" />
             </div>
           </div>
         </div>
@@ -251,7 +272,7 @@ function SkillStateIcon({
   isOpen: boolean;
 }) {
   return (
-    <span className="mt-0.5 grid h-7 w-7 place-items-center">
+    <span className="grid h-7 w-7 place-items-center">
       <span
         className={cx(
           'grid h-7 w-7 place-items-center transition-colors duration-300',
@@ -290,10 +311,10 @@ function MobileCompetencyList({ skill }: { skill: SkillData }) {
           key={item.label}
           className="border-l border-[var(--skill-accent)] bg-white/[0.025] px-3 py-2.5"
         >
-          <h5 className="font-headline text-sm font-bold text-white">
+          <h5 className="font-headline text-base font-bold text-white">
             {item.label}
           </h5>
-          <p className="text-on-surface-variant mt-1 text-sm leading-relaxed">
+          <p className="text-on-surface-variant mt-1 text-xs leading-relaxed">
             {item.description}
           </p>
         </div>
@@ -304,17 +325,62 @@ function MobileCompetencyList({ skill }: { skill: SkillData }) {
 
 function MobileExampleList({ skill }: { skill: SkillData }) {
   return (
-    <div className="divide-y divide-white/10 border-y border-white/10">
-      {skill.examples.map((example) => (
-        <div key={example.title} className="py-3 first:pt-0 last:pb-0">
-          <h5 className="font-headline text-sm font-bold text-white">
-            {example.title}
-          </h5>
-          <p className="text-on-surface-variant mt-1 text-sm leading-relaxed">
-            {example.detail}
-          </p>
-        </div>
-      ))}
+    <div className="grid gap-4">
+      {skill.examples.map((example) => {
+        const content = (
+          <>
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
+              <h5 className="font-headline text-[15px] leading-snug font-bold text-white transition-colors duration-200 group-hover/example-card:text-[var(--skill-accent)]">
+                {example.title}
+              </h5>
+              <span className="inline-flex shrink-0 items-center gap-1.5">
+                {example.showGithubIcon && (
+                  <GithubIcon className="h-3.5 w-3.5 text-white/80 transition-colors duration-200 group-hover/example-card:text-[var(--skill-accent)]" />
+                )}
+                {example.url && <ExternalLinkIcon />}
+              </span>
+            </div>
+            <p className="text-on-surface-variant mt-0.5 text-xs leading-snug">
+              {example.detail}
+            </p>
+          </>
+        );
+
+        if (example.url) {
+          return (
+            <a
+              key={example.title}
+              href={example.url}
+              target="_blank"
+              rel="noreferrer"
+              className="group/example-card block cursor-pointer"
+            >
+              {content}
+            </a>
+          );
+        }
+
+        return <div key={example.title}>{content}</div>;
+      })}
     </div>
+  );
+}
+
+function ExternalLinkIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="text-on-surface-variant/80 h-3.5 w-3.5 shrink-0 transition-colors duration-200 group-hover/example-card:text-[var(--skill-accent)]"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+    >
+      <path d="M15 3h6v6" />
+      <path d="M10 14 21 3" />
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+    </svg>
   );
 }

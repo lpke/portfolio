@@ -6,6 +6,8 @@ export type SkillCompetency = {
 export type SkillExample = {
   title: string;
   detail: string;
+  url?: string;
+  showGithubIcon?: boolean;
 };
 
 export type SkillData = {
@@ -36,17 +38,12 @@ export const SKILLS: SkillData[] = [
       {
         label: 'User-Facing Apps',
         description:
-          'SPAs, portals, and interactive web experiences shipped to real users at scale.',
+          'SPAs, portals, and interactive web experiences shipped to real users at scale. Greenfield to production.',
       },
       {
         label: 'Full-Stack Delivery',
         description:
           'Frontend-first, but comfortable owning API integration, serverless functions, and data layers.',
-      },
-      {
-        label: 'Greenfield Builds',
-        description:
-          'New products from zero. Stack selection, architecture decisions, and first deploy.',
       },
       {
         label: 'Platform & CMS Work',
@@ -61,23 +58,16 @@ export const SKILLS: SkillData[] = [
       'Vite',
       'Node.js',
       'GraphQL',
-      'REST',
       'MongoDB',
-      'MUI',
       'Tailwind',
-      'Zod',
       'Vercel',
       'Shopify',
-      'Magento',
-      'Webflow',
-      'Sanity',
-      'Contentful',
     ],
     examples: [
       {
-        title: 'Pre-Consultation Portal',
+        title: 'Healthcare Patient Portal',
         detail:
-          'Sole frontend architect of a greenfield React SPA at Montu, serving ~1,500 new users daily across AU and NZ.',
+          'Sole frontend architect of a greenfield React SPA serving ~1,500 new users daily across AU and NZ.',
       },
       {
         title: "McDonald's Menu Boards",
@@ -88,16 +78,18 @@ export const SKILLS: SkillData[] = [
         title: 'Nutricia / Danone',
         detail:
           "SSO, loyalty program, and branded checkout on a headless React/Magento PWA for one of the world's largest food companies.",
+        url: 'https://www.nutriciastore.com.au',
       },
       {
-        title: 'Releases Web App',
+        title: 'Property Listings Portal',
         detail:
-          'Full-stack Next.js/MongoDB portal with auth, serverless functions, and a dynamic data grid for property releases.',
+          'Full-stack Next.js/MongoDB app with auth, serverless functions, and a dynamic data grid for real estate launches.',
       },
       {
         title: 'Milkrun',
         detail:
           'Senior frontend on a TypeScript/React Shopify site built with Next.js. Provided code reviews and mentoring.',
+        url: 'https://www.milkrun.com',
       },
     ],
   },
@@ -129,39 +121,39 @@ export const SKILLS: SkillData[] = [
     ],
     stack: [
       'GitHub Copilot',
-      'OpenAI Codex',
+      'Codex',
       'Claude',
-      'GPT',
       'Ollama',
-      'CodeCompanion.nvim',
       'Neovim',
       'Lua',
       'Bash',
-      'Node.js',
-      'TypeScript',
-      'Notion API',
-      'Google Stitch',
     ],
     examples: [
       {
         title: 'code-to-notion',
         detail:
           'Open-source Node CLI that uploads codebases to Notion with full Git context. Built to give AI agents structured code reasoning.',
+        url: 'https://github.com/lpke/code-to-notion',
+        showGithubIcon: true,
       },
       {
         title: 'aspyn',
         detail:
           'Local pipeline engine that gives your scripts a memory. Stateful step runners, change detection, crash recovery, and scheduling.',
+        url: 'https://github.com/lpke/aspyn-legacy',
+        showGithubIcon: true,
       },
       {
         title: 'Neovim + CodeCompanion',
         detail:
           'Custom Lua-based AI config with multi-model support, agentic workflows, slash commands, and tool approval flows.',
+        url: 'https://github.com/lpke/nvim',
+        showGithubIcon: true,
       },
       {
-        title: 'AI at Montu',
+        title: 'AI in Production Teams',
         detail:
-          'Used agentic coding tools daily for feature development, debugging, and iteration across a 100+ engineer monorepo.',
+          'Used agentic coding tools daily for feature development, debugging, and iteration across a 100+ engineer codebase.',
       },
       {
         title: 'Local LLM Automation',
@@ -200,34 +192,27 @@ export const SKILLS: SkillData[] = [
     stack: [
       'Nx',
       'Vite',
-      'Webpack',
       'Storybook',
       'Chromatic',
-      'MUI',
-      'Tailwind',
-      'pnpm',
       'TypeScript',
       'AWS CDK',
       'GitHub Actions',
-      'React',
-      'ESLint',
-      'Prettier',
     ],
     examples: [
       {
-        title: 'FormBuilder Migration',
+        title: 'Shared Component Library',
         detail:
-          'Helped migrate an internal React form tool into a standalone shared package in an Nx monorepo. Owned the Storybook library and E2E coverage.',
+          'Migrated an internal React form tool into a standalone shared package in an Nx monorepo. Owned the Storybook library and E2E coverage.',
       },
       {
-        title: 'Alternaleaf Build Pipeline',
+        title: 'Custom Multi-Site Build',
         detail:
-          "Custom Vite multi-site build with AWS CDK infra that replaced Webflow's code limits. 75% bundle reduction, 70% faster builds.",
+          "Vite build pipeline with AWS CDK infra that replaced a no-code platform's limits. 75% bundle reduction, 70% faster builds.",
       },
       {
-        title: 'Montu Monorepo',
+        title: '100+ Engineer Monorepo',
         detail:
-          'Implemented new apps and packages in a 100+ engineer Nx monorepo, including full CI/CD and IaC for new projects.',
+          'Implemented new apps and packages in a large-scale Nx monorepo, including full CI/CD and IaC for new projects.',
       },
       {
         title: 'Design System Rollout',
@@ -275,19 +260,13 @@ export const SKILLS: SkillData[] = [
       'Bash',
       'Storybook',
       'Playwright',
-      'Vitest',
-      'Figma',
-      'Jira',
-      'Confluence',
-      'Notion',
       'Git',
-      'GitHub',
     ],
     examples: [
       {
-        title: 'FormBuilder Docs & Adoption',
+        title: 'Internal Tool Documentation',
         detail:
-          'Wrote internal documentation and streamlined the Storybook library to drive adoption of a shared form tool across engineering.',
+          'Wrote docs and streamlined a Storybook library to drive adoption of a shared form tool across engineering.',
       },
       {
         title: 'Mentoring at Montu',
@@ -303,11 +282,13 @@ export const SKILLS: SkillData[] = [
         title: 'Neovim Config',
         detail:
           'Comprehensive custom Neovim setup in Lua. LSP, linting, type checking, keymaps, and AI integration from scratch.',
+        url: 'https://github.com/lpke/nvim',
+        showGithubIcon: true,
       },
       {
-        title: 'Milkrun Code Reviews',
+        title: 'Senior Code Reviews',
         detail:
-          'Senior frontend providing code reviews and mentorship on a Next.js/React Shopify build at Acidgreen.',
+          'Provided code reviews and mentorship on a Next.js/React Shopify build as the senior frontend on the project.',
       },
     ],
   },
@@ -343,28 +324,23 @@ export const SKILLS: SkillData[] = [
       'Vitest',
       'GitHub Actions',
       'AWS CDK',
-      'S3',
-      'CloudFront',
-      'Vercel',
+      'Docker',
       'LaunchDarkly',
       'VWO',
-      'GA4',
-      'GTM',
-      'Docker',
     ],
     examples: [
       {
-        title: 'FormBuilder E2E',
+        title: 'Shared Tool E2E Suite',
         detail:
-          'Built comprehensive Playwright E2E test suites for a shared form tool used across multiple patient-facing apps.',
+          'Built comprehensive Playwright E2E tests for an internal form tool used across multiple patient-facing apps.',
       },
       {
-        title: 'Alternaleaf CI/CD',
+        title: 'Custom CI/CD Pipeline',
         detail:
-          'GitHub Actions pipeline with AWS CDK infrastructure (S3 + CloudFront) for a custom Vite multi-site build.',
+          'GitHub Actions pipeline with AWS CDK infrastructure (S3 + CloudFront) for a multi-site Vite build.',
       },
       {
-        title: 'Pre-Consultation Portal QA',
+        title: 'Healthcare App QA',
         detail:
           'Unit testing with Vitest and a custom GUI testing tool with state controls for rapid manual QA.',
       },
@@ -409,28 +385,22 @@ export const SKILLS: SkillData[] = [
       },
     ],
     stack: [
-      'Commerce',
-      'Marketing',
-      'Strategy',
-      'Google Ads',
       'GA4',
       'GTM',
       'VWO',
-      'Braze',
       'A/B Testing',
       'Figma',
-      'Webflow',
     ],
     examples: [
       {
-        title: 'Alternaleaf Migration Proposal',
+        title: 'Code Migration Proposal',
         detail:
-          'Proposed a full code migration over quick-fix Webflow workarounds. Built the business case, got buy-in, and delivered.',
+          'Proposed a full code migration over quick-fix no-code workarounds. Built the business case, got buy-in, and delivered.',
       },
       {
-        title: 'Portal Presentation',
+        title: 'Company-Wide Product Demo',
         detail:
-          "Presented the Pre-Consultation Portal's new user flow to ~400 people on a near-company-wide call at Montu.",
+          'Presented a new patient onboarding flow to ~400 people on a near-company-wide call.',
       },
       {
         title: 'Danone Client Communication',
@@ -438,7 +408,7 @@ export const SKILLS: SkillData[] = [
           'Communicated technical decisions directly to senior stakeholders at Nutricia/Danone while implementing systems like Yotpo reviews.',
       },
       {
-        title: 'Greenfields Tech Translation',
+        title: 'Non-Technical Stakeholders',
         detail:
           'Explained web app architecture and technical constraints to property developers with no engineering background.',
       },

@@ -11,6 +11,7 @@ import {
 import { SKILLS, type SkillData } from '../data/skills';
 import { getSkillIcon } from './SkillIcons';
 import {
+  GithubIcon,
   SkillsHeading,
   StackChips,
   SkillsShell,
@@ -319,14 +320,15 @@ function ImmersiveContent({
         {skill.detail}
       </p>
 
-      <StackChips items={skill.stack} className="mt-5" />
+      <CompetencyGrid skill={skill} limit={layout.competencyLimit} />
 
-      <div className="mt-8 grid gap-7 lg:grid-cols-2 lg:items-start">
-        <CompetencyGrid skill={skill} limit={layout.competencyLimit} />
+      <div className="mt-8">
         <ContentSection title="Examples">
           <ExampleGrid skill={skill} />
         </ContentSection>
       </div>
+
+      <StackChips items={skill.stack} className="mt-6" />
     </article>
   );
 }
@@ -340,7 +342,7 @@ function ContentSection({
 }) {
   return (
     <section>
-      <h4 className="font-label text-on-surface-variant/70 mb-4 text-xs font-bold tracking-widest uppercase">
+      <h4 className="font-label text-on-surface-variant/70 mb-4 text-xs font-bold tracking-widest uppercase lg:text-sm">
         {title}
       </h4>
       {children}
@@ -350,16 +352,16 @@ function ContentSection({
 
 function CompetencyGrid({ skill, limit }: { skill: SkillData; limit: number }) {
   return (
-    <div className="grid content-start gap-3">
+    <div className="mt-7 flex flex-wrap gap-3">
       {skill.competencies.slice(0, limit).map((item) => (
         <div
           key={item.label}
-          className="border-l border-[var(--skill-accent)] bg-white/[0.025] px-4 py-3"
+          className="min-w-[14rem] flex-1 border-l border-[var(--skill-accent)] bg-white/[0.025] px-4 py-3"
         >
-          <h5 className="font-headline text-sm font-bold text-white">
+          <h5 className="font-headline text-base font-bold text-white lg:text-lg">
             {item.label}
           </h5>
-          <p className="text-on-surface-variant mt-1 text-sm leading-relaxed">
+          <p className="text-on-surface-variant mt-1 text-xs leading-relaxed lg:text-sm">
             {item.description}
           </p>
         </div>
@@ -371,17 +373,74 @@ function CompetencyGrid({ skill, limit }: { skill: SkillData; limit: number }) {
 function ExampleGrid({ skill }: { skill: SkillData }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
-      {skill.examples.map((example) => (
-        <div key={example.title} className="bg-white/[0.025] px-4 py-3">
-          <h5 className="font-headline text-sm font-bold text-white">
-            {example.title}
-          </h5>
-          <p className="text-on-surface-variant mt-2 text-sm leading-relaxed">
-            {example.detail}
-          </p>
-        </div>
-      ))}
+      {skill.examples.map((example) => {
+        const content = (
+          <>
+            <div className="flex items-start gap-3">
+              <h5 className="font-headline flex-1 text-base font-bold text-white transition-colors duration-200 group-hover/example-card:text-[var(--skill-accent)] lg:text-lg">
+                {example.title}
+              </h5>
+              <span className="flex shrink-0 items-center gap-2">
+                {example.showGithubIcon && (
+                  <GithubIcon className="text-on-surface-variant/70 mt-1 h-4 w-4 transition-colors duration-200 group-hover/example-card:text-[var(--skill-accent)]" />
+                )}
+                {example.url && <ExternalLinkIcon />}
+              </span>
+            </div>
+            <p className="text-on-surface-variant mt-2 text-xs leading-relaxed lg:text-sm">
+              {example.detail}
+            </p>
+          </>
+        );
+
+        if (example.url) {
+          return (
+            <div
+              key={example.title}
+              className="group/example-card relative overflow-hidden bg-white/[0.025]"
+            >
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-white/[0.03] opacity-0 transition-opacity duration-200 group-hover/example-card:opacity-100"
+              />
+              <a
+                href={example.url}
+                target="_blank"
+                rel="noreferrer"
+                className="relative block cursor-pointer px-4 py-3"
+              >
+                {content}
+              </a>
+            </div>
+          );
+        }
+
+        return (
+          <div key={example.title} className="bg-white/[0.025] px-4 py-3">
+            {content}
+          </div>
+        );
+      })}
     </div>
+  );
+}
+
+function ExternalLinkIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="text-on-surface-variant/70 mt-1 h-4 w-4 shrink-0 transition-colors duration-200 group-hover/example-card:text-[var(--skill-accent)]"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+    >
+      <path d="M15 3h6v6" />
+      <path d="M10 14 21 3" />
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+    </svg>
   );
 }
 
