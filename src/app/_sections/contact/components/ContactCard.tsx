@@ -35,6 +35,26 @@ function CheckIcon({ className }: { className?: string }) {
   );
 }
 
+function ExternalLinkIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      role="graphics-symbol"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.75"
+      className={className}
+    >
+      <path d="M6.25 3.25H3.75a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h7.5a1.5 1.5 0 0 0 1.5-1.5v-2.5" />
+      <path d="M9.25 2.25h4.5v4.5" />
+      <path d="m8 8 5.25-5.25" />
+    </svg>
+  );
+}
+
 type ContactCardProps = {
   iconSrc: string;
   label: string;
@@ -73,8 +93,11 @@ export function ContactCard({
         />
       </div>
       <div className="min-w-0 flex-1 text-left">
-        <p className="font-label text-on-surface-variant/70 text-xs tracking-widest uppercase">
-          {label}
+        <p className="font-label text-on-surface-variant/70 flex items-center gap-1.5 text-xs tracking-widest uppercase">
+          <span>{label}</span>
+          {href && (
+            <ExternalLinkIcon className="mb-[0.1rem] h-3 w-3 opacity-70 transition-opacity duration-200 group-hover/contact-card:opacity-100" />
+          )}
         </p>
         <p className="font-headline truncate text-base font-bold text-white">
           {value}
@@ -84,9 +107,7 @@ export function ContactCard({
   );
 
   return (
-    <div
-      className="group/contact-card bg-surface-container-low/80 relative overflow-hidden rounded-md shadow-[0_14px_32px_rgba(0,0,0,0.18)] ring-1 ring-white/10 ring-inset transition-shadow duration-200 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)] hover:ring-white/20"
-    >
+    <div className="group/contact-card bg-surface-container-high/75 text-on-surface-variant relative overflow-hidden rounded-lg border border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.28)] transition-[background-color,border-color,color,box-shadow] duration-300 hover:border-white/32 hover:bg-white/[0.11] hover:text-white hover:shadow-[0_6px_16px_rgba(0,0,0,0.18),0_14px_30px_rgba(0,0,0,0.12)]">
       <span
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-white/[0.08] opacity-0 transition-opacity duration-200 group-hover/contact-card:opacity-100"
@@ -98,7 +119,7 @@ export function ContactCard({
           rel={href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
           className={`focus-visible:ring-primary/35 relative flex min-w-0 items-center gap-3 px-4 py-4 outline-none focus-visible:ring-2 sm:gap-4 sm:px-5 ${
             copyContent
-              ? 'pr-18 sm:pr-5 sm:group-hover/contact-card:[mask-image:linear-gradient(to_right,#000_calc(100%-6rem),transparent_calc(100%-6rem))] sm:group-focus-within/contact-card:[mask-image:linear-gradient(to_right,#000_calc(100%-6rem),transparent_calc(100%-6rem))]'
+              ? 'pr-18 sm:pr-5 sm:group-focus-within/contact-card:[mask-image:linear-gradient(to_right,#000_calc(100%-6rem),transparent_calc(100%-6rem))] sm:group-hover/contact-card:[mask-image:linear-gradient(to_right,#000_calc(100%-6rem),transparent_calc(100%-6rem))]'
               : ''
           }`}
         >
@@ -108,7 +129,7 @@ export function ContactCard({
         <div
           className={`relative flex min-w-0 items-center gap-3 px-4 py-4 sm:gap-4 sm:px-5 ${
             copyContent
-              ? 'pr-18 sm:pr-5 sm:group-hover/contact-card:[mask-image:linear-gradient(to_right,#000_calc(100%-6rem),transparent_calc(100%-6rem))] sm:group-focus-within/contact-card:[mask-image:linear-gradient(to_right,#000_calc(100%-6rem),transparent_calc(100%-6rem))]'
+              ? 'pr-18 sm:pr-5 sm:group-focus-within/contact-card:[mask-image:linear-gradient(to_right,#000_calc(100%-6rem),transparent_calc(100%-6rem))] sm:group-hover/contact-card:[mask-image:linear-gradient(to_right,#000_calc(100%-6rem),transparent_calc(100%-6rem))]'
               : ''
           }`}
         >
