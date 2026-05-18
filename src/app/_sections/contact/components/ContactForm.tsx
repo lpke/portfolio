@@ -32,79 +32,79 @@ export function ContactForm() {
     INITIAL_STATE,
   );
 
-  return (
-    <form action={formAction} className="relative z-10 space-y-6">
-      {/* Full Name */}
-      <div className="space-y-2">
-        <label
-          htmlFor="name"
-          className="font-label text-on-surface-variant/60 text-xs tracking-widest uppercase"
-        >
-          Full Name
-        </label>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          required
-          placeholder="Enter your name"
-          className="bg-surface-container-lowest text-on-surface focus:border-primary focus:ring-primary w-full rounded-sm border border-white/10 px-4 py-3 transition-all outline-none focus:ring-1"
-        />
-      </div>
+  const inputClassName =
+    'bg-surface-container-lowest/70 text-on-surface placeholder:text-on-surface-variant/30 focus:border-primary/80 focus:bg-surface-container-lowest focus:ring-primary/35 w-full rounded-md border border-white/10 px-3.5 py-2.5 text-sm transition-colors outline-none focus:ring-2';
+  const labelClassName =
+    'font-label text-on-surface-variant/55 text-[11px] tracking-widest uppercase';
 
-      {/* Email */}
-      <div className="space-y-2">
-        <label
-          htmlFor="email"
-          className="font-label text-on-surface-variant/60 text-xs tracking-widest uppercase"
-        >
-          Email Address
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          placeholder="your@email.com"
-          className="bg-surface-container-lowest text-on-surface focus:border-primary focus:ring-primary w-full rounded-sm border border-white/10 px-4 py-3 transition-all outline-none focus:ring-1"
-        />
+  return (
+    <form action={formAction} className="relative z-10 space-y-4">
+      <div className="grid gap-4 sm:grid-cols-2">
+        {/* Full Name */}
+        <div className="space-y-1.5">
+          <label htmlFor="name" className={labelClassName}>
+            Name
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            required
+            placeholder="Luke Skywalker"
+            className={inputClassName}
+          />
+        </div>
+
+        {/* Email */}
+        <div className="space-y-1.5">
+          <label htmlFor="email" className={labelClassName}>
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            placeholder="you@example.com"
+            className={inputClassName}
+          />
+        </div>
       </div>
 
       {/* Project Details */}
-      <div className="space-y-2">
-        <label
-          htmlFor="details"
-          className="font-label text-on-surface-variant/60 text-xs tracking-widest uppercase"
-        >
-          Project Details
+      <div className="space-y-1.5">
+        <label htmlFor="details" className={labelClassName}>
+          What are you building?
         </label>
         <textarea
           id="details"
           name="details"
           required
-          rows={4}
-          placeholder="Tell me about your project..."
-          className="bg-surface-container-lowest text-on-surface focus:border-primary focus:ring-primary w-full resize-none rounded-sm border border-white/10 px-4 py-3 transition-all outline-none focus:ring-1"
+          rows={5}
+          placeholder="A few details, goals, timeline, or links."
+          className={`${inputClassName} min-h-32 resize-y leading-relaxed`}
         />
       </div>
 
       {/* Submit */}
-      <button
-        type="submit"
-        disabled={isPending}
-        className="signature-gradient font-headline text-on-primary flex w-full items-center justify-center gap-2 rounded-full py-4 font-bold transition-all hover:shadow-[0_10px_30px_rgba(123,208,255,0.2)] disabled:opacity-50"
-      >
-        {isPending ? 'Sending…' : 'Send Message'} ➤
-      </button>
-
-      {/* Feedback */}
-      {state.message && (
-        <p
-          className={`text-center text-sm ${state.success ? 'text-tertiary' : 'text-error'}`}
+      <div className="flex flex-col items-start gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
+        <button
+          type="submit"
+          disabled={isPending}
+          className="signature-gradient font-headline text-on-primary inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full px-6 text-sm font-bold transition-all hover:shadow-[0_0_18px_rgba(123,208,255,0.28)] disabled:cursor-default disabled:opacity-50"
         >
-          {state.message}
-        </p>
-      )}
+          {isPending ? 'Sending...' : 'Send message'}
+        </button>
+
+        {/* Feedback */}
+        {state.message && (
+          <p
+            className={`text-sm ${state.success ? 'text-tertiary' : 'text-error'}`}
+          >
+            {state.message}
+          </p>
+        )}
+      </div>
     </form>
   );
 }

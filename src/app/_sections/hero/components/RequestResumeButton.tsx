@@ -177,7 +177,7 @@ function PanelForm({
             />
           </span>
           <span className="text-on-surface-variant/50 text-sm font-medium">
-            Add message
+            Add note
           </span>
         </button>
 
@@ -190,7 +190,7 @@ function PanelForm({
             cursor: !isEmailValid || submitted ? 'default' : 'pointer',
           }}
         >
-          {submitted ? '\u2713 Sent' : 'Request CV'}
+          {submitted ? '\u2713 Sent' : 'Download CV'}
         </button>
       </div>
     </>
@@ -276,7 +276,7 @@ function MobileDialog({
       }}
       role="dialog"
       aria-modal="true"
-      aria-label="Request CV"
+      aria-label="Download CV"
     >
       {/* Backdrop */}
       <div
@@ -301,13 +301,13 @@ function MobileDialog({
       >
         <div className="flex items-center justify-between border-b border-white/5 px-4 py-3">
           <p className="font-headline text-base font-bold text-white">
-            Request CV
+            Download CV
           </p>
           <button
             type="button"
             onClick={close}
             className="text-on-surface-variant/55 flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/10 hover:text-white"
-            aria-label="Close request CV dialog"
+            aria-label="Close download CV dialog"
           >
             <svg
               viewBox="0 0 24 24"
@@ -598,7 +598,7 @@ export function RequestResumeButton() {
                 pointerEvents: 'none',
               }}
             >
-              Request CV
+              Download CV
             </div>
 
             {/* Expanded panel content */}
@@ -633,7 +633,7 @@ export function RequestResumeButton() {
           visibility: !isMobile && isVisible ? 'hidden' : 'visible',
         }}
       >
-        Request CV
+        Download CV
       </button>
 
       {mobilePortal}

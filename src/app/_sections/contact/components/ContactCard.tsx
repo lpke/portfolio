@@ -34,70 +34,96 @@ export function ContactCard({
 }: ContactCardProps) {
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = useCallback(
-    (e: React.MouseEvent) => {
-      if (!copyContent) return;
-      e.preventDefault();
-      e.stopPropagation();
-      navigator.clipboard.writeText(copyContent).then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1500);
-      });
-    },
-    [copyContent],
-  );
+  const handleCopy = useCallback(() => {
+    if (!copyContent) return;
+    navigator.clipboard.writeText(copyContent).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
+  }, [copyContent]);
 
-  const Wrapper = href ? 'a' : 'div';
-  const linkProps = href
-    ? {
-        href,
-        target: href.startsWith('mailto') ? undefined : ('_blank' as const),
-        rel: href.startsWith('mailto')
-          ? undefined
-          : ('noopener noreferrer' as const),
-      }
-    : {};
-
-  return (
-    <Wrapper
-      {...linkProps}
-      className="group bg-surface-container-low hover:bg-surface-container flex items-center gap-6 rounded-lg p-4 transition-colors duration-300"
-    >
-      <div className="bg-surface-container text-primary relative flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 group-hover:bg-white/5">
-        {copyContent ? (
-          <>
-            {/* Default icon — hidden on hover */}
-            <Image
-              src={iconSrc}
-              alt={label}
-              width={20}
-              height={20}
-              className="h-5 w-5 transition-opacity duration-300 group-hover:opacity-0"
-            />
-            {/* Copy button — shown on hover */}
-            <button
-              type="button"
-              onClick={handleCopy}
-              aria-label={copied ? 'Copied!' : `Copy ${label}`}
-              className="absolute inset-0 flex cursor-pointer items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-            >
-              {copied ? (
-                <span className="text-primary text-xs font-bold">✓</span>
-              ) : (
-                <CopyIcon className="text-primary h-4 w-4 transition-transform duration-300 group-hover:scale-125" />
-              )}
-            </button>
-          </>
-        ) : (
-          <Image src={iconSrc} alt={label} width={20} height={20} className="h-5 w-5" />
-        )}
+  const content = (
+    <>
+      <div className="text-primary bg-surface-container group-hover/contact-card:bg-white/5 flex h-10 w-10 shrink-0 items-center justify-center rounded-md transition-colors duration-200">
+        <Image
+          src={iconSrc}
+          alt=""
+          width={20}
+          height={20}
+          className="h-4.5 w-4.5"
+        />
       </div>
-      <div className="text-left">
+      <div className="min-w-0 flex-1 text-left">
         <p className="font-label text-on-surface-variant/50 text-[10px] tracking-widest uppercase">
           {label}
         </p>
-        <p className="font-headline font-bold text-white">{value}</p>
+        <p className="font-headline truncate text-sm font-bold text-white">
+          {value}
+        </p>
       </div>
-    </Wrapper>
+    </>
+  );
+
+  return (
+    <div
+      className="group/contact-card bg-surface-container-low/55 relative overflow-hidden rounded-md ring-1 ring-white/5 ring-inset"
+    >
+      <span
+        aria-hidden="true"
+        className="bg-surface-container pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 group-hover/contact-card:opacity-100"
+      />
+      {href ? (
+        <a
+          href={href}
+          target={href.startsWith('mailto') ? undefined : '_blank'}
+          rel={href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+          className={`focus-visible:ring-primary/35 relative flex min-w-0 items-center gap-4 px-4 py-3 outline-none focus-visible:ring-2 ${
+            copyContent ? 'pr-24' : ''
+          }`}
+        >
+          {content}
+        </a>
+      ) : (
+        <div
+          className={`relative flex min-w-0 items-center gap-4 px-4 py-3 ${
+            copyContent ? 'pr-24' : ''
+          }`}
+        >
+          {content}
+        </div>
+      )}
+
+      {copyContent && (
+        <button
+          type="button"
+          onClick={handleCopy}
+          aria-label={copied ? `${label} copied` : `Copy ${label}`}
+          className="text-on-surface-variant hover:text-primary hover:bg-primary/8 focus-visible:text-primary focus-visible:bg-primary/10 focus-visible:ring-primary/35 absolute top-0 right-0 bottom-0 flex w-20 cursor-pointer items-center justify-center text-xs font-semibold transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none"
+        >
+          <span
+            aria-hidden="true"
+            className="absolute top-0 bottom-0 left-0 w-px bg-white/5 opacity-0 transition-opacity duration-200 group-hover/contact-card:opacity-100"
+          />
+          <span
+            className={`absolute inset-0 flex items-center justify-center gap-1 transition-opacity duration-200 ${
+              copied
+                ? 'opacity-0'
+                : 'opacity-0 group-hover/contact-card:opacity-100'
+            }`}
+          >
+            <CopyIcon className="h-3.5 w-3.5" />
+            Copy
+          </span>
+          <span
+            aria-live="polite"
+            className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${
+              copied ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            Copied
+          </span>
+        </button>
+      )}
+    </div>
   );
 }
