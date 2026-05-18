@@ -56,6 +56,7 @@ function ExternalLinkIcon({ className }: { className?: string }) {
 }
 
 type ContactCardProps = {
+  id?: string;
   iconSrc: string;
   label: string;
   value: string;
@@ -64,6 +65,7 @@ type ContactCardProps = {
 };
 
 export function ContactCard({
+  id,
   iconSrc,
   label,
   value,
@@ -107,7 +109,10 @@ export function ContactCard({
   );
 
   return (
-    <div className="group/contact-card bg-surface-container-high/75 text-on-surface-variant relative overflow-hidden rounded-lg border border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.28)] transition-[background-color,border-color,color,box-shadow] duration-300 hover:border-white/32 hover:bg-white/[0.11] hover:text-white hover:shadow-[0_6px_16px_rgba(0,0,0,0.18),0_14px_30px_rgba(0,0,0,0.12)]">
+    <div
+      id={id}
+      className="group/contact-card bg-surface-container-high/75 text-on-surface-variant relative scroll-mt-24 overflow-hidden rounded-lg border border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.28)] transition-[background-color,border-color,color,box-shadow] duration-300 hover:border-white/32 hover:bg-white/[0.11] hover:text-white hover:shadow-[0_6px_16px_rgba(0,0,0,0.18),0_14px_30px_rgba(0,0,0,0.12)] md:scroll-mt-28"
+    >
       <span
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-white/[0.08] opacity-0 transition-opacity duration-200 group-hover/contact-card:opacity-100"

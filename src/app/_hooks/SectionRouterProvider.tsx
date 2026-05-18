@@ -11,7 +11,7 @@ import { useSectionRouter } from '@/hooks/useSectionRouter';
 
 type SectionRouterContext = {
   activeId: string;
-  navigateTo: (sectionId: string) => void;
+  navigateTo: (sectionId: string, scrollTargetId?: string) => void;
 };
 
 const Ctx = createContext<SectionRouterContext>({

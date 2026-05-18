@@ -26,16 +26,19 @@ export function ContactContent() {
       {/* Left Column — Info + Links */}
       <div className="space-y-5">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1">
-          {CONTACT_LINKS.map(({ iconSrc, label, value, href, copyContent }) => (
-            <ContactCard
-              key={label}
-              iconSrc={iconSrc}
-              label={label}
-              value={value}
-              href={href}
-              copyContent={copyContent}
-            />
-          ))}
+          {CONTACT_LINKS.map(
+            ({ iconSrc, label, value, href, copyContent }, index) => (
+              <ContactCard
+                key={label}
+                id={index === 0 ? 'contact-card-first' : undefined}
+                iconSrc={iconSrc}
+                label={label}
+                value={value}
+                href={href}
+                copyContent={copyContent}
+              />
+            ),
+          )}
         </div>
       </div>
 

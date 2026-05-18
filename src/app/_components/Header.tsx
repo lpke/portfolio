@@ -8,9 +8,10 @@ export function Header() {
   const { activeId, navigateTo } = useSectionNav();
 
   const handleNavigate =
-    (sectionId: string) => (e: { preventDefault: () => void }) => {
+    (sectionId: string, scrollTargetId?: string) =>
+    (e: { preventDefault: () => void }) => {
       e.preventDefault();
-      navigateTo(sectionId);
+      navigateTo(sectionId, scrollTargetId);
     };
 
   return (
@@ -18,7 +19,7 @@ export function Header() {
       className="glass-nav ambient-shadow fixed top-0 z-50 w-full"
       style={{ paddingRight: 'var(--scrollbar-gutter, 0px)' }}
     >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 md:px-8 py-4">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-8">
         {/* Logo */}
         <Link
           href="/"
@@ -53,7 +54,7 @@ export function Header() {
         {/* CTA Button */}
         <Link
           href="/contact"
-          onNavigate={handleNavigate('contact')}
+          onNavigate={handleNavigate('contact', 'contact-card-first')}
           className="signature-gradient font-headline text-on-primary rounded-full px-6 py-2 text-sm font-bold transition-all hover:shadow-[0_0_20px_rgba(123,208,255,0.4)] active:scale-95"
         >
           Get in Touch

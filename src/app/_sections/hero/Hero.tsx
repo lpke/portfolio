@@ -36,6 +36,7 @@ export function Hero() {
         <div className="flex flex-wrap items-start gap-4">
           <SectionLink
             to="contact"
+            scrollTargetId="contact-card-first"
             className="signature-gradient font-headline text-on-primary rounded-full px-8 py-4 font-bold transition-all hover:shadow-[0_0_20px_rgba(123,208,255,0.4)]"
           >
             Contact Me

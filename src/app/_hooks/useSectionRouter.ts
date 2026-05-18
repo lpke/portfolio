@@ -38,36 +38,39 @@ export function useSectionRouter() {
   }, []);
 
   // --- Scroll to a section programmatically ---
-  const navigateTo = useCallback((sectionId: string) => {
-    const el = document.getElementById(sectionId);
-    if (!el) return;
+  const navigateTo = useCallback(
+    (sectionId: string, scrollTargetId?: string) => {
+      const el = document.getElementById(scrollTargetId ?? sectionId);
+      if (!el) return;
 
-    // Temporarily mark as programmatic scroll so the observer doesn't
-    // fight with the pushState below.
-    isUserScrolling.current = false;
+      // Temporarily mark as programmatic scroll so the observer doesn't
+      // fight with the pushState below.
+      isUserScrolling.current = false;
 
-    // Pause observer-driven navbar highlighting during the animation.
-    // Immediately highlight the target section instead.
-    isAnimating.current = true;
-    activeIdRef.current = sectionId;
-    activeListeners.current.forEach((fn) => fn(sectionId));
+      // Pause observer-driven navbar highlighting during the animation.
+      // Immediately highlight the target section instead.
+      isAnimating.current = true;
+      activeIdRef.current = sectionId;
+      activeListeners.current.forEach((fn) => fn(sectionId));
 
-    // Use pushState (not replaceState) so the back button works.
-    const path = ID_TO_PATH[sectionId] ?? '/';
-    if (window.location.pathname !== path) {
-      window.history.pushState(null, '', path);
-    }
+      // Use pushState (not replaceState) so the back button works.
+      const path = ID_TO_PATH[sectionId] ?? '/';
+      if (window.location.pathname !== path) {
+        window.history.pushState(null, '', path);
+      }
 
-    el.scrollIntoView({ behavior: 'smooth' });
+      el.scrollIntoView({ behavior: 'smooth' });
 
-    // Re-enable observer-driven URL updates and navbar highlighting
-    // after the scroll finishes. 1200ms is generous enough for long
-    // smooth scrolls.
-    setTimeout(() => {
-      isUserScrolling.current = true;
-      isAnimating.current = false;
-    }, 1200);
-  }, []);
+      // Re-enable observer-driven URL updates and navbar highlighting
+      // after the scroll finishes. 1200ms is generous enough for long
+      // smooth scrolls.
+      setTimeout(() => {
+        isUserScrolling.current = true;
+        isAnimating.current = false;
+      }, 1200);
+    },
+    [],
+  );
 
   useEffect(() => {
     // --- IntersectionObserver: track which section is in view ---

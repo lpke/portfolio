@@ -12,6 +12,8 @@ const ID_TO_PATH: Record<string, string> = Object.fromEntries(
 type SectionLinkProps = {
   /** The section id to scroll to, e.g. 'projects' */
   to: string;
+  /** Optional DOM id to scroll to while keeping the URL/active section tied to `to`. */
+  scrollTargetId?: string;
   children: ReactNode;
   className?: string;
 };
@@ -21,12 +23,17 @@ type SectionLinkProps = {
  * to a clean path (e.g. `/projects`). Renders an `<a>` for accessibility
  * with a real href as fallback.
  */
-export function SectionLink({ to, children, className }: SectionLinkProps) {
+export function SectionLink({
+  to,
+  scrollTargetId,
+  children,
+  className,
+}: SectionLinkProps) {
   const { navigateTo } = useSectionNav();
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    navigateTo(to);
+    navigateTo(to, scrollTargetId);
   };
 
   return (
