@@ -4,6 +4,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
@@ -27,6 +28,10 @@ type ImmersiveLayout = {
   competencyLimit: number;
 };
 
+type RailTextStyle = CSSProperties & {
+  '--skill-rail-text-extra': string;
+};
+
 const IMMERSIVE_LAYOUT: ImmersiveLayout = {
   id: 'primary',
   panelClassName: 'bg-[#0b1322]',
@@ -37,7 +42,7 @@ const IMMERSIVE_LAYOUT: ImmersiveLayout = {
   competencyLimit: 99,
 };
 
-const FADE_MS = 170;
+const FADE_MS = 200;
 
 export function ImmersiveShowcaseSkills({
   withShell = true,
@@ -213,7 +218,7 @@ function SkillRail({
             }}
             onClick={() => onSelect(skill.id)}
             className={cx(
-              'grid w-full cursor-pointer grid-cols-[1.75rem_minmax(0,1fr)] items-start gap-2.5 justify-self-start rounded-lg border border-transparent px-4 py-4 text-left transition-[width,background-color,border-color,color,box-shadow] duration-500',
+              'grid w-full cursor-pointer grid-cols-[1.75rem_minmax(0,1fr)] items-start gap-2.5 justify-self-start overflow-hidden rounded-lg border border-transparent px-4 py-4 text-left transition-[width,background-color,border-color,color,box-shadow] duration-600',
               isSelected ? 'lg:w-[calc(100%+1.5rem)]' : 'lg:w-full',
               getRailItemClass(isSelected),
             )}
@@ -232,7 +237,10 @@ function SkillRail({
               )}
             </span>
 
-            <span className="min-w-0 lg:w-[calc(19.5rem-4.75rem)]">
+            <span
+              className="min-w-0 lg:w-[calc(21rem-4.75rem+var(--skill-rail-text-extra))]"
+              style={getRailTextStyle(skill)}
+            >
               <span
                 className={cx(
                   'font-headline block truncate text-xl font-bold',
@@ -246,7 +254,7 @@ function SkillRail({
 
               <span
                 className={cx(
-                  'grid transition-[grid-template-rows,opacity,margin-top] duration-300',
+                  'grid transition-[grid-template-rows,opacity,margin-top] duration-500',
                   isSelected
                     ? 'mt-2 grid-rows-[1fr] opacity-100'
                     : 'mt-0 grid-rows-[0fr] opacity-0',
@@ -262,6 +270,12 @@ function SkillRail({
       })}
     </div>
   );
+}
+
+function getRailTextStyle(skill: SkillData): RailTextStyle {
+  return {
+    '--skill-rail-text-extra': `${skill.railTextExtraRem ?? 0}rem`,
+  };
 }
 
 function getRailItemClass(isSelected: boolean) {

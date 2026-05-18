@@ -16,6 +16,7 @@ export type SkillData = {
   iconKey: string;
   accent: string;
   accentSoft: string;
+  railTextExtraRem?: number;
   competencies: SkillCompetency[];
   stack: string[];
   examples: SkillExample[];
@@ -384,6 +385,7 @@ export const SKILLS: SkillData[] = [
     title: 'Technical Strategy',
     summary:
       'Trade-offs, stakeholder communication, and business-minded decisions.',
+    railTextExtraRem: 0.3,
     detail:
       'Commerce graduate turned engineer. I understand the business side because I came from it, and that shapes every technical decision I make.',
     iconKey: 'strategy',
