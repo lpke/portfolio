@@ -50,7 +50,10 @@ export function Hero() {
          crescent clipped by the section boundary. */}
       <div
         className="pointer-events-none absolute -bottom-20 -left-20 h-[28rem] w-[28rem] rounded-full"
-        style={{ background: 'radial-gradient(circle at 35% 65%, rgba(60,221,199,0.07) 0%, rgba(60,221,199,0.03) 40%, transparent 70%)' }}
+        style={{
+          background:
+            'radial-gradient(circle at 35% 65%, rgba(60,221,199,0.07) 0%, rgba(60,221,199,0.03) 40%, transparent 70%)',
+        }}
       />
     </section>
   );

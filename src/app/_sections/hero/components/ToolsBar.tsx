@@ -122,7 +122,6 @@ function PlaywrightIcon() {
   );
 }
 
-
 function LinuxIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
@@ -202,7 +201,10 @@ function VWOIcon() {
 function MonorepoIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-      <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z" opacity=".85" />
+      <path
+        d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"
+        opacity=".85"
+      />
     </svg>
   );
 }
@@ -249,4 +251,3 @@ export function ToolsBar() {
     </div>
   );
 }
-

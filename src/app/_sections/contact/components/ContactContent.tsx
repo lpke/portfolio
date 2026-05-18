@@ -43,7 +43,7 @@ export function ContactContent() {
       <div
         tabIndex={-1}
         onPointerDown={handleFormShellPointerDown}
-        className="group/contact-form bg-surface-container/92 relative overflow-hidden rounded-lg border border-white/20 p-5 shadow-[0_22px_72px_rgba(0,0,0,0.36)] transition-[background-color,box-shadow] duration-800 outline-none focus-within:bg-surface-container/96 focus-within:shadow-[0_34px_96px_rgba(0,0,0,0.54)] sm:p-6 lg:p-7"
+        className="group/contact-form bg-surface-container/92 focus-within:bg-surface-container/96 relative overflow-hidden rounded-lg border border-white/20 p-5 shadow-[0_22px_72px_rgba(0,0,0,0.36)] transition-[background-color,box-shadow] duration-800 outline-none focus-within:shadow-[0_34px_96px_rgba(0,0,0,0.54)] sm:p-6 lg:p-7"
       >
         {/* Decorative glow — static radial gradient instead of blur filter */}
         <div

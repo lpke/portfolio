@@ -14,7 +14,7 @@ export function Header() {
     };
 
   return (
-<header
+    <header
       className="glass-nav ambient-shadow fixed top-0 z-50 w-full"
       style={{ paddingRight: 'var(--scrollbar-gutter, 0px)' }}
     >
