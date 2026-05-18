@@ -6,7 +6,7 @@ export function Experience() {
   return (
     <section
       id="experience"
-      className="mx-auto max-w-7xl px-6 pt-32 pb-24 md:px-12"
+      className="mx-auto max-w-7xl px-6 pt-24 pb-24 md:px-12 md:pt-32"
     >
       <PageHero
         title={

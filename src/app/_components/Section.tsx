@@ -23,7 +23,7 @@ export function Section({
 }: SectionProps) {
   return (
     <section className={`${LEVEL_BG[level]} ${className}`} id={id}>
-      <div className="mx-auto max-w-7xl px-6 md:px-8">{children}</div>
+      <div className="mx-auto max-w-7xl px-5 md:px-8">{children}</div>
     </section>
   );
 }

@@ -132,7 +132,7 @@ export function ImmersiveShowcaseSkills({
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.055),transparent_36%,rgba(255,255,255,0.025))]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,var(--skill-accent-soft),transparent_32%)] opacity-75" />
 
-      <div className="relative z-10 mx-auto min-h-[42rem] max-w-7xl px-4 py-24 sm:px-6 md:px-8 lg:py-28">
+      <div className="relative z-10 mx-auto min-h-[42rem] max-w-7xl px-4 py-16 sm:px-6 sm:py-24 md:px-8 lg:py-28">
         <div className="mb-10 lg:mb-12">
           <SkillsHeading />
         </div>
@@ -265,7 +265,7 @@ function getRailItemClass(isSelected: boolean) {
     return base;
   }
 
-  return 'border-white/20 bg-white/[0.13] text-white shadow-[0_18px_45px_rgba(0,0,0,0.24)]';
+  return 'border-white/20 bg-white/[0.13] text-white shadow-[0_6px_16px_rgba(0,0,0,0.18),0_14px_30px_rgba(0,0,0,0.12)]';
 }
 
 function ImmersiveContent({

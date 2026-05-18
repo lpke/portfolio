@@ -17,6 +17,24 @@ function CopyIcon({ className }: { className?: string }) {
   );
 }
 
+function CheckIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      role="graphics-symbol"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      className={className}
+    >
+      <path d="m3.5 8.5 3 3 6-7" />
+    </svg>
+  );
+}
+
 type ContactCardProps = {
   iconSrc: string;
   label: string;
@@ -33,6 +51,7 @@ export function ContactCard({
   copyContent,
 }: ContactCardProps) {
   const [copied, setCopied] = useState(false);
+  const iconSizeClassName = label === 'Email' ? 'h-5 w-5' : 'h-5.5 w-5.5';
 
   const handleCopy = useCallback(() => {
     if (!copyContent) return;
@@ -44,13 +63,13 @@ export function ContactCard({
 
   const content = (
     <>
-      <div className="text-primary flex h-11 w-11 shrink-0 items-center justify-center">
+      <div className="text-primary flex h-10 w-10 shrink-0 items-center justify-center sm:h-11 sm:w-11">
         <Image
           src={iconSrc}
           alt=""
           width={20}
           height={20}
-          className="h-5.5 w-5.5 drop-shadow-[0_3px_5px_rgba(0,0,0,0.35)]"
+          className={`${iconSizeClassName} drop-shadow-[0_3px_5px_rgba(0,0,0,0.35)]`}
         />
       </div>
       <div className="min-w-0 flex-1 text-left">
@@ -77,16 +96,20 @@ export function ContactCard({
           href={href}
           target={href.startsWith('mailto') ? undefined : '_blank'}
           rel={href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
-          className={`focus-visible:ring-primary/35 relative flex min-w-0 items-center gap-4 px-5 py-4 outline-none focus-visible:ring-2 ${
-            copyContent ? 'pr-28' : ''
+          className={`focus-visible:ring-primary/35 relative flex min-w-0 items-center gap-3 px-4 py-4 outline-none focus-visible:ring-2 sm:gap-4 sm:px-5 ${
+            copyContent
+              ? 'pr-18 sm:pr-5 sm:group-hover/contact-card:[mask-image:linear-gradient(to_right,#000_calc(100%-6rem),transparent_calc(100%-6rem))] sm:group-focus-within/contact-card:[mask-image:linear-gradient(to_right,#000_calc(100%-6rem),transparent_calc(100%-6rem))]'
+              : ''
           }`}
         >
           {content}
         </a>
       ) : (
         <div
-          className={`relative flex min-w-0 items-center gap-4 px-5 py-4 ${
-            copyContent ? 'pr-28' : ''
+          className={`relative flex min-w-0 items-center gap-3 px-4 py-4 sm:gap-4 sm:px-5 ${
+            copyContent
+              ? 'pr-18 sm:pr-5 sm:group-hover/contact-card:[mask-image:linear-gradient(to_right,#000_calc(100%-6rem),transparent_calc(100%-6rem))] sm:group-focus-within/contact-card:[mask-image:linear-gradient(to_right,#000_calc(100%-6rem),transparent_calc(100%-6rem))]'
+              : ''
           }`}
         >
           {content}
@@ -98,29 +121,30 @@ export function ContactCard({
           type="button"
           onClick={handleCopy}
           aria-label={copied ? `${label} copied` : `Copy ${label}`}
-          className="text-on-surface-variant hover:text-primary hover:bg-primary/8 focus-visible:text-primary focus-visible:bg-primary/10 focus-visible:ring-primary/35 absolute top-0 right-0 bottom-0 flex w-24 cursor-pointer items-center justify-center text-sm font-semibold transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none"
+          className="text-on-surface-variant hover:text-primary hover:bg-primary/8 focus-visible:text-primary focus-visible:bg-primary/10 focus-visible:ring-primary/35 absolute top-0 right-0 bottom-0 flex w-14 cursor-pointer items-center justify-center text-sm font-semibold transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none sm:w-24"
         >
           <span
             aria-hidden="true"
-            className="absolute top-0 bottom-0 left-0 w-px bg-white/5 opacity-0 transition-opacity duration-200 group-hover/contact-card:opacity-100"
+            className="absolute top-px bottom-px left-0 w-px bg-white/10 opacity-100 transition-opacity duration-200 sm:bg-white/16 sm:opacity-0 sm:group-hover/contact-card:opacity-100"
           />
           <span
             className={`absolute inset-0 flex items-center justify-center gap-1 transition-opacity duration-200 ${
               copied
                 ? 'opacity-0'
-                : 'opacity-0 group-hover/contact-card:opacity-100'
+                : 'opacity-100 sm:opacity-0 sm:group-hover/contact-card:opacity-100'
             }`}
           >
             <CopyIcon className="h-3.5 w-3.5" />
-            Copy
+            <span className="hidden sm:inline">Copy</span>
           </span>
           <span
             aria-live="polite"
-            className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${
+            className={`text-primary absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${
               copied ? 'opacity-100' : 'opacity-0'
             }`}
           >
-            Copied
+            <CheckIcon className="h-4 w-4 sm:hidden" />
+            <span className="hidden sm:inline">Copied</span>
           </span>
         </button>
       )}

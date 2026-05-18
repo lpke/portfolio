@@ -36,14 +36,11 @@ export function AccordionIndexSkills({
 
   const content = (
     <div className="ghost-border relative overflow-hidden bg-[#0b1322]">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.055),transparent_36%,rgba(255,255,255,0.025))]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_0%,rgba(123,208,255,0.10),transparent_34%)]" />
-
-      <div className="relative mx-auto max-w-2xl px-4 pt-20 pb-8 sm:px-6">
+      <div className="relative mx-auto max-w-7xl px-5 pt-14 pb-8 md:px-8 md:pt-20">
         <SkillsHeading />
       </div>
 
-      <div className="relative grid w-full gap-3 pb-6">
+      <div className="relative mx-auto grid w-full max-w-7xl gap-3 px-5 pb-6 md:px-8">
         {SKILLS.map((skill) => {
           const isOpen = openIds.has(skill.id);
 
@@ -101,7 +98,10 @@ function MobileSkillPanel({
       return;
     }
 
-    const movement = Math.hypot(event.clientX - start.x, event.clientY - start.y);
+    const movement = Math.hypot(
+      event.clientX - start.x,
+      event.clientY - start.y,
+    );
 
     if (movement > 8) {
       start.moved = true;
@@ -138,85 +138,102 @@ function MobileSkillPanel({
   };
 
   return (
-    <article
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerCancel}
+    <div
       className={cx(
-        'relative overflow-hidden border-x-0 border-y transition-[background-color,border-color,border-radius,box-shadow,margin] duration-300',
-        isOpen
-          ? 'mx-0 rounded-none border-white/15 bg-white/[0.075] shadow-[0_14px_32px_rgba(0,0,0,0.18)]'
-          : 'bg-surface-container-high/80 mx-2 rounded-lg border-white/10',
+        'relative transition-[margin] duration-500 ease-out',
+        isOpen && '-mx-2',
       )}
-      style={getSkillStyle(skill)}
     >
       <div
         className={cx(
-          'pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_92%_-8%,var(--skill-accent-soft),transparent_56%)] transition-opacity duration-300',
-          isOpen ? 'opacity-45' : 'opacity-0',
+          'pointer-events-none absolute inset-0 z-0 rounded-lg transition-shadow duration-500 ease-out',
+          isOpen &&
+            'shadow-[0_3px_10px_rgba(0,0,0,0.72),0_18px_36px_rgba(0,0,0,0.62),0_34px_90px_rgba(0,0,0,0.6)]',
         )}
       />
 
-      <button
-        type="button"
-        aria-expanded={isOpen}
-        aria-controls={`skill-panel-${skill.id}`}
-        onKeyDown={handleKeyDown}
+      <article
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerCancel}
         className={cx(
-          'relative grid w-full grid-cols-[1.75rem_minmax(0,1fr)_1.75rem] items-start gap-3 py-4 text-left transition-[color,padding] duration-300',
-          isOpen ? 'px-6' : 'px-4',
+          'relative isolate z-10 overflow-hidden rounded-lg border transition-[background-color,border-color] duration-500 ease-out',
+          isOpen
+            ? 'border-white/15 bg-white/[0.075]'
+            : 'bg-surface-container-high/80 border-white/10',
         )}
+        style={getSkillStyle(skill)}
       >
-        <SkillStateIcon skill={skill} isOpen={isOpen} />
+        <div
+          className={cx(
+            'pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_92%_-8%,var(--skill-accent-soft),transparent_56%)] transition-opacity duration-300',
+            isOpen ? 'opacity-45' : 'opacity-0',
+          )}
+        />
 
-        <span className="min-w-0">
-          <span className="font-headline block text-lg leading-tight font-bold tracking-tight text-white">
-            {skill.title}
+        <button
+          type="button"
+          aria-expanded={isOpen}
+          aria-controls={`skill-panel-${skill.id}`}
+          onKeyDown={handleKeyDown}
+          className={cx(
+            'relative grid w-full grid-cols-[1.75rem_minmax(0,1fr)_1.75rem] items-start gap-3 py-4 text-left transition-[color,padding] duration-500 ease-out',
+            isOpen ? 'px-6' : 'px-4',
+          )}
+        >
+          <SkillStateIcon skill={skill} isOpen={isOpen} />
+
+          <span className="min-w-0">
+            <span className="font-headline block text-lg leading-tight font-bold tracking-tight text-white">
+              {skill.title}
+            </span>
+            <span className="text-on-surface-variant mt-2 block text-sm leading-relaxed">
+              {skill.summary}
+            </span>
           </span>
-          <span className="text-on-surface-variant mt-2 block text-sm leading-relaxed">
-            {skill.summary}
+
+          <span className="text-on-surface-variant/70 grid h-7 w-7 place-items-center rounded-full border border-white/10 bg-white/[0.025]">
+            <ChevronIcon open={isOpen} />
           </span>
-        </span>
+        </button>
 
-        <span className="text-on-surface-variant/70 grid h-7 w-7 place-items-center rounded-full border border-white/10 bg-white/[0.025]">
-          <ChevronIcon open={isOpen} />
-        </span>
-      </button>
+        <div
+          id={`skill-panel-${skill.id}`}
+          className={cx(
+            'relative grid transition-[grid-template-rows,opacity] duration-300',
+            isOpen
+              ? 'grid-rows-[1fr] opacity-100'
+              : 'grid-rows-[0fr] opacity-0',
+          )}
+        >
+          <div className="min-h-0 overflow-hidden">
+            <div
+              className={cx(
+                'border-t border-white/10 pt-4 pb-5 transition-[padding] duration-500 ease-out',
+                isOpen ? 'px-6' : 'px-4',
+              )}
+            >
+              <p className="text-on-surface-variant text-sm leading-relaxed">
+                {skill.detail}
+              </p>
 
-      <div
-        id={`skill-panel-${skill.id}`}
-        className={cx(
-          'relative grid transition-[grid-template-rows,opacity] duration-300',
-          isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
-        )}
-      >
-        <div className="min-h-0 overflow-hidden">
-          <div
-            className={cx(
-              'border-t border-white/10 pt-4 pb-5 transition-[padding] duration-300',
-              isOpen ? 'px-6' : 'px-4',
-            )}
-          >
-            <p className="text-on-surface-variant text-sm leading-relaxed">
-              {skill.detail}
-            </p>
+              <MobileContentSection title="Approach">
+                <MobileCompetencyList skill={skill} />
+              </MobileContentSection>
 
-            <MobileContentSection title="Approach">
-              <MobileCompetencyList skill={skill} />
-            </MobileContentSection>
+              <MobileContentSection title="Examples">
+                <MobileExampleList skill={skill} />
+              </MobileContentSection>
 
-            <MobileContentSection title="Examples">
-              <MobileExampleList skill={skill} />
-            </MobileContentSection>
-
-            <MobileContentSection title="Tools and stack">
-              <StackChips items={skill.stack} />
-            </MobileContentSection>
+              <MobileContentSection title="Tools and stack">
+                <StackChips items={skill.stack} />
+              </MobileContentSection>
+            </div>
           </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </div>
   );
 }
 

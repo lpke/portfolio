@@ -33,7 +33,7 @@ export function ContactForm() {
   );
 
   const inputClassName =
-    'bg-surface-container-lowest/70 text-on-surface placeholder:text-on-surface-variant/35 focus:border-white/28 focus:bg-surface-container-lowest focus:shadow-[0_8px_18px_rgba(0,0,0,0.18)] w-full rounded-md border border-white/10 px-4 py-3 text-base transition-[background-color,border-color,box-shadow] outline-none';
+    'bg-surface-container-lowest/70 text-on-surface placeholder:text-on-surface-variant/35 focus:border-primary/35 focus:bg-surface-container-lowest focus:shadow-[0_8px_18px_rgba(0,0,0,0.18)] w-full rounded-md border border-white/10 px-4 py-3 text-base transition-[background-color,border-color,box-shadow] outline-none';
   const labelClassName =
     'font-label text-on-surface-variant/65 text-xs tracking-widest uppercase';
 
@@ -41,7 +41,7 @@ export function ContactForm() {
     <form action={formAction} className="relative z-10 space-y-5">
       <div className="grid gap-5 sm:grid-cols-2">
         {/* Full Name */}
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           <label htmlFor="name" className={labelClassName}>
             Name
           </label>
@@ -56,7 +56,7 @@ export function ContactForm() {
         </div>
 
         {/* Email */}
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           <label htmlFor="email" className={labelClassName}>
             Email
           </label>
@@ -72,7 +72,7 @@ export function ContactForm() {
       </div>
 
       {/* Project Details */}
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         <label htmlFor="details" className={labelClassName}>
           Message
         </label>

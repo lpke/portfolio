@@ -5,7 +5,7 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="mx-auto max-w-7xl px-6 pt-32 pb-24 md:px-8"
+      className="mx-auto max-w-7xl px-5 pt-24 pb-24 md:px-8 md:pt-32"
     >
       <PageHero
         title={
