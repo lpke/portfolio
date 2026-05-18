@@ -6,7 +6,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="hero-waves relative flex min-h-200 items-center overflow-hidden px-5 pt-16 md:px-8 md:pt-24"
+      className="hero-waves relative flex min-h-200 items-center overflow-hidden px-5 md:px-8 md:pt-24"
     >
       <div className="mx-auto w-full max-w-7xl">
         {/* Copy */}
