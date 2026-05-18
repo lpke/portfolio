@@ -185,7 +185,7 @@ function MobileSkillPanel({
           <SkillStateIcon skill={skill} isOpen={isOpen} />
 
           <span className="min-w-0">
-            <span className="font-headline block text-lg leading-tight font-bold tracking-tight text-white">
+            <span className="font-headline block text-xl leading-tight font-bold tracking-tight text-white">
               {skill.title}
             </span>
             <span className="text-on-surface-variant mt-2 block text-sm leading-relaxed">
@@ -218,16 +218,12 @@ function MobileSkillPanel({
                 {skill.detail}
               </p>
 
-              <MobileContentSection title="Approach">
-                <MobileCompetencyList skill={skill} />
-              </MobileContentSection>
+              <StackChips items={skill.stack} className="mt-4" />
+
+              <MobileCompetencyList skill={skill} />
 
               <MobileContentSection title="Examples">
                 <MobileExampleList skill={skill} />
-              </MobileContentSection>
-
-              <MobileContentSection title="Tools and stack">
-                <StackChips items={skill.stack} />
               </MobileContentSection>
             </div>
           </div>
@@ -248,7 +244,7 @@ function SkillStateIcon({
     <span className="mt-0.5 grid h-7 w-7 place-items-center">
       <span
         className={cx(
-          'grid h-6 w-6 place-items-center transition-colors duration-300 [&>svg]:h-5 [&>svg]:w-5',
+          'grid h-7 w-7 place-items-center transition-colors duration-300',
           isOpen ? 'text-[var(--skill-accent)]' : 'text-on-surface-variant/55',
         )}
         aria-hidden="true"
@@ -278,11 +274,11 @@ function MobileContentSection({
 
 function MobileCompetencyList({ skill }: { skill: SkillData }) {
   return (
-    <div className="grid gap-3">
+    <div className="mt-5 grid gap-3">
       {skill.competencies.map((item) => (
         <div
           key={item.label}
-          className="border-l border-[var(--skill-accent)] pl-3"
+          className="border-l border-[var(--skill-accent)] bg-white/[0.025] px-3 py-2.5"
         >
           <h5 className="font-headline text-sm font-bold text-white">
             {item.label}

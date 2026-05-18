@@ -56,7 +56,7 @@ export function StackChips({
       {visible.map((item) => (
         <span
           key={item}
-          className="font-label text-on-surface-variant rounded-sm border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] font-bold tracking-wider uppercase"
+          className="font-label rounded-sm border border-[color:color-mix(in_srgb,var(--skill-accent)_20%,transparent)] bg-[color:color-mix(in_srgb,var(--skill-accent)_7%,transparent)] px-2.5 py-1 text-[11px] font-bold tracking-wider text-[color:color-mix(in_srgb,var(--skill-accent)_28%,white)] uppercase"
         >
           {item}
         </span>

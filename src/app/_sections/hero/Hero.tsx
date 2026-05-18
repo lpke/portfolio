@@ -22,9 +22,9 @@ export function Hero() {
           </h2>
 
           <p className="text-on-surface-variant mb-8 max-w-lg text-lg leading-relaxed opacity-70">
-            Commerce graduate who turned to the nerd side. I build frontend
-            apps, the systems that ship them, and the tools that help write
-            them. When not coding, I&apos;m training — calisthenics and
+            Commerce graduate who turned to the nerd side. I build React apps,
+            the infrastructure that ships them, and the AI tooling that writes
+            them faster. When not coding, I&apos;m training - calisthenics and
             competitive swimming.
           </p>
 

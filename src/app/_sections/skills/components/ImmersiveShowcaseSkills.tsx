@@ -34,7 +34,7 @@ const IMMERSIVE_LAYOUT: ImmersiveLayout = {
   descriptionClassName: 'text-base',
   railWidthClassName: 'lg:w-[19.5rem]',
   contentMaxClassName: 'max-w-4xl',
-  competencyLimit: 3,
+  competencyLimit: 99,
 };
 
 const FADE_MS = 170;
@@ -213,10 +213,8 @@ function SkillRail({
             }}
             onClick={() => onSelect(skill.id)}
             className={cx(
-              'grid w-full cursor-pointer grid-cols-[1.75rem_minmax(0,1fr)] items-start gap-2.5 justify-self-start rounded-lg border border-transparent px-4 py-4 text-left transition-[width,background-color,border-color,color,box-shadow,min-height] duration-500',
-              isSelected
-                ? 'min-h-[8.75rem] lg:w-[calc(100%+0.875rem)]'
-                : 'min-h-[4.25rem] lg:w-full',
+              'grid w-full cursor-pointer grid-cols-[1.75rem_minmax(0,1fr)] items-start gap-2.5 justify-self-start rounded-lg border border-transparent px-4 py-4 text-left transition-[width,background-color,border-color,color,box-shadow] duration-500',
+              isSelected ? 'lg:w-[calc(100%+1.5rem)]' : 'lg:w-full',
               getRailItemClass(isSelected),
             )}
             style={getSkillStyle(skill)}
@@ -224,7 +222,7 @@ function SkillRail({
             <span className="flex h-7 w-7 items-center justify-center">
               {isSelected ? (
                 <span
-                  className="grid h-6 w-6 place-items-center text-[var(--skill-accent)] [&>svg]:h-5 [&>svg]:w-5"
+                  className="grid h-7 w-7 place-items-center text-[var(--skill-accent)]"
                   aria-hidden="true"
                 >
                   {getSkillIcon(skill.iconKey)}
@@ -235,7 +233,14 @@ function SkillRail({
             </span>
 
             <span className="min-w-0 lg:w-[calc(19.5rem-4.75rem)]">
-              <span className="font-headline block truncate text-lg font-bold text-white">
+              <span
+                className={cx(
+                  'font-headline block truncate text-xl font-bold',
+                  isSelected
+                    ? 'text-xl text-[var(--skill-accent)] [text-shadow:0_2px_8px_rgba(0,0,0,0.45)]'
+                    : 'text-white',
+                )}
+              >
                 {skill.title}
               </span>
 
@@ -267,7 +272,7 @@ function getRailItemClass(isSelected: boolean) {
     return base;
   }
 
-  return 'border-white/20 bg-white/[0.13] text-white shadow-[0_6px_16px_rgba(0,0,0,0.18),0_14px_30px_rgba(0,0,0,0.12)]';
+  return 'border-[color:color-mix(in_srgb,var(--skill-accent)_58%,rgba(255,255,255,0.16))] bg-[linear-gradient(90deg,color-mix(in_srgb,var(--skill-accent)_16%,rgba(255,255,255,0.105)),color-mix(in_srgb,var(--skill-accent)_13%,rgba(255,255,255,0.105))_52%,color-mix(in_srgb,var(--skill-accent)_10%,rgba(255,255,255,0.105)))] text-white shadow-[0_6px_16px_rgba(0,0,0,0.18),0_14px_30px_rgba(0,0,0,0.12)]';
 }
 
 function ImmersiveContent({
@@ -285,7 +290,7 @@ function ImmersiveContent({
       role="tabpanel"
       aria-labelledby={`immersive-${layout.id}-tab-${skill.id}`}
       className={cx(
-        'w-full py-4 transition-opacity duration-250 ease-out lg:py-10',
+        'w-full py-4 transition-opacity duration-250 ease-out lg:pt-0 lg:pb-4',
         layout.contentMaxClassName,
         isVisible ? 'opacity-100' : 'opacity-0',
       )}
@@ -300,14 +305,12 @@ function ImmersiveContent({
         {skill.detail}
       </p>
 
-      <div className="mt-8 grid gap-7 lg:grid-cols-2">
-        <ContentSection title="Approach">
-          <CompetencyGrid skill={skill} limit={layout.competencyLimit} />
-        </ContentSection>
+      <StackChips items={skill.stack} className="mt-5" />
 
+      <div className="mt-8 grid gap-7 lg:grid-cols-2 lg:items-start">
+        <CompetencyGrid skill={skill} limit={layout.competencyLimit} />
         <ContentSection title="Examples">
           <ExampleGrid skill={skill} />
-          <StackChips items={skill.stack} className="mt-5" />
         </ContentSection>
       </div>
     </article>
@@ -333,7 +336,7 @@ function ContentSection({
 
 function CompetencyGrid({ skill, limit }: { skill: SkillData; limit: number }) {
   return (
-    <div className="grid gap-3">
+    <div className="grid content-start gap-3">
       {skill.competencies.slice(0, limit).map((item) => (
         <div
           key={item.label}

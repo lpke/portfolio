@@ -23,331 +23,427 @@ export type SkillData = {
 
 export const SKILLS: SkillData[] = [
   {
-    id: 'frontend-architecture',
-    title: 'Frontend Architecture',
-    summary:
-      'React, TypeScript, monorepos, build tooling, and composable foundations for complex web apps.',
+    id: 'product-engineering',
+    title: 'Product Engineering',
+    summary: 'React, TypeScript, full-stack features, end-to-end ownership.',
     detail:
-      'I turn frontend codebases into systems that stay readable while teams, surfaces, and delivery pressure grow. The work spans app boundaries, state strategy, package structure, build pipelines, and clear component contracts.',
-    iconKey: 'architecture',
+      'I build the apps people actually use. React and TypeScript frontend, with enough backend to own features end-to-end.',
+    iconKey: 'product',
     accent: '#7bd0ff',
     accentSoft: 'rgba(123, 208, 255, 0.16)',
     competencies: [
       {
-        label: 'Monorepo design',
+        label: 'User-Facing Apps',
         description:
-          'Nx and Turborepo structures with clear ownership, fast affected builds, and shared package boundaries.',
+          'SPAs, portals, and interactive web experiences shipped to real users at scale.',
       },
       {
-        label: 'App composition',
+        label: 'Full-Stack Delivery',
         description:
-          'Microfrontend and modular app patterns that let teams ship independently without fragmenting UX.',
+          'Frontend-first, but comfortable owning API integration, serverless functions, and data layers.',
       },
       {
-        label: 'State and data flow',
+        label: 'Greenfield Builds',
         description:
-          'Predictable React state, server state, caching, and hydration decisions for resilient interfaces.',
+          'New products from zero. Stack selection, architecture decisions, and first deploy.',
       },
       {
-        label: 'Build tooling',
+        label: 'Platform & CMS Work',
         description:
-          'Vite, Webpack, and compiler setup tuned for project constraints instead of generic defaults.',
+          'Shopify, Magento, Webflow, and headless CMS integrations across commerce and marketing.',
       },
     ],
-    stack: ['React', 'TypeScript', 'Next.js', 'Nx', 'Turborepo', 'Vite'],
+    stack: [
+      'React',
+      'TypeScript',
+      'Next.js',
+      'Vite',
+      'Node.js',
+      'GraphQL',
+      'REST',
+      'MongoDB',
+      'MUI',
+      'Tailwind',
+      'Zod',
+      'Vercel',
+      'Shopify',
+      'Magento',
+      'Webflow',
+      'Sanity',
+      'Contentful',
+    ],
     examples: [
       {
-        title: 'Shared foundations',
+        title: 'Pre-Consultation Portal',
         detail:
-          'Design tokens, typed utilities, app shells, and package boundaries that reduce duplicate implementation.',
+          'Sole frontend architect of a greenfield React SPA at Montu, serving ~1,500 new users daily across AU and NZ.',
       },
       {
-        title: 'Delivery architecture',
+        title: "McDonald's Menu Boards",
         detail:
-          'Pipelines and ownership models that let multiple product streams ship without blocking each other.',
+          "Built React components deployed to digital screens at 2,000+ McDonald's stores across Australia and New Zealand.",
+      },
+      {
+        title: 'Nutricia / Danone',
+        detail:
+          "SSO, loyalty program, and branded checkout on a headless React/Magento PWA for one of the world's largest food companies.",
+      },
+      {
+        title: 'Releases Web App',
+        detail:
+          'Full-stack Next.js/MongoDB portal with auth, serverless functions, and a dynamic data grid for property releases.',
+      },
+      {
+        title: 'Milkrun',
+        detail:
+          'Senior frontend on a TypeScript/React Shopify site built with Next.js. Provided code reviews and mentoring.',
       },
     ],
   },
   {
-    id: 'ui-ux-engineering',
-    title: 'UI/UX Engineering',
-    summary:
-      'Design systems, responsive implementation, accessibility, and product UI that respects design intent.',
+    id: 'ai-automation',
+    title: 'AI & Automation',
+    summary: 'Agentic coding, AI-assisted workflows, CLI tools, and scripts.',
     detail:
-      'I sit close to the handoff between design and engineering: preserving visual intent, tightening interaction states, and making the result work under real content, real devices, and real users.',
-    iconKey: 'design',
+      'AI is part of how I build every day. Agentic coding workflows, custom tooling, and terminal automation from editor to deploy.',
+    iconKey: 'ai',
     accent: '#c7a5ff',
     accentSoft: 'rgba(199, 165, 255, 0.16)',
     competencies: [
       {
-        label: 'Design systems',
+        label: 'Agentic Development',
         description:
-          'Reusable components, tokens, variants, docs, and usage rules that keep product UI coherent.',
+          'Multi-model AI workflows embedded in the editor. Not autocomplete, actual coding partners.',
       },
       {
-        label: 'Responsive layouts',
+        label: 'AI Tooling & Context',
         description:
-          'Interfaces that adapt cleanly across mobile, tablet, desktop, and dense internal tools.',
+          'Custom tools that feed structured codebase context to AI agents for planning and generation.',
       },
       {
-        label: 'Accessibility',
+        label: 'CLI & Pipelines',
         description:
-          'Semantic HTML, keyboard flows, focus states, and ARIA where it improves assistive technology support.',
-      },
-      {
-        label: 'Motion and states',
-        description:
-          'Small interactions that clarify cause and effect without slowing down repeated use.',
+          'Purpose-built terminal tools, local pipeline engines, bash scripts, and workflow glue.',
       },
     ],
-    stack: ['Figma', 'Storybook', 'Tailwind', 'Radix UI', 'HTML', 'CSS'],
+    stack: [
+      'GitHub Copilot',
+      'OpenAI Codex',
+      'Claude',
+      'GPT',
+      'Ollama',
+      'CodeCompanion.nvim',
+      'Neovim',
+      'Lua',
+      'Bash',
+      'Node.js',
+      'TypeScript',
+      'Notion API',
+      'Google Stitch',
+    ],
     examples: [
       {
-        title: 'Responsive product surfaces',
+        title: 'code-to-notion',
         detail:
-          'Layouts that preserve hierarchy from compact mobile views through wide operational workspaces.',
+          'Open-source Node CLI that uploads codebases to Notion with full Git context. Built to give AI agents structured code reasoning.',
       },
       {
-        title: 'Accessible component systems',
+        title: 'aspyn',
         detail:
-          'Keyboard-friendly primitives with consistent state, disabled, focus, and error behavior.',
+          'Local pipeline engine that gives your scripts a memory. Stateful step runners, change detection, crash recovery, and scheduling.',
+      },
+      {
+        title: 'Neovim + CodeCompanion',
+        detail:
+          'Custom Lua-based AI config with multi-model support, agentic workflows, slash commands, and tool approval flows.',
+      },
+      {
+        title: 'AI at Montu',
+        detail:
+          'Used agentic coding tools daily for feature development, debugging, and iteration across a 100+ engineer monorepo.',
+      },
+      {
+        title: 'Local LLM Automation',
+        detail:
+          'Ollama-powered local models for lightweight tasks like web page parsing and text processing.',
       },
     ],
   },
   {
-    id: 'developer-experience',
-    title: 'Developer Experience',
+    id: 'code-architecture',
+    title: 'Code Architecture',
     summary:
-      'CI/CD, linting, local workflow, internal tooling, and automation that helps teams ship without drag.',
+      'Design systems, component libraries, monorepos, and build pipelines.',
     detail:
-      'I remove friction from the path between idea and production. That usually means better local feedback, sharper CI gates, reusable scaffolds, and guardrails that improve code quality without slowing teams down.',
-    iconKey: 'dx',
+      'I care about how the code is organised, not just that it works. Package boundaries, shared systems, and builds that scale.',
+    iconKey: 'architecture',
     accent: '#3cddc7',
     accentSoft: 'rgba(60, 221, 199, 0.16)',
     competencies: [
       {
-        label: 'CI/CD pipelines',
+        label: 'Design Systems & Components',
         description:
-          'Automated build, test, deploy, cache, and release flows with useful failure signals.',
+          'Component libraries, Storybook, visual testing, and design consistency at scale.',
       },
       {
-        label: 'Code quality systems',
+        label: 'Monorepo Structure',
         description:
-          'ESLint, Prettier, TypeScript, hooks, and review checks that are strict but explainable.',
+          'Nx workspaces, app/package architecture, and clean dependency boundaries.',
       },
       {
-        label: 'Local workflow',
+        label: 'Build & Bundle Optimisation',
         description:
-          'Fast dev servers, seed data, scripts, and task runners that make everyday work smoother.',
-      },
-      {
-        label: 'Custom tooling',
-        description:
-          'Internal CLIs and generators that remove repetitive setup and keep conventions consistent.',
+          'Custom Vite pipelines, multi-site builds, and performance-focused tooling.',
       },
     ],
     stack: [
+      'Nx',
+      'Vite',
+      'Webpack',
+      'Storybook',
+      'Chromatic',
+      'MUI',
+      'Tailwind',
+      'pnpm',
+      'TypeScript',
+      'AWS CDK',
       'GitHub Actions',
-      'Docker',
-      'Node.js',
+      'React',
       'ESLint',
       'Prettier',
-      'Husky',
     ],
     examples: [
       {
-        title: 'Automated quality path',
+        title: 'FormBuilder Migration',
         detail:
-          'Pre-merge feedback that catches type, test, visual, and formatting issues before they become review noise.',
+          'Helped migrate an internal React form tool into a standalone shared package in an Nx monorepo. Owned the Storybook library and E2E coverage.',
       },
       {
-        title: 'Scaffolding engines',
+        title: 'Alternaleaf Build Pipeline',
         detail:
-          'Generators that create routes, components, test files, and package wiring from one command.',
+          "Custom Vite multi-site build with AWS CDK infra that replaced Webflow's code limits. 75% bundle reduction, 70% faster builds.",
+      },
+      {
+        title: 'Montu Monorepo',
+        detail:
+          'Implemented new apps and packages in a 100+ engineer Nx monorepo, including full CI/CD and IaC for new projects.',
+      },
+      {
+        title: 'Design System Rollout',
+        detail:
+          'Key contributor to design system adoption across multiple patient-facing apps at Montu.',
+      },
+      {
+        title: 'Headless PWA (Nutricia)',
+        detail:
+          'Frontend architecture for a headless React/Magento PWA with component reuse across checkout, SSO, and loyalty flows.',
       },
     ],
   },
   {
-    id: 'automated-testing',
-    title: 'Automated Testing',
+    id: 'developer-tooling',
+    title: 'Developer Tooling',
     summary:
-      'Testing strategy across unit, integration, E2E, and visual regression for confident product changes.',
+      'Internal tools, DX improvements, mentoring, and knowledge sharing.',
     detail:
-      'I build test coverage around user value and change risk. The goal is not just more tests, but feedback that catches breakage at the cheapest useful layer and stays stable through refactors.',
-    iconKey: 'testing',
+      'I build the things that make the team faster. Internal tools, better workflows, and engineers who level up.',
+    iconKey: 'tooling',
     accent: '#9ee493',
     accentSoft: 'rgba(158, 228, 147, 0.16)',
     competencies: [
       {
-        label: 'Unit and integration',
+        label: 'Internal Tools',
         description:
-          'Fast component and logic tests with clear mocks, useful assertions, and low maintenance overhead.',
+          'Purpose-built tools and utilities that solve real workflow problems for the team.',
       },
       {
-        label: 'End-to-end flows',
+        label: 'Mentoring & Growth',
         description:
-          'Playwright coverage for critical paths, permissions, viewport behavior, and browser differences.',
+          'Levelling up junior engineers through pairing, code reviews, and structured guidance.',
       },
       {
-        label: 'Visual regression',
+        label: 'Dev Environment',
         description:
-          'Storybook and screenshot checks for high-value UI surfaces where pixel shifts matter.',
-      },
-      {
-        label: 'Testing strategy',
-        description:
-          'Choosing the right test layer and keeping the suite fast enough that teams trust it.',
+          'Neovim, dotfiles, and Linux config, precision-tuned for speed and control.',
       },
     ],
-    stack: ['Vitest', 'Playwright', 'Storybook', 'Chromatic', 'RTL', 'MSW'],
+    stack: [
+      'Neovim',
+      'Lua',
+      'Linux',
+      'Bash',
+      'Storybook',
+      'Playwright',
+      'Vitest',
+      'Figma',
+      'Jira',
+      'Confluence',
+      'Notion',
+      'Git',
+      'GitHub',
+    ],
     examples: [
       {
-        title: 'Risk-based suites',
+        title: 'FormBuilder Docs & Adoption',
         detail:
-          'Coverage concentrated around payments, auth, forms, navigation, and high-change shared components.',
+          'Wrote internal documentation and streamlined the Storybook library to drive adoption of a shared form tool across engineering.',
       },
       {
-        title: 'Visual safety net',
+        title: 'Mentoring at Montu',
         detail:
-          'Component stories and snapshots for UI states that are expensive to inspect manually.',
+          'Mentored several junior-mid engineers on React patterns, frontend fundamentals, and code quality.',
+      },
+      {
+        title: 'Technical Hiring',
+        detail:
+          "Conducted technical candidate reviews for Montu's international engineering expansion.",
+      },
+      {
+        title: 'Neovim Config',
+        detail:
+          'Comprehensive custom Neovim setup in Lua. LSP, linting, type checking, keymaps, and AI integration from scratch.',
+      },
+      {
+        title: 'Milkrun Code Reviews',
+        detail:
+          'Senior frontend providing code reviews and mentorship on a Next.js/React Shopify build at Acidgreen.',
       },
     ],
   },
   {
-    id: 'experimentation',
-    title: 'Experimentation',
+    id: 'shipping-testing',
+    title: 'Shipping & Testing',
     summary:
-      'A/B testing, feature flags, analytics, personalisation, and measurement systems for product decisions.',
+      'CI/CD, automated testing, accessibility, and cloud infrastructure.',
     detail:
-      'I implement experimentation systems that are measurable, performant, and operationally safe. That includes flag architecture, analytics instrumentation, rollout controls, and clean removal paths.',
-    iconKey: 'experimentation',
+      "I write the tests, build the pipelines, and make sure what ships is solid. Quality isn't a phase. It's how I work.",
+    iconKey: 'shipping',
     accent: '#f7d774',
     accentSoft: 'rgba(247, 215, 116, 0.16)',
     competencies: [
       {
-        label: 'A/B testing',
+        label: 'Automated Testing',
         description:
-          'Client and server experiments with predictable bucketing, clean targeting, and reliable exposure events.',
+          'Unit tests, E2E coverage, and quality gates across the test pyramid.',
       },
       {
-        label: 'Feature flags',
+        label: 'CI/CD & Infrastructure',
         description:
-          'Progressive rollout, kill switches, environment targeting, and technical-debt cleanup paths.',
+          'GitHub Actions pipelines, AWS CDK, and infrastructure-as-code for frontend delivery.',
       },
       {
-        label: 'Analytics integration',
+        label: 'Accessibility',
         description:
-          'Event naming, payload contracts, and QA flows that make downstream analysis trustworthy.',
-      },
-      {
-        label: 'Personalisation',
-        description:
-          'Segment-aware experiences that avoid layout instability and unexpected performance costs.',
+          'Semantic HTML, ARIA, keyboard navigation, contrast ratios, and compliance audits.',
       },
     ],
-    stack: ['LaunchDarkly', 'VWO', 'Optimizely', 'GA4', 'GTM', 'Segment'],
+    stack: [
+      'Playwright',
+      'Vitest',
+      'GitHub Actions',
+      'AWS CDK',
+      'S3',
+      'CloudFront',
+      'Vercel',
+      'LaunchDarkly',
+      'VWO',
+      'GA4',
+      'GTM',
+      'Docker',
+    ],
     examples: [
       {
-        title: 'Measured releases',
+        title: 'FormBuilder E2E',
         detail:
-          'Flagged launches with cohort tracking, exposure events, and fast rollback paths.',
+          'Built comprehensive Playwright E2E test suites for a shared form tool used across multiple patient-facing apps.',
       },
       {
-        title: 'Analytics contracts',
+        title: 'Alternaleaf CI/CD',
         detail:
-          'Typed event maps that let engineering and product agree on what success means before launch.',
+          'GitHub Actions pipeline with AWS CDK infrastructure (S3 + CloudFront) for a custom Vite multi-site build.',
+      },
+      {
+        title: 'Pre-Consultation Portal QA',
+        detail:
+          'Unit testing with Vitest and a custom GUI testing tool with state controls for rapid manual QA.',
+      },
+      {
+        title: 'Accessibility at Montu',
+        detail:
+          'Implemented keyboard navigation, ARIA attributes, and contrast fixes across patient-facing apps.',
+      },
+      {
+        title: 'A/B Experimentation',
+        detail:
+          'Built and shipped multiple VWO A/B campaigns with custom variant UIs, client-side logic, and GA4 event tracking.',
       },
     ],
   },
   {
-    id: 'performance',
-    title: 'Performance',
+    id: 'technical-strategy',
+    title: 'Technical Strategy',
     summary:
-      'Core Web Vitals, bundle analysis, build optimisation, and practical speed work for real users.',
+      'Trade-offs, stakeholder communication, and business-minded decisions.',
     detail:
-      'I work performance from both sides: user-perceived speed in the browser and developer-perceived speed in the toolchain. The best gains usually come from measurement, budgets, and targeted removal of waste.',
-    iconKey: 'performance',
+      'Commerce graduate turned engineer. I understand the business side because I came from it, and that shapes every technical decision I make.',
+    iconKey: 'strategy',
     accent: '#ffb4ab',
     accentSoft: 'rgba(255, 180, 171, 0.16)',
     competencies: [
       {
-        label: 'Core Web Vitals',
+        label: 'Technical Decision-Making',
         description:
-          'LCP, INP, and CLS work grounded in field data, not only lab scores.',
+          'Evaluating trade-offs, proposing solutions, and choosing the right approach over the easy one.',
       },
       {
-        label: 'Bundle analysis',
+        label: 'Stakeholder Communication',
         description:
-          'Dependency audits, splitting strategy, dead-code removal, and route-level budgets.',
+          'Explaining technical concepts to non-technical people: clients, product, leadership.',
       },
       {
-        label: 'Runtime profiling',
+        label: 'Business Context',
         description:
-          'React render analysis, main-thread work reduction, and expensive interaction cleanup.',
-      },
-      {
-        label: 'Build performance',
-        description:
-          'Cache strategy, parallel tasks, incremental builds, and CI tuning for faster delivery.',
+          'Commerce degree, marketing background, and understanding the why behind the code.',
       },
     ],
-    stack: ['Lighthouse', 'Web Vitals', 'Next.js', 'Webpack', 'Vite', 'CDN'],
+    stack: [
+      'Commerce',
+      'Marketing',
+      'Strategy',
+      'Google Ads',
+      'GA4',
+      'GTM',
+      'VWO',
+      'Braze',
+      'A/B Testing',
+      'Figma',
+      'Webflow',
+    ],
     examples: [
       {
-        title: 'User speed budgets',
+        title: 'Alternaleaf Migration Proposal',
         detail:
-          'Route-level performance budgets tied to real content and device constraints.',
+          'Proposed a full code migration over quick-fix Webflow workarounds. Built the business case, got buy-in, and delivered.',
       },
       {
-        title: 'Build pipeline tuning',
+        title: 'Portal Presentation',
         detail:
-          'Cache-aware task graphs that reduce unnecessary rebuilds and shorten feedback loops.',
-      },
-    ],
-  },
-  {
-    id: 'cms-content',
-    title: 'CMS & Content',
-    summary:
-      'Headless CMS integration, content modelling, previews, and editor-friendly component systems.',
-    detail:
-      'I build content systems that give editors real flexibility while keeping engineering control over quality, performance, and design consistency. Schema design matters as much as rendering.',
-    iconKey: 'cms',
-    accent: '#f2a7d8',
-    accentSoft: 'rgba(242, 167, 216, 0.16)',
-    competencies: [
-      {
-        label: 'Headless integration',
-        description:
-          'Typed data access, preview flows, caching, and deployment integration for modern CMS platforms.',
+          "Presented the Pre-Consultation Portal's new user flow to ~400 people on a near-company-wide call at Montu.",
       },
       {
-        label: 'Content modelling',
-        description:
-          'Schemas that match editorial intent without creating unmaintainable presentation escape hatches.',
-      },
-      {
-        label: 'Composable pages',
-        description:
-          'Block systems where teams can assemble flexible pages from well-tested components.',
-      },
-      {
-        label: 'Publishing workflow',
-        description:
-          'Draft, preview, approval, rollback, and localization flows that fit team operations.',
-      },
-    ],
-    stack: ['Sanity', 'Contentful', 'Strapi', 'GraphQL', 'REST', 'Preview'],
-    examples: [
-      {
-        title: 'Component-driven content',
+        title: 'Danone Client Communication',
         detail:
-          'Reusable content blocks with guardrails for layout, spacing, media, and accessibility.',
+          'Communicated technical decisions directly to senior stakeholders at Nutricia/Danone while implementing systems like Yotpo reviews.',
       },
       {
-        title: 'Preview pipelines',
+        title: 'Greenfields Tech Translation',
         detail:
-          'Draft previews that let editors inspect real pages before publishing changes.',
+          'Explained web app architecture and technical constraints to property developers with no engineering background.',
+      },
+      {
+        title: 'Commerce to Code',
+        detail:
+          'Bachelor of Commerce graduate who moved from marketing strategy to engineering. Business thinking is built in, not bolted on.',
       },
     ],
   },

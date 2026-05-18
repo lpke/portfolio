@@ -1,6 +1,12 @@
 /** SVG icons for each skill card, keyed by iconKey from the data */
 
-export function ArchitectureIcon() {
+type IconProps = {
+  children: React.ReactNode;
+};
+
+type IconComponent = () => React.ReactNode;
+
+function SkillIconSvg({ children }: IconProps) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -9,131 +15,117 @@ export function ArchitectureIcon() {
       strokeWidth={1.5}
       className="h-6 w-6"
     >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3 0h.008v.008H18V7.5Z"
-      />
+      {children}
     </svg>
   );
 }
 
-export function DesignIcon() {
+function LargeSkillIconSvg({ children }: IconProps) {
   return (
     <svg
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
       strokeWidth={1.5}
-      className="h-6 w-6"
+      className="h-7 w-7"
     >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42"
-      />
+      {children}
     </svg>
   );
 }
 
-export function DxIcon() {
+function PathIcon({ paths }: { paths: string[] }) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.5}
-      className="h-6 w-6"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437"
-      />
-    </svg>
+    <SkillIconSvg>
+      {paths.map((path) => (
+        <path
+          key={path}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d={path}
+        />
+      ))}
+    </SkillIconSvg>
   );
 }
 
-export function TestingIcon() {
+export function ProductEngineeringIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.5}
-      className="h-6 w-6"
-    >
+    <LargeSkillIconSvg>
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"
+        d="m7.5 8.25-3.75 3.75 3.75 3.75M16.5 8.25l3.75 3.75-3.75 3.75M13.5 5.25l-3 13.5"
       />
-    </svg>
+    </LargeSkillIconSvg>
   );
 }
 
-export function ExperimentationIcon() {
+export function AiAutomationIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.5}
-      className="h-6 w-6"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"
-      />
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+      <path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z" />
     </svg>
   );
 }
 
-export function PerformanceIcon() {
+export function CodeArchitectureIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.5}
-      className="h-6 w-6"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
-      />
-    </svg>
+    <PathIcon
+      paths={[
+        'M4.5 7.5 12 3.75l7.5 3.75v9L12 20.25 4.5 16.5v-9Z',
+        'M12 12 4.5 7.5M12 12l7.5-4.5M12 12v8.25',
+      ]}
+    />
   );
 }
 
-export function CmsIcon() {
+export function DeveloperToolingIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.5}
-      className="h-6 w-6"
-    >
+    <LargeSkillIconSvg>
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+        d="M4.5 5.25h15v10.5h-15V5.25Z"
       />
-    </svg>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M8.25 19.5h7.5M12 15.75v3.75M8.25 8.75 10.5 11l-2.25 2.25M13.5 13.25h2.25"
+      />
+    </LargeSkillIconSvg>
   );
 }
 
-const ICON_MAP: Record<string, () => React.ReactNode> = {
-  architecture: ArchitectureIcon,
-  design: DesignIcon,
-  dx: DxIcon,
-  testing: TestingIcon,
-  experimentation: ExperimentationIcon,
-  performance: PerformanceIcon,
-  cms: CmsIcon,
+export function ShippingTestingIcon() {
+  return (
+    <PathIcon
+      paths={[
+        'M12 3.75 18.75 7.5v5.25c0 4.5-2.813 7.313-6.75 8.25-3.938-.938-6.75-3.75-6.75-8.25V7.5L12 3.75Z',
+        'm8.75 12.25 2.25 2.25 4.5-5',
+      ]}
+    />
+  );
+}
+
+export function TechnicalStrategyIcon() {
+  return (
+    <PathIcon
+      paths={[
+        'M4.5 18.75 9 14.25l3 3 7.5-7.5',
+        'M15 9.75h4.5v4.5M5.25 5.25h13.5M5.25 9h6M5.25 12.75h3',
+      ]}
+    />
+  );
+}
+
+const ICON_MAP: Record<string, IconComponent> = {
+  product: ProductEngineeringIcon,
+  ai: AiAutomationIcon,
+  architecture: CodeArchitectureIcon,
+  tooling: DeveloperToolingIcon,
+  shipping: ShippingTestingIcon,
+  strategy: TechnicalStrategyIcon,
 };
 
 export function getSkillIcon(key: string): React.ReactNode {
