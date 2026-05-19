@@ -1,5 +1,3 @@
-/** Shared site-wide content, settings, and data constants. */
-
 const firstName = 'Luke';
 const lastName = 'Perich';
 const siteName = `${firstName} ${lastName}`;
@@ -121,7 +119,7 @@ export const HEADER_CONTENT = {
 
 export const FOOTER_CONTENT = {
   copyrightSymbol: '©',
-  copyrightSuffix: 'Built with precision.',
+  copyrightSuffix: '',
 } as const;
 
 export const FOOTER_LINKS = [

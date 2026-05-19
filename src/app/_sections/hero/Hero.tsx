@@ -14,7 +14,7 @@ export function Hero() {
   return (
     <section
       id={SECTION_IDS.home}
-      className="hero-shell hero-waves relative flex min-h-[44rem] items-center overflow-hidden px-5 pt-24 pb-16 min-[390px]:min-h-[46rem] md:min-h-[48rem] md:px-8 md:pt-28"
+      className="hero-shell hero-waves relative flex min-h-[44rem] items-center overflow-hidden px-5 pt-10 pb-16 min-[390px]:min-h-[46rem] md:min-h-[48rem] md:px-8 md:pt-28"
     >
       <StableHeroViewport />
       <div className="hero-grid pointer-events-none absolute inset-0" />
