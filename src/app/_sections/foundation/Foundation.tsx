@@ -1,35 +1,4 @@
-const SKILLS = [
-  {
-    icon: '◇',
-    title: 'Systems Architecture',
-    description:
-      'Designing modular monorepos and distributed frontend systems that handle scale with ease.',
-  },
-  {
-    icon: '⚙',
-    title: 'Build Tooling',
-    description:
-      'Customizing build pipelines and development environments to maximize team velocity.',
-  },
-  {
-    icon: '◈',
-    title: 'Frontend Excellence',
-    description:
-      'Pixel-perfect React interfaces crafted with performance and deep Type-safety.',
-  },
-  {
-    icon: '🚀',
-    title: 'CI/CD & Deployment',
-    description:
-      'Automated testing and delivery pipelines ensuring reliable and frequent releases.',
-  },
-] as const;
-
-const CODE_SNIPPET = `const engineer = {
-  philosophy: "DX First",
-  stack: ["React", "TS"],
-  performance: "Optimized"
-};`;
+import { FOUNDATION_CONTENT } from '@/utils/constants';
 
 export function Foundation() {
   return (
@@ -39,19 +8,18 @@ export function Foundation() {
           {/* Left Column — Intro + Code Block */}
           <div className="lg:col-span-1">
             <h2 className="font-headline mb-6 text-3xl font-black tracking-tight text-white">
-              TECHNICAL
+              {FOUNDATION_CONTENT.heading[0]}
               <br />
-              FOUNDATION
+              {FOUNDATION_CONTENT.heading[1]}
             </h2>
             <p className="text-on-surface-variant mb-8">
-              My approach blends engineering rigor with creative problem solving
-              to build future-proof software.
+              {FOUNDATION_CONTENT.intro}
             </p>
 
             {/* Terminal Block */}
             <div className="ghost-border bg-surface-container-highest rounded-xl p-6">
               <pre className="text-tertiary font-mono text-[13px] leading-relaxed">
-                {CODE_SNIPPET.split('\n').map((line, i) => (
+                {FOUNDATION_CONTENT.codeSnippet.split('\n').map((line, i) => (
                   <span key={i} className="block">
                     <span className="text-on-surface-variant/50 mr-3">
                       {i + 1}
@@ -65,7 +33,7 @@ export function Foundation() {
 
           {/* Right Column — Skill Cards Grid */}
           <div className="grid gap-6 sm:grid-cols-2 lg:col-span-2">
-            {SKILLS.map(({ icon, title, description }) => (
+            {FOUNDATION_CONTENT.skills.map(({ icon, title, description }) => (
               <div
                 key={title}
                 className="group bg-surface-container hover:bg-surface-variant rounded-xl p-8 transition-colors"

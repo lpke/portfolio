@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { UI_TEXT } from '@/utils/constants';
 
 type SectionScrollIndicatorProps = {
   nextSectionId: string;
@@ -83,7 +84,7 @@ export function SectionScrollIndicator({
         .join(' ')}
     >
       <span className="text-on-surface-variant/55 font-mono text-[10px] font-semibold tracking-[0.28em] uppercase">
-        Scroll
+        {UI_TEXT.scroll}
       </span>
       <span className="section-scroll-line" />
     </div>

@@ -2,10 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { NAV_LINKS, SITE } from '@/utils/constants';
+import {
+  HEADER_CONTENT,
+  LAYOUT_CONFIG,
+  NAV_LINKS,
+  SCROLL_TARGETS,
+  SECTION_IDS,
+  SITE,
+} from '@/utils/constants';
 import { useSectionNav } from '@/hooks/SectionRouterProvider';
 
-const MOBILE_QUERY = '(max-width: 767px)';
+const MOBILE_QUERY = LAYOUT_CONFIG.mediaQueries.belowMd;
 
 export function Header() {
   const { activeId, navigateTo } = useSectionNav();
@@ -67,7 +74,7 @@ export function Header() {
         {/* Logo */}
         <Link
           href="/"
-          onNavigate={handleNavigate('home')}
+          onNavigate={handleNavigate(SECTION_IDS.home)}
           className="font-headline text-xl font-black tracking-tighter text-white/90"
         >
           {SITE.name}
@@ -98,10 +105,13 @@ export function Header() {
         {/* CTA Button */}
         <Link
           href="/contact"
-          onNavigate={handleNavigate('contact', 'contact-card-first')}
+          onNavigate={handleNavigate(
+            SECTION_IDS.contact,
+            SCROLL_TARGETS.contactCardFirst,
+          )}
           className="signature-gradient font-headline text-on-primary rounded-full px-6 py-2 text-sm font-bold transition-all hover:shadow-[0_0_20px_rgba(123,208,255,0.4)] active:scale-95"
         >
-          Get in Touch
+          {HEADER_CONTENT.ctaLabel}
         </Link>
       </nav>
     </header>

@@ -9,9 +9,10 @@ import {
   useSyncExternalStore,
 } from 'react';
 import { createPortal, flushSync } from 'react-dom';
+import { LAYOUT_CONFIG, RESUME_REQUEST_CONTENT } from '@/utils/constants';
 
-const ANIM_MS = 300;
-const MOBILE_BREAKPOINT = 640; // Tailwind `sm`
+const ANIM_MS = LAYOUT_CONFIG.motion.resumePanelMs;
+const MOBILE_BREAKPOINT = LAYOUT_CONFIG.breakpoints.sm; // Tailwind `sm`
 
 const mobileQuery = `(max-width: ${MOBILE_BREAKPOINT - 1}px)`;
 
@@ -127,7 +128,7 @@ function PanelForm({
           aria-invalid={email.length > 0 && !isEmailValid}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="your@email.com"
+          placeholder={RESUME_REQUEST_CONTENT.emailPlaceholder}
           className={`text-on-surface placeholder:text-on-surface-variant/40 flex-1 bg-transparent text-base outline-none ${mobile ? 'py-5' : 'py-4'}`}
           onPointerDown={handleMobileFieldPointerDown}
           onKeyDown={(e) => {
@@ -147,7 +148,7 @@ function PanelForm({
               ref={messageInputRef}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Include an optional message..."
+              placeholder={RESUME_REQUEST_CONTENT.messagePlaceholder}
               rows={3}
               className="text-on-surface placeholder:text-on-surface-variant/40 w-full resize-none bg-transparent px-4 py-3.5 text-base outline-none"
               onPointerDown={handleMobileFieldPointerDown}
@@ -177,7 +178,7 @@ function PanelForm({
             />
           </span>
           <span className="text-on-surface-variant/50 text-sm font-medium">
-            Add note
+            {RESUME_REQUEST_CONTENT.noteToggleLabel}
           </span>
         </button>
 
@@ -190,7 +191,9 @@ function PanelForm({
             cursor: !isEmailValid || submitted ? 'default' : 'pointer',
           }}
         >
-          {submitted ? '\u2713 Sent' : 'Download CV'}
+          {submitted
+            ? RESUME_REQUEST_CONTENT.submittedLabel
+            : RESUME_REQUEST_CONTENT.triggerLabel}
         </button>
       </div>
     </>
@@ -276,7 +279,7 @@ function MobileDialog({
       }}
       role="dialog"
       aria-modal="true"
-      aria-label="Download CV"
+      aria-label={RESUME_REQUEST_CONTENT.dialogAriaLabel}
     >
       {/* Backdrop */}
       <div
@@ -301,13 +304,13 @@ function MobileDialog({
       >
         <div className="flex items-center justify-between border-b border-white/5 px-4 py-3">
           <p className="font-headline text-base font-bold text-white">
-            Download CV
+            {RESUME_REQUEST_CONTENT.dialogTitle}
           </p>
           <button
             type="button"
             onClick={close}
             className="text-on-surface-variant/55 flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/10 hover:text-white"
-            aria-label="Close download CV dialog"
+            aria-label={RESUME_REQUEST_CONTENT.closeDialogLabel}
           >
             <svg
               viewBox="0 0 24 24"
@@ -508,7 +511,7 @@ export function RequestResumeButton() {
       setEmail('');
       setMessage('');
       setShowMessage(false);
-    }, 1400);
+    }, LAYOUT_CONFIG.motion.resumeResetMs);
   };
 
   // ── Form props shared by both layouts ──
@@ -598,7 +601,7 @@ export function RequestResumeButton() {
                 pointerEvents: 'none',
               }}
             >
-              Download CV
+              {RESUME_REQUEST_CONTENT.triggerLabel}
             </div>
 
             {/* Expanded panel content */}
@@ -633,7 +636,7 @@ export function RequestResumeButton() {
           visibility: !isMobile && isVisible ? 'hidden' : 'visible',
         }}
       >
-        Download CV
+        {RESUME_REQUEST_CONTENT.triggerLabel}
       </button>
 
       {mobilePortal}

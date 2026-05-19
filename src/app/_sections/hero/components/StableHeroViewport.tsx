@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect } from 'react';
+import { LAYOUT_CONFIG } from '@/utils/constants';
 
-const MOBILE_QUERY = '(max-width: 767px)';
-const HEIGHT_VAR = '--hero-stable-height';
+const MOBILE_QUERY = LAYOUT_CONFIG.mediaQueries.belowMd;
+const HEIGHT_VAR = LAYOUT_CONFIG.cssVars.heroStableHeight;
 
 function readViewportHeight() {
   return Math.round(window.visualViewport?.height ?? window.innerHeight);
@@ -41,7 +42,10 @@ export function StableHeroViewport() {
 
     const handleOrientationChange = () => {
       clearTimeout(orientationTimer);
-      orientationTimer = setTimeout(setStableHeight, 250);
+      orientationTimer = setTimeout(
+        setStableHeight,
+        LAYOUT_CONFIG.motion.mobileOrientationSettleMs,
+      );
     };
 
     setStableHeight();

@@ -1,6 +1,6 @@
 'use client';
 
-import { CONTACT_LINKS } from '@/utils/constants';
+import { CONTACT_LINKS, SCROLL_TARGETS } from '@/utils/constants';
 import { ContactCard } from './ContactCard';
 import { ContactForm } from './ContactForm';
 
@@ -30,7 +30,9 @@ export function ContactContent() {
             ({ iconSrc, label, value, href, copyContent }, index) => (
               <ContactCard
                 key={label}
-                id={index === 0 ? 'contact-card-first' : undefined}
+                id={
+                  index === 0 ? SCROLL_TARGETS.contactCardFirst : undefined
+                }
                 iconSrc={iconSrc}
                 label={label}
                 value={value}

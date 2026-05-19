@@ -1,6 +1,9 @@
 import { TechTag } from '@/components/TechTag';
-import { EXPERIENCE_DATA } from '../data/experience';
-import type { TimelineEntry } from '../data/experience';
+import {
+  EXPERIENCE_DATA,
+  EXPERIENCE_SECTION_CONTENT,
+  type TimelineEntry,
+} from '@/utils/constants';
 
 const BADGE_STYLES = {
   current: 'bg-primary-container text-primary',
@@ -9,12 +12,7 @@ const BADGE_STYLES = {
   early: 'bg-surface-container-high text-on-surface-variant',
 } as const;
 
-const BADGE_LABELS = {
-  current: null, // uses period instead
-  experience: 'Experience',
-  previous: 'Previous',
-  early: 'Early Career',
-} as const;
+const BADGE_LABELS = EXPERIENCE_SECTION_CONTENT.badges;
 
 function HighlightText({ text }: { text: string }) {
   // Render **bold** markdown segments

@@ -1,7 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useCallback } from 'react';
-import { SECTIONS } from '@/utils/constants';
+import {
+  DEFAULT_SECTION_ID,
+  LAYOUT_CONFIG,
+  SECTIONS,
+} from '@/utils/constants';
 
 /** Map sectionId → clean path */
 const ID_TO_PATH: Record<string, string> = Object.fromEntries(
@@ -23,7 +27,7 @@ const SECTION_IDS = SECTIONS.map(({ sectionId }) => sectionId);
  * `navigateTo` function for programmatic scrolling.
  */
 export function useSectionRouter() {
-  const activeIdRef = useRef<string>('home');
+  const activeIdRef = useRef<string>(DEFAULT_SECTION_ID);
   const isUserScrolling = useRef(true);
   /** When true, observer notifications to listeners (navbar highlighting) are paused. */
   const isAnimating = useRef(false);
@@ -62,12 +66,12 @@ export function useSectionRouter() {
       el.scrollIntoView({ behavior: 'smooth' });
 
       // Re-enable observer-driven URL updates and navbar highlighting
-      // after the scroll finishes. 1200ms is generous enough for long
+      // after the scroll finishes. Config value is generous enough for long
       // smooth scrolls.
       setTimeout(() => {
         isUserScrolling.current = true;
         isAnimating.current = false;
-      }, 1200);
+      }, LAYOUT_CONFIG.motion.navScrollSettleMs);
     },
     [],
   );
@@ -130,14 +134,18 @@ export function useSectionRouter() {
           }
         }
       },
-      { rootMargin: '-15% 0px -40% 0px', threshold: [0, 0.1, 0.25, 0.5] },
+      {
+        rootMargin: LAYOUT_CONFIG.sectionObserver.rootMargin,
+        threshold: [...LAYOUT_CONFIG.sectionObserver.threshold],
+      },
     );
 
     elements.forEach((el) => observer.observe(el));
 
     // --- Handle browser back/forward ---
     const handlePopState = () => {
-      const id = PATH_TO_ID[window.location.pathname] ?? 'home';
+      const id =
+        PATH_TO_ID[window.location.pathname] ?? DEFAULT_SECTION_ID;
       const el = document.getElementById(id);
       if (el) {
         isUserScrolling.current = false;
@@ -150,7 +158,7 @@ export function useSectionRouter() {
         setTimeout(() => {
           isUserScrolling.current = true;
           isAnimating.current = false;
-        }, 1200);
+        }, LAYOUT_CONFIG.motion.navScrollSettleMs);
       }
     };
 

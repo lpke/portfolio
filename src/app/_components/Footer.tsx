@@ -1,12 +1,5 @@
 import Link from 'next/link';
-import { SITE } from '@/utils/constants';
-
-const FOOTER_LINKS = [
-  { label: 'luke@lpdev.io', href: `mailto:${SITE.email}` },
-  { label: 'GitHub', href: SITE.github },
-  { label: 'LinkedIn', href: SITE.linkedin },
-  { label: 'Source Code', href: SITE.sourceCode },
-] as const;
+import { FOOTER_CONTENT, FOOTER_LINKS, SITE } from '@/utils/constants';
 
 export function Footer() {
   return (
@@ -33,7 +26,8 @@ export function Footer() {
         </div>
 
         <p className="font-body text-on-surface-variant/50 text-sm">
-          © {new Date().getFullYear()} {SITE.name}. Built with precision.
+          {FOOTER_CONTENT.copyrightSymbol} {new Date().getFullYear()}{' '}
+          {SITE.name}. {FOOTER_CONTENT.copyrightSuffix}
         </p>
       </div>
     </footer>

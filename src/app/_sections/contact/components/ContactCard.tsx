@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useState, useCallback } from 'react';
+import { LAYOUT_CONFIG, UI_TEXT } from '@/utils/constants';
 
 function CopyIcon({ className }: { className?: string }) {
   return (
@@ -79,7 +80,10 @@ export function ContactCard({
     if (!copyContent) return;
     navigator.clipboard.writeText(copyContent).then(() => {
       setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      setTimeout(
+        () => setCopied(false),
+        LAYOUT_CONFIG.motion.contactCopyMs,
+      );
     });
   }, [copyContent]);
 
@@ -146,7 +150,9 @@ export function ContactCard({
         <button
           type="button"
           onClick={handleCopy}
-          aria-label={copied ? `${label} copied` : `Copy ${label}`}
+          aria-label={
+            copied ? `${label} ${UI_TEXT.copied}` : `${UI_TEXT.copy} ${label}`
+          }
           className="text-on-surface-variant hover:text-primary hover:bg-primary/8 focus-visible:text-primary focus-visible:bg-primary/10 focus-visible:ring-primary/35 absolute top-0 right-0 bottom-0 flex w-14 cursor-pointer items-center justify-center text-sm font-semibold transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none sm:w-24"
         >
           <span
@@ -161,7 +167,7 @@ export function ContactCard({
             }`}
           >
             <CopyIcon className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Copy</span>
+            <span className="hidden sm:inline">{UI_TEXT.copy}</span>
           </span>
           <span
             aria-live="polite"
@@ -170,7 +176,7 @@ export function ContactCard({
             }`}
           >
             <CheckIcon className="h-4 w-4 sm:hidden" />
-            <span className="hidden sm:inline">Copied</span>
+            <span className="hidden sm:inline">{UI_TEXT.copied}</span>
           </span>
         </button>
       )}

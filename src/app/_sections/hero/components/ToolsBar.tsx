@@ -1,3 +1,9 @@
+import type { ReactNode } from 'react';
+import {
+  HERO_TOOLS,
+  LAYOUT_CONFIG,
+  type HeroToolId,
+} from '@/utils/constants';
 import { Scroller } from './Scroller';
 import { Tool } from './Tool';
 
@@ -225,44 +231,48 @@ function VWOIcon() {
   );
 }
 
-const TOOLS_LIST: { label: string; icon: React.ReactNode }[] = [
-  { label: 'Node.js', icon: <NodeIcon /> },
-  { label: 'React', icon: <ReactIcon /> },
-  { label: 'TypeScript', icon: <TypeScriptIcon /> },
-  { label: 'Next.js', icon: <NextJsIcon /> },
-  { label: 'Claude', icon: <ClaudeIcon /> },
-  { label: 'Codex', icon: <CodexIcon /> },
-  { label: 'AWS', icon: <AwsIcon /> },
-  { label: 'Tailwind', icon: <TailwindIcon /> },
-  { label: 'Vite', icon: <ViteIcon /> },
-  { label: 'GraphQL', icon: <GraphQLIcon /> },
-  { label: 'Docker', icon: <DockerIcon /> },
-  { label: 'Vercel', icon: <VercelIcon /> },
-  { label: 'Playwright', icon: <PlaywrightIcon /> },
-  { label: 'Nx', icon: <NxIcon /> },
-  { label: 'Storybook', icon: <StorybookIcon /> },
-  { label: 'GitHub', icon: <GithubIcon /> },
-  { label: 'MongoDB', icon: <MongoDBIcon /> },
-  { label: 'MUI', icon: <MUIIcon /> },
-  { label: 'Git', icon: <GitIcon /> },
-  { label: 'Linux', icon: <LinuxIcon /> },
-  { label: 'Bash', icon: <BashIcon /> },
-  { label: 'Vim', icon: <VimIcon /> },
-  { label: 'Lua', icon: <LuaIcon /> },
-  { label: 'Nix', icon: <NixIcon /> },
-  { label: 'GA4', icon: <GA4Icon /> },
-  { label: 'VWO', icon: <VWOIcon /> },
-  { label: 'LaunchDarkly', icon: <LaunchDarklyIcon /> },
-];
+const TOOL_ICONS: Record<HeroToolId, ReactNode> = {
+  node: <NodeIcon />,
+  react: <ReactIcon />,
+  typescript: <TypeScriptIcon />,
+  next: <NextJsIcon />,
+  claude: <ClaudeIcon />,
+  codex: <CodexIcon />,
+  aws: <AwsIcon />,
+  tailwind: <TailwindIcon />,
+  vite: <ViteIcon />,
+  graphql: <GraphQLIcon />,
+  docker: <DockerIcon />,
+  vercel: <VercelIcon />,
+  playwright: <PlaywrightIcon />,
+  nx: <NxIcon />,
+  storybook: <StorybookIcon />,
+  github: <GithubIcon />,
+  mongodb: <MongoDBIcon />,
+  mui: <MUIIcon />,
+  git: <GitIcon />,
+  linux: <LinuxIcon />,
+  bash: <BashIcon />,
+  vim: <VimIcon />,
+  lua: <LuaIcon />,
+  nix: <NixIcon />,
+  ga4: <GA4Icon />,
+  vwo: <VWOIcon />,
+  launchdarkly: <LaunchDarklyIcon />,
+};
 
 /** Horizontal auto-scrolling bar of technologies with icons */
 export function ToolsBar() {
   return (
     <div className="mb-12">
-      <Scroller speed={0.4}>
+      <Scroller speed={LAYOUT_CONFIG.scroller.heroToolsSpeed}>
         <div className="flex items-center py-2">
-          {TOOLS_LIST.map((tool) => (
-            <Tool key={tool.label} label={tool.label} icon={tool.icon} />
+          {HERO_TOOLS.map((tool) => (
+            <Tool
+              key={tool.id}
+              label={tool.label}
+              icon={TOOL_ICONS[tool.id]}
+            />
           ))}
         </div>
       </Scroller>

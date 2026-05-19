@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { SKILLS, type SkillData } from '../data/skills';
+import { SKILLS, UI_TEXT, type SkillData } from '@/utils/constants';
 import { getSkillIcon } from './SkillIcons';
 import {
   ChevronIcon,
@@ -36,7 +36,7 @@ export function AccordionIndexSkills({
   };
 
   const content = (
-    <div className="ghost-border relative overflow-hidden bg-[#0b1322]">
+    <div className="ghost-border bg-skill-stage relative overflow-hidden">
       <div className="relative mx-auto max-w-7xl px-5 pt-14 pb-8 md:px-8 md:pt-20">
         <SkillsHeading />
       </div>
@@ -251,7 +251,7 @@ function MobileSkillPanel({
 
               <MobileCompetencyList skill={skill} />
 
-              <MobileContentSection title="Examples">
+              <MobileContentSection title={UI_TEXT.examples}>
                 <MobileExampleList skill={skill} />
               </MobileContentSection>
 

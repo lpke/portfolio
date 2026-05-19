@@ -1,6 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
+import { CONTACT_FORM_CONTENT } from '@/utils/constants';
 
 type FormState = {
   message: string;
@@ -17,11 +18,14 @@ async function submitContact(
   const details = formData.get('details') as string;
 
   if (!name || !email || !details) {
-    return { message: 'Please fill in all fields.', success: false };
+    return {
+      message: CONTACT_FORM_CONTENT.feedback.missingFields,
+      success: false,
+    };
   }
 
   // Placeholder — replace with actual submission logic
-  return { message: "Message sent! I'll be in touch soon.", success: true };
+  return { message: CONTACT_FORM_CONTENT.feedback.success, success: true };
 }
 
 const INITIAL_STATE: FormState = { message: '', success: false };
@@ -43,14 +47,14 @@ export function ContactForm() {
         {/* Full Name */}
         <div className="space-y-2">
           <label htmlFor="name" className={labelClassName}>
-            Name
+            {CONTACT_FORM_CONTENT.fields.name.label}
           </label>
           <input
             id="name"
             name="name"
             type="text"
             required
-            placeholder="Your name"
+            placeholder={CONTACT_FORM_CONTENT.fields.name.placeholder}
             className={inputClassName}
           />
         </div>
@@ -58,14 +62,14 @@ export function ContactForm() {
         {/* Email */}
         <div className="space-y-2">
           <label htmlFor="email" className={labelClassName}>
-            Email
+            {CONTACT_FORM_CONTENT.fields.email.label}
           </label>
           <input
             id="email"
             name="email"
             type="email"
             required
-            placeholder="you@example.com"
+            placeholder={CONTACT_FORM_CONTENT.fields.email.placeholder}
             className={inputClassName}
           />
         </div>
@@ -74,14 +78,14 @@ export function ContactForm() {
       {/* Project Details */}
       <div className="space-y-2">
         <label htmlFor="details" className={labelClassName}>
-          Message
+          {CONTACT_FORM_CONTENT.fields.details.label}
         </label>
         <textarea
           id="details"
           name="details"
           required
           rows={5}
-          placeholder="A few details, goals, timeline, or links."
+          placeholder={CONTACT_FORM_CONTENT.fields.details.placeholder}
           className={`${inputClassName} min-h-40 resize-y leading-relaxed`}
         />
       </div>
@@ -93,7 +97,9 @@ export function ContactForm() {
           disabled={isPending}
           className="signature-gradient font-headline text-on-primary inline-flex min-h-12 cursor-pointer items-center justify-center rounded-full px-7 text-base font-bold transition-all hover:shadow-[0_0_18px_rgba(123,208,255,0.28)] disabled:cursor-default disabled:opacity-50"
         >
-          {isPending ? 'Sending...' : 'Send message'}
+          {isPending
+            ? CONTACT_FORM_CONTENT.submit.pending
+            : CONTACT_FORM_CONTENT.submit.idle}
         </button>
 
         {/* Feedback */}

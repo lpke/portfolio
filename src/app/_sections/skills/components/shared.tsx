@@ -1,6 +1,10 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { SectionScrollIndicator } from '@/components/SectionScrollIndicator';
-import type { SkillData } from '../data/skills';
+import {
+  SECTION_IDS,
+  SKILLS_SECTION_CONTENT,
+  type SkillData,
+} from '@/utils/constants';
 
 type SkillsShellProps = {
   children: ReactNode;
@@ -30,7 +34,7 @@ export function SkillsShell({
   nextSectionId,
 }: SkillsShellProps) {
   return (
-    <section id="skills" className={cx('relative', className)}>
+    <section id={SECTION_IDS.skills} className={cx('relative', className)}>
       {children}
       {nextSectionId && (
         <SectionScrollIndicator nextSectionId={nextSectionId} />
@@ -43,7 +47,10 @@ export function SkillsHeading() {
   return (
     <header>
       <h1 className="font-headline text-5xl leading-none font-black tracking-tighter text-white sm:text-6xl md:text-7xl lg:text-8xl">
-        What I <span className="text-primary italic">do</span>
+        {SKILLS_SECTION_CONTENT.heading.lead}{' '}
+        <span className="text-primary italic">
+          {SKILLS_SECTION_CONTENT.heading.accent}
+        </span>
       </h1>
     </header>
   );

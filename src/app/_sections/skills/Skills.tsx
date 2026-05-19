@@ -1,10 +1,11 @@
+import { SECTION_IDS } from '@/utils/constants';
 import { AccordionIndexSkills } from './components/AccordionIndexSkills';
 import { ImmersiveShowcaseSkills } from './components/ImmersiveShowcaseSkills';
 import { SkillsShell } from './components/shared';
 
 export function Skills() {
   return (
-    <SkillsShell nextSectionId="contact">
+    <SkillsShell nextSectionId={SECTION_IDS.contact}>
       <div className="lg:hidden">
         <AccordionIndexSkills withShell={false} />
       </div>

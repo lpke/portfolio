@@ -1,6 +1,9 @@
 import { TechTag } from '@/components/TechTag';
-import { PROJECTS } from '../data/projects';
-import type { Project } from '../data/projects';
+import {
+  PROJECTS,
+  PROJECTS_SECTION_CONTENT,
+  type Project,
+} from '@/utils/constants';
 
 function LargeProjectCard({ project }: { project: Project }) {
   return (
@@ -95,20 +98,22 @@ export function ProjectGrid() {
       {/* Pagination Hint */}
       <div className="mt-20 text-center">
         <p className="font-headline text-on-surface-variant/50 mb-4 font-medium italic">
-          More projects from Acidgreen, Greenfields, and Greenhouse Creative.
+          {PROJECTS_SECTION_CONTENT.pagination.more}
         </p>
         <div className="flex justify-center gap-4">
           <button
             type="button"
+            aria-label={PROJECTS_SECTION_CONTENT.pagination.previousLabel}
             className="border-outline-variant/20 text-on-surface-variant/60 hover:border-primary hover:text-primary flex h-12 w-12 items-center justify-center rounded-full border transition-all"
           >
-            ‹
+            {PROJECTS_SECTION_CONTENT.pagination.previousGlyph}
           </button>
           <button
             type="button"
+            aria-label={PROJECTS_SECTION_CONTENT.pagination.nextLabel}
             className="border-outline-variant/20 text-on-surface-variant/60 hover:border-primary hover:text-primary flex h-12 w-12 items-center justify-center rounded-full border transition-all"
           >
-            ›
+            {PROJECTS_SECTION_CONTENT.pagination.nextGlyph}
           </button>
         </div>
       </div>

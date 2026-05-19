@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import { useSectionRouter } from '@/hooks/useSectionRouter';
+import { DEFAULT_SECTION_ID } from '@/utils/constants';
 
 type SectionRouterContext = {
   activeId: string;
@@ -15,7 +16,7 @@ type SectionRouterContext = {
 };
 
 const Ctx = createContext<SectionRouterContext>({
-  activeId: 'home',
+  activeId: DEFAULT_SECTION_ID,
   navigateTo: () => {},
 });
 
@@ -25,7 +26,7 @@ export function useSectionNav() {
 
 export function SectionRouterProvider({ children }: { children: ReactNode }) {
   const { navigateTo, activeListeners, activeIdRef } = useSectionRouter();
-  const [activeId, setActiveId] = useState('home');
+  const [activeId, setActiveId] = useState<string>(DEFAULT_SECTION_ID);
 
   useEffect(() => {
     // Copy ref value so the cleanup function sees the same Set

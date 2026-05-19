@@ -1,19 +1,23 @@
 import { PageHero } from '@/components/PageHero';
+import { PROJECTS_SECTION_CONTENT, SECTION_IDS } from '@/utils/constants';
 import { ProjectGrid } from './components/ProjectGrid';
 
 export function Projects() {
   return (
     <section
-      id="projects"
+      id={SECTION_IDS.projects}
       className="mx-auto max-w-7xl px-6 pt-24 pb-20 md:pt-32"
     >
       <PageHero
         title={
           <>
-            Selected <span className="text-primary italic">Works</span>
+            {PROJECTS_SECTION_CONTENT.title.lead}{' '}
+            <span className="text-primary italic">
+              {PROJECTS_SECTION_CONTENT.title.accent}
+            </span>
           </>
         }
-        subtitle="Exploring the intersection of high-performance backend architecture and intuitive, fluid user interfaces. Each project represents a unique challenge in precision engineering."
+        subtitle={PROJECTS_SECTION_CONTENT.subtitle}
       />
       <ProjectGrid />
     </section>

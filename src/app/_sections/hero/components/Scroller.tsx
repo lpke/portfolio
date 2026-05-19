@@ -7,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import { LAYOUT_CONFIG } from '@/utils/constants';
 
 type ScrollerProps = {
   children: ReactNode;
@@ -14,14 +15,7 @@ type ScrollerProps = {
   speed?: number;
 };
 
-/** How long (ms) to pause auto-scroll after user interaction. */
-const PAUSE_DURATION = 2000;
-
-/** Width of the fade-out edges in pixels. */
-const FADE_WIDTH = 64;
-
-/** Extra safety margin past the fade edges to prevent 1px content peek. */
-const SAFETY_MARGIN = 2;
+const { scroller } = LAYOUT_CONFIG;
 
 /**
  * Horizontal auto-scrolling container with faded edges.
@@ -33,7 +27,10 @@ const SAFETY_MARGIN = 2;
  * - Uses CSS mask-image for background-agnostic opacity fade on edges.
  * - Content is not selectable.
  */
-export function Scroller({ children, speed = 0.5 }: ScrollerProps) {
+export function Scroller({
+  children,
+  speed = scroller.defaultSpeed,
+}: ScrollerProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>(0);
   const offsetRef = useRef(0);
@@ -55,7 +52,7 @@ export function Scroller({ children, speed = 0.5 }: ScrollerProps) {
     clearTimeout(pauseTimeout.current);
     pauseTimeout.current = setTimeout(() => {
       isPaused.current = false;
-    }, PAUSE_DURATION);
+    }, scroller.pauseMs);
   }, []);
 
   /** Wrap offset into [0, contentWidth) range (Pac-Man style). */
@@ -185,8 +182,16 @@ export function Scroller({ children, speed = 0.5 }: ScrollerProps) {
   }, [pauseAutoScroll, wrapOffset]);
 
   const maskStyle: React.CSSProperties = {
-    maskImage: `linear-gradient(to right, transparent 0px, black ${FADE_WIDTH + SAFETY_MARGIN}px, black calc(100% - ${FADE_WIDTH + SAFETY_MARGIN}px), transparent 100%)`,
-    WebkitMaskImage: `linear-gradient(to right, transparent 0px, black ${FADE_WIDTH + SAFETY_MARGIN}px, black calc(100% - ${FADE_WIDTH + SAFETY_MARGIN}px), transparent 100%)`,
+    maskImage: `linear-gradient(to right, transparent 0px, black ${
+      scroller.fadeWidthPx + scroller.safetyMarginPx
+    }px, black calc(100% - ${
+      scroller.fadeWidthPx + scroller.safetyMarginPx
+    }px), transparent 100%)`,
+    WebkitMaskImage: `linear-gradient(to right, transparent 0px, black ${
+      scroller.fadeWidthPx + scroller.safetyMarginPx
+    }px, black calc(100% - ${
+      scroller.fadeWidthPx + scroller.safetyMarginPx
+    }px), transparent 100%)`,
   };
 
   return (

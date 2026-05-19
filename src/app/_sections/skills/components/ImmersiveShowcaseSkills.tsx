@@ -6,7 +6,12 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { SKILLS, type SkillData } from '../data/skills';
+import {
+  SKILLS,
+  SKILLS_SECTION_CONTENT,
+  UI_TEXT,
+  type SkillData,
+} from '@/utils/constants';
 import { getSkillIcon } from './SkillIcons';
 import {
   GithubIcon,
@@ -33,7 +38,7 @@ type RailTextStyle = CSSProperties & {
 
 const IMMERSIVE_LAYOUT: ImmersiveLayout = {
   id: 'primary',
-  panelClassName: 'bg-[#0b1322]',
+  panelClassName: 'bg-skill-stage',
   contentAlignClassName: 'lg:pl-[24rem]',
   descriptionClassName: 'text-[1.25rem]',
   railWidthClassName: 'lg:w-[19.5rem]',
@@ -173,7 +178,7 @@ function SkillRail({
   return (
     <div
       role="tablist"
-      aria-label="Skill focus areas"
+      aria-label={SKILLS_SECTION_CONTENT.railAriaLabel}
       onKeyDown={onKeyDown}
       className="grid flex-1 gap-3"
     >
@@ -299,7 +304,7 @@ function ImmersiveContent({
       <CompetencyGrid skill={skill} limit={layout.competencyLimit} />
 
       <div className="mt-8">
-        <ContentSection title="Examples">
+        <ContentSection title={UI_TEXT.examples}>
           <ExampleGrid skill={skill} />
         </ContentSection>
       </div>
