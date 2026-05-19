@@ -1,4 +1,5 @@
 import { SectionLink } from '@/components/SectionLink';
+import { SectionScrollIndicator } from '@/components/SectionScrollIndicator';
 import { RequestResumeButton } from './components/RequestResumeButton';
 import { StableHeroViewport } from './components/StableHeroViewport';
 import { ToolsBar } from './components/ToolsBar';
@@ -26,9 +27,7 @@ function HeroActions() {
 
 function HeroTools({ className = '' }: { className?: string }) {
   return (
-    <div
-      className={`hero-reveal hero-delay-6 w-full max-w-4xl ${className}`}
-    >
+    <div className={`hero-reveal hero-delay-6 w-full max-w-4xl ${className}`}>
       <ToolsBar />
     </div>
   );
@@ -82,7 +81,7 @@ export function Hero() {
         data-hero-content
         className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center text-center"
       >
-        <p className="hero-reveal hero-delay-2 font-mono text-primary mb-6 text-lg font-semibold md:text-xl">
+        <p className="hero-reveal hero-delay-2 text-primary mb-6 font-mono text-lg font-semibold md:text-xl">
           Senior Software Engineer
         </p>
 
@@ -102,15 +101,7 @@ export function Hero() {
         <HeroTools className="mt-12" />
       </div>
 
-      <div
-        aria-hidden
-        className="hero-scroll-indicator hero-reveal hero-delay-6 absolute bottom-5 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex"
-      >
-        <span className="font-mono text-on-surface-variant/55 text-[10px] font-semibold tracking-[0.28em] uppercase">
-          Scroll
-        </span>
-        <span className="hero-scroll-line" />
-      </div>
+      <SectionScrollIndicator nextSectionId="skills" />
     </section>
   );
 }

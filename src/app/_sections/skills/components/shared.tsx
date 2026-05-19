@@ -1,9 +1,11 @@
 import type { CSSProperties, ReactNode } from 'react';
+import { SectionScrollIndicator } from '@/components/SectionScrollIndicator';
 import type { SkillData } from '../data/skills';
 
 type SkillsShellProps = {
   children: ReactNode;
   className?: string;
+  nextSectionId?: string;
 };
 
 type SkillTokenStyle = CSSProperties & {
@@ -22,10 +24,17 @@ export function getSkillStyle(skill: SkillData): SkillTokenStyle {
   };
 }
 
-export function SkillsShell({ children, className }: SkillsShellProps) {
+export function SkillsShell({
+  children,
+  className,
+  nextSectionId,
+}: SkillsShellProps) {
   return (
-    <section id="skills" className={className}>
+    <section id="skills" className={cx('relative', className)}>
       {children}
+      {nextSectionId && (
+        <SectionScrollIndicator nextSectionId={nextSectionId} />
+      )}
     </section>
   );
 }

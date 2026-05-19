@@ -201,7 +201,7 @@ function MobileSkillPanel({
           onKeyDown={handleKeyDown}
           className="relative grid w-full grid-cols-[1.75rem_minmax(0,1fr)_1.75rem] items-start gap-3 px-4 py-4 text-left transition-colors duration-300 ease-out"
         >
-          <SkillStateIcon skill={skill} isOpen={isOpen} />
+          <SkillStateIcon skill={skill} />
 
           <span className="min-w-0">
             <span
@@ -266,18 +266,13 @@ function MobileSkillPanel({
 
 function SkillStateIcon({
   skill,
-  isOpen,
 }: {
   skill: SkillData;
-  isOpen: boolean;
 }) {
   return (
     <span className="grid h-7 w-7 place-items-center">
       <span
-        className={cx(
-          'grid h-7 w-7 place-items-center transition-colors duration-300',
-          isOpen ? 'text-[var(--skill-accent)]' : 'text-on-surface-variant/55',
-        )}
+        className="grid h-7 w-7 place-items-center text-[var(--skill-accent)]"
         aria-hidden="true"
       >
         {getSkillIcon(skill.iconKey)}

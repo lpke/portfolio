@@ -4,7 +4,7 @@ import { SkillsShell } from './components/shared';
 
 export function Skills() {
   return (
-    <SkillsShell>
+    <SkillsShell nextSectionId="contact">
       <div className="lg:hidden">
         <AccordionIndexSkills withShell={false} />
       </div>

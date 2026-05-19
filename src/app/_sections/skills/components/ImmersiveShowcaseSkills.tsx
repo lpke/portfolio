@@ -1,8 +1,6 @@
 'use client';
 
 import {
-  useEffect,
-  useRef,
   useState,
   type CSSProperties,
   type KeyboardEvent,
@@ -43,8 +41,6 @@ const IMMERSIVE_LAYOUT: ImmersiveLayout = {
   competencyLimit: 99,
 };
 
-const FADE_MS = 200;
-
 export function ImmersiveShowcaseSkills({
   withShell = true,
 }: {
@@ -53,42 +49,18 @@ export function ImmersiveShowcaseSkills({
   const layout = IMMERSIVE_LAYOUT;
   const initialId = SKILLS[0]?.id ?? '';
   const [selectedId, setSelectedId] = useState(initialId);
-  const [visibleId, setVisibleId] = useState(initialId);
-  const [isVisible, setIsVisible] = useState(true);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const selectedSkill =
     SKILLS.find((skill) => skill.id === selectedId) ?? SKILLS[0];
-  const visibleSkill =
-    SKILLS.find((skill) => skill.id === visibleId) ?? selectedSkill;
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
-
-  if (!selectedSkill || !visibleSkill) {
+  if (!selectedSkill) {
     return null;
   }
 
   const selectSkill = (nextId: string) => {
     if (!nextId || nextId === selectedId) return;
 
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
     setSelectedId(nextId);
-    setIsVisible(false);
-
-    timeoutRef.current = setTimeout(() => {
-      setVisibleId(nextId);
-      setIsVisible(true);
-      timeoutRef.current = null;
-    }, FADE_MS);
   };
 
   const selectByOffset = (offset: number) => {
@@ -128,9 +100,9 @@ export function ImmersiveShowcaseSkills({
   };
 
   const content = (
-    <section
+    <div
       className={cx(
-        'ghost-border relative min-h-[42rem] overflow-hidden transition-colors duration-300',
+        'ghost-border relative min-h-[42rem] overflow-hidden transition-colors duration-300 lg:min-h-screen',
         layout.panelClassName,
       )}
       style={getSkillStyle(selectedSkill)}
@@ -138,7 +110,7 @@ export function ImmersiveShowcaseSkills({
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.055),transparent_36%,rgba(255,255,255,0.025))]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,var(--skill-accent-soft),transparent_32%)] opacity-75" />
 
-      <div className="relative z-10 mx-auto min-h-[42rem] max-w-7xl px-4 py-16 sm:px-6 sm:py-24 md:px-8 lg:py-28">
+      <div className="relative z-10 mx-auto min-h-[42rem] max-w-7xl px-4 py-16 sm:px-6 sm:py-24 md:px-8 lg:min-h-screen lg:py-28">
         <div className="mb-10 lg:mb-12">
           <SkillsHeading />
         </div>
@@ -162,19 +134,22 @@ export function ImmersiveShowcaseSkills({
 
           <div
             className={cx(
-              'mt-5 flex flex-col gap-5 lg:mt-0 lg:min-h-[38rem] lg:items-end',
+              'mt-5 grid lg:mt-0 lg:min-h-[38rem] lg:justify-items-end',
               layout.contentAlignClassName,
             )}
           >
-            <ImmersiveContent
-              skill={visibleSkill}
-              layout={layout}
-              isVisible={isVisible}
-            />
+            {SKILLS.map((skill) => (
+              <ImmersiveContent
+                key={skill.id}
+                skill={skill}
+                layout={layout}
+                isSelected={skill.id === selectedId}
+              />
+            ))}
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 
   if (!withShell) {
@@ -212,7 +187,7 @@ function SkillRail({
             type="button"
             role="tab"
             aria-selected={isSelected}
-            aria-controls={`immersive-${layout.id}-panel`}
+            aria-controls={`immersive-${layout.id}-panel-${skill.id}`}
             onMouseDown={(event) => {
               if (event.button !== 0) return;
               onSelect(skill.id);
@@ -245,9 +220,7 @@ function SkillRail({
               <span
                 className={cx(
                   'font-headline block truncate text-[1.4rem] font-bold',
-                  isSelected
-                    ? 'text-[var(--skill-accent)]'
-                    : 'text-white',
+                  isSelected ? 'text-[var(--skill-accent)]' : 'text-white',
                 )}
               >
                 {skill.title}
@@ -293,21 +266,24 @@ function getRailItemClass(isSelected: boolean) {
 function ImmersiveContent({
   skill,
   layout,
-  isVisible,
+  isSelected,
 }: {
   skill: SkillData;
   layout: ImmersiveLayout;
-  isVisible: boolean;
+  isSelected: boolean;
 }) {
   return (
     <article
-      id={`immersive-${layout.id}-panel`}
+      id={`immersive-${layout.id}-panel-${skill.id}`}
       role="tabpanel"
       aria-labelledby={`immersive-${layout.id}-tab-${skill.id}`}
+      aria-hidden={!isSelected}
       className={cx(
-        'w-full py-4 transition-opacity duration-250 ease-out lg:pt-0 lg:pb-4',
+        'col-start-1 row-start-1 w-full py-4 transition-[opacity,visibility] duration-250 ease-out lg:pt-0 lg:pb-4',
         layout.contentMaxClassName,
-        isVisible ? 'opacity-100' : 'opacity-0',
+        isSelected
+          ? 'visible opacity-100'
+          : 'pointer-events-none invisible opacity-0',
       )}
       style={getSkillStyle(skill)}
     >
