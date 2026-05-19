@@ -1,17 +1,11 @@
 import { SECTION_IDS } from '@/utils/constants';
-import { AccordionIndexSkills } from './components/AccordionIndexSkills';
-import { ImmersiveShowcaseSkills } from './components/ImmersiveShowcaseSkills';
-import { SkillsShell } from './components/shared';
+import { ResponsiveSkills } from './components/ResponsiveSkills';
+import { SkillsShell } from './components/SkillsShell';
 
 export function Skills() {
   return (
     <SkillsShell nextSectionId={SECTION_IDS.contact}>
-      <div className="lg:hidden">
-        <AccordionIndexSkills withShell={false} />
-      </div>
-      <div className="hidden lg:block">
-        <ImmersiveShowcaseSkills withShell={false} />
-      </div>
+      <ResponsiveSkills />
     </SkillsShell>
   );
 }

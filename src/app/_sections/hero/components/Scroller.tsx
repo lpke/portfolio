@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Fragment,
   useRef,
   useEffect,
   useCallback,
@@ -17,6 +18,11 @@ type ScrollerProps = {
 
 const { scroller } = LAYOUT_CONFIG;
 
+function applyTrackTransform(track: HTMLDivElement | null, offset: number) {
+  if (!track) return;
+  track.style.transform = `translate3d(${-offset}px, 0, 0)`;
+}
+
 /**
  * Horizontal auto-scrolling container with faded edges.
  *
@@ -31,20 +37,31 @@ export function Scroller({
   children,
   speed = scroller.defaultSpeed,
 }: ScrollerProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>(0);
   const offsetRef = useRef(0);
   const contentWidthRef = useRef(0);
   const isPaused = useRef(false);
+  const isInViewport = useRef(true);
+  const isPageVisible = useRef(true);
+  const isPageScrolling = useRef(false);
+  const reduceMotion = useRef(false);
   const pauseTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const scrollTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
   const lastTimestamp = useRef<number | null>(null);
 
   // Drag state
+  const isPointerActive = useRef(false);
   const isDragging = useRef(false);
+  const hasPointerCapture = useRef(false);
   const dragStartX = useRef(0);
+  const dragStartY = useRef(0);
   const dragStartOffset = useRef(0);
 
+  const [isHydrated, setIsHydrated] = useState(false);
   const [cursorStyle, setCursorStyle] = useState<'grab' | 'grabbing'>('grab');
+  const renderCopyCount = isHydrated ? scroller.hydratedCopyCount : 1;
 
   const pauseAutoScroll = useCallback(() => {
     isPaused.current = true;
@@ -62,15 +79,21 @@ export function Scroller({
     return ((value % w) + w) % w;
   }, []);
 
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => setIsHydrated(true));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
   // Measure a single set of children.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
 
     const measure = () => {
-      // The track contains 3 copies; measure one third.
-      const w = track.scrollWidth / 3;
+      const w = track.scrollWidth / renderCopyCount;
       contentWidthRef.current = w;
+      offsetRef.current = wrapOffset(offsetRef.current);
+      applyTrackTransform(track, offsetRef.current);
     };
 
     measure();
@@ -78,12 +101,65 @@ export function Scroller({
     const ro = new ResizeObserver(measure);
     ro.observe(track);
     return () => ro.disconnect();
-  }, []);
+  }, [renderCopyCount, wrapOffset]);
 
   // Animation loop.
   useEffect(() => {
+    if (!isHydrated) return;
+
+    const container = containerRef.current;
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    reduceMotion.current = motionQuery.matches;
+
+    const handleMotionChange = () => {
+      reduceMotion.current = motionQuery.matches;
+      lastTimestamp.current = null;
+    };
+
+    const handleVisibilityChange = () => {
+      isPageVisible.current = !document.hidden;
+      lastTimestamp.current = null;
+    };
+
+    const handlePageScroll = () => {
+      isPageScrolling.current = true;
+      lastTimestamp.current = null;
+      clearTimeout(scrollTimeout.current);
+      scrollTimeout.current = setTimeout(() => {
+        isPageScrolling.current = false;
+      }, scroller.scrollResumeDelayMs);
+    };
+
+    const observer =
+      container && 'IntersectionObserver' in window
+        ? new IntersectionObserver(
+            ([entry]) => {
+              isInViewport.current = Boolean(entry?.isIntersecting);
+              lastTimestamp.current = null;
+            },
+            { rootMargin: '120px 0px' },
+          )
+        : null;
+
+    if (container && observer) {
+      observer.observe(container);
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('scroll', handlePageScroll, { passive: true });
+    motionQuery.addEventListener('change', handleMotionChange);
+
     const tick = (timestamp: number) => {
-      if (!isPaused.current && contentWidthRef.current > 0) {
+      const shouldAnimate =
+        !isPaused.current &&
+        !isPageScrolling.current &&
+        !reduceMotion.current &&
+        isInViewport.current &&
+        isPageVisible.current &&
+        contentWidthRef.current > 0;
+
+      if (shouldAnimate) {
         if (lastTimestamp.current !== null) {
           // Normalise speed to ~60fps regardless of actual frame rate.
           const delta = (timestamp - lastTimestamp.current) / (1000 / 60);
@@ -91,10 +167,7 @@ export function Scroller({
         }
         lastTimestamp.current = timestamp;
 
-        const track = trackRef.current;
-        if (track) {
-          track.style.transform = `translate3d(${-offsetRef.current}px, 0, 0)`;
-        }
+        applyTrackTransform(trackRef.current, offsetRef.current);
       } else {
         lastTimestamp.current = null;
       }
@@ -107,12 +180,17 @@ export function Scroller({
     return () => {
       cancelAnimationFrame(animationRef.current);
       clearTimeout(pauseTimeout.current);
+      clearTimeout(scrollTimeout.current);
+      observer?.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('scroll', handlePageScroll);
+      motionQuery.removeEventListener('change', handleMotionChange);
     };
-  }, [speed, wrapOffset]);
+  }, [isHydrated, speed, wrapOffset]);
 
   // User interaction handlers.
   useEffect(() => {
-    const container = trackRef.current?.parentElement;
+    const container = containerRef.current;
     if (!container) return;
 
     // --- Wheel (shift+scroll or horizontal scroll) ---
@@ -128,39 +206,61 @@ export function Scroller({
 
       e.preventDefault();
       offsetRef.current = wrapOffset(offsetRef.current + dx);
-
-      const track = trackRef.current;
-      if (track) {
-        track.style.transform = `translate3d(${-offsetRef.current}px, 0, 0)`;
-      }
+      applyTrackTransform(trackRef.current, offsetRef.current);
 
       pauseAutoScroll();
     };
 
     // --- Pointer drag (works for mouse AND touch) ---
     const handlePointerDown = (e: PointerEvent) => {
-      isDragging.current = true;
-      setCursorStyle('grabbing');
+      isPointerActive.current = true;
       dragStartX.current = e.clientX;
+      dragStartY.current = e.clientY;
       dragStartOffset.current = offsetRef.current;
-      container.setPointerCapture(e.pointerId);
+      isDragging.current = e.pointerType === 'mouse';
+      hasPointerCapture.current = isDragging.current;
+
+      if (isDragging.current) {
+        setCursorStyle('grabbing');
+        container.setPointerCapture(e.pointerId);
+      }
+
       pauseAutoScroll();
     };
 
     const handlePointerMove = (e: PointerEvent) => {
-      if (!isDragging.current) return;
+      if (!isPointerActive.current) return;
+
+      if (!isDragging.current) {
+        const dx = e.clientX - dragStartX.current;
+        const dy = e.clientY - dragStartY.current;
+
+        if (Math.abs(dx) <= 6 || Math.abs(dx) <= Math.abs(dy)) {
+          return;
+        }
+
+        isDragging.current = true;
+        hasPointerCapture.current = true;
+        setCursorStyle('grabbing');
+        container.setPointerCapture(e.pointerId);
+      }
+
       const dx = dragStartX.current - e.clientX;
       offsetRef.current = wrapOffset(dragStartOffset.current + dx);
-
-      const track = trackRef.current;
-      if (track) {
-        track.style.transform = `translate3d(${-offsetRef.current}px, 0, 0)`;
-      }
+      applyTrackTransform(trackRef.current, offsetRef.current);
     };
 
-    const handlePointerUp = () => {
+    const handlePointerUp = (e: PointerEvent) => {
+      isPointerActive.current = false;
       if (!isDragging.current) return;
+
       isDragging.current = false;
+      if (hasPointerCapture.current) {
+        hasPointerCapture.current = false;
+        if (container.hasPointerCapture(e.pointerId)) {
+          container.releasePointerCapture(e.pointerId);
+        }
+      }
       setCursorStyle('grab');
       pauseAutoScroll();
     };
@@ -196,6 +296,7 @@ export function Scroller({
 
   return (
     <div
+      ref={containerRef}
       className="relative overflow-hidden select-none"
       style={{
         cursor: cursorStyle,
@@ -209,10 +310,9 @@ export function Scroller({
         style={{ transform: 'translate3d(0, 0, 0)' }}
         aria-hidden
       >
-        {/* Render children 3× for seamless wrapping in both directions. */}
-        {children}
-        {children}
-        {children}
+        {Array.from({ length: renderCopyCount }, (_, index) => (
+          <Fragment key={index}>{children}</Fragment>
+        ))}
       </div>
     </div>
   );

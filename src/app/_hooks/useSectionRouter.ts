@@ -81,6 +81,7 @@ export function useSectionRouter() {
     const elements = SECTION_IDS.map((id) =>
       document.getElementById(id),
     ).filter(Boolean) as HTMLElement[];
+    const sectionElements = new Map(elements.map((el) => [el.id, el]));
 
     if (elements.length === 0) return;
 
@@ -108,7 +109,7 @@ export function useSectionRouter() {
         let bestTop = Infinity;
 
         for (const [id] of visibleSections) {
-          const el = document.getElementById(id);
+          const el = sectionElements.get(id);
           if (!el) continue;
           const rect = el.getBoundingClientRect();
           // Use abs distance of the section top from the viewport top;

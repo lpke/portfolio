@@ -477,9 +477,11 @@ export function RequestResumeButton() {
   );
 
   useEffect(() => {
+    if (isMobile || phase !== 'open') return;
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [handleClickOutside]);
+  }, [handleClickOutside, isMobile, phase]);
 
   // Reposition on scroll / resize (desktop only)
   const updateBtnRect = useCallback(() => {

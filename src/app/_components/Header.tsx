@@ -21,22 +21,32 @@ export function Header() {
   useEffect(() => {
     const mobileQuery = window.matchMedia(MOBILE_QUERY);
     let frame = 0;
+    let actions: Element | null = document.querySelector(
+      '[data-hero-actions]',
+    );
+
+    const setConcealed = (nextValue: boolean) => {
+      setIsConcealedForHero((current) =>
+        current === nextValue ? current : nextValue,
+      );
+    };
 
     const updateVisibility = () => {
       frame = 0;
 
       if (!mobileQuery.matches) {
-        setIsConcealedForHero(false);
+        setConcealed(false);
         return;
       }
 
-      const actions = document.querySelector('[data-hero-actions]');
-      setIsConcealedForHero(
+      actions ??= document.querySelector('[data-hero-actions]');
+      setConcealed(
         actions ? actions.getBoundingClientRect().top > 0 : false,
       );
     };
 
     const requestUpdate = () => {
+      if (!mobileQuery.matches) return;
       if (frame) return;
       frame = window.requestAnimationFrame(updateVisibility);
     };

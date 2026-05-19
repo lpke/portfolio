@@ -1,16 +1,5 @@
-import type { CSSProperties, ReactNode } from 'react';
-import { SectionScrollIndicator } from '@/components/SectionScrollIndicator';
-import {
-  SECTION_IDS,
-  SKILLS_SECTION_CONTENT,
-  type SkillData,
-} from '@/utils/constants';
-
-type SkillsShellProps = {
-  children: ReactNode;
-  className?: string;
-  nextSectionId?: string;
-};
+import type { CSSProperties } from 'react';
+import { SKILLS_SECTION_CONTENT, type SkillData } from '../data/skills';
 
 type SkillTokenStyle = CSSProperties & {
   '--skill-accent': string;
@@ -26,21 +15,6 @@ export function getSkillStyle(skill: SkillData): SkillTokenStyle {
     '--skill-accent': skill.accent,
     '--skill-accent-soft': skill.accentSoft,
   };
-}
-
-export function SkillsShell({
-  children,
-  className,
-  nextSectionId,
-}: SkillsShellProps) {
-  return (
-    <section id={SECTION_IDS.skills} className={cx('relative', className)}>
-      {children}
-      {nextSectionId && (
-        <SectionScrollIndicator nextSectionId={nextSectionId} />
-      )}
-    </section>
-  );
 }
 
 export function SkillsHeading() {

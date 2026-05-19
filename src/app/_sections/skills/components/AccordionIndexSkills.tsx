@@ -2,14 +2,15 @@
 
 import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { SKILLS, UI_TEXT, type SkillData } from '@/utils/constants';
+import { UI_TEXT } from '@/utils/constants';
+import { SKILLS, type SkillData } from '../data/skills';
 import { getSkillIcon } from './SkillIcons';
+import { SkillsShell } from './SkillsShell';
 import {
   ChevronIcon,
   GithubIcon,
   SkillsHeading,
   StackChips,
-  SkillsShell,
   cx,
   getSkillStyle,
 } from './shared';

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { SectionLink } from '@/components/SectionLink';
 import { SectionScrollIndicator } from '@/components/SectionScrollIndicator';
 import {
@@ -31,6 +32,14 @@ export function Hero() {
             className={'hero-portrait hero-delay-1 hero-reveal shrink-0'}
             role="img"
           >
+            <Image
+              src="/images/lp-pop.png"
+              alt=""
+              width={210}
+              height={210}
+              priority
+              className="hero-portrait-image"
+            />
             <span className="sr-only">{SITE.name}</span>
           </div>
 

@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { UI_TEXT } from '@/utils/constants';
+import { LAYOUT_CONFIG, UI_TEXT } from '@/utils/constants';
+
+const { mediaQueries } = LAYOUT_CONFIG;
 
 type SectionScrollIndicatorProps = {
   nextSectionId: string;
@@ -16,57 +18,83 @@ export function SectionScrollIndicator({
     useState(false);
 
   useEffect(() => {
-    const nextSection = document.getElementById(nextSectionId);
-    if (!nextSection) return;
-
-    const headings = Array.from(
-      nextSection.querySelectorAll<HTMLElement>(
-        '[data-section-heading], h1, h2',
-      ),
+    const indicatorQuery = window.matchMedia(
+      mediaQueries.sectionScrollIndicator,
     );
-    const target =
-      headings.find((heading) => heading.offsetParent !== null) ??
-      headings[0] ??
-      nextSection;
+    let cleanupActiveIndicator: (() => void) | undefined;
 
-    const updateVisibility = (isVisible: boolean) => {
-      setIsNextHeadingBottomVisible((current) =>
-        current === isVisible ? current : isVisible,
+    const cleanup = () => {
+      cleanupActiveIndicator?.();
+      cleanupActiveIndicator = undefined;
+    };
+
+    const setup = () => {
+      cleanup();
+
+      if (!indicatorQuery.matches) {
+        return;
+      }
+
+      const nextSection = document.getElementById(nextSectionId);
+      if (!nextSection) return;
+
+      const headings = Array.from(
+        nextSection.querySelectorAll<HTMLElement>(
+          '[data-section-heading], h1, h2',
+        ),
       );
-    };
+      const target =
+        headings.find((heading) => heading.offsetParent !== null) ??
+        headings[0] ??
+        nextSection;
 
-    const updateFromRect = () => {
-      const { bottom } = target.getBoundingClientRect();
-      updateVisibility(bottom <= window.innerHeight);
-    };
+      const updateVisibility = (isVisible: boolean) => {
+        setIsNextHeadingBottomVisible((current) =>
+          current === isVisible ? current : isVisible,
+        );
+      };
 
-    let frame = 0;
-    const requestUpdate = () => {
-      if (frame) return;
+      const updateFromRect = () => {
+        const { bottom } = target.getBoundingClientRect();
+        updateVisibility(bottom <= window.innerHeight);
+      };
 
-      frame = window.requestAnimationFrame(() => {
-        frame = 0;
-        updateFromRect();
+      let frame = 0;
+      const requestUpdate = () => {
+        if (frame) return;
+
+        frame = window.requestAnimationFrame(() => {
+          frame = 0;
+          updateFromRect();
+        });
+      };
+
+      const observer = new IntersectionObserver(requestUpdate, {
+        threshold: [0, 1],
       });
+
+      updateFromRect();
+
+      observer.observe(target);
+      window.addEventListener('scroll', requestUpdate, { passive: true });
+      window.addEventListener('resize', requestUpdate);
+
+      cleanupActiveIndicator = () => {
+        observer.disconnect();
+        window.removeEventListener('scroll', requestUpdate);
+        window.removeEventListener('resize', requestUpdate);
+        if (frame) {
+          window.cancelAnimationFrame(frame);
+        }
+      };
     };
 
-    const observer = new IntersectionObserver(requestUpdate, {
-      threshold: [0, 1],
-    });
-
-    updateFromRect();
-
-    observer.observe(target);
-    window.addEventListener('scroll', requestUpdate, { passive: true });
-    window.addEventListener('resize', requestUpdate);
+    setup();
+    indicatorQuery.addEventListener('change', setup);
 
     return () => {
-      observer.disconnect();
-      window.removeEventListener('scroll', requestUpdate);
-      window.removeEventListener('resize', requestUpdate);
-      if (frame) {
-        window.cancelAnimationFrame(frame);
-      }
+      indicatorQuery.removeEventListener('change', setup);
+      cleanup();
     };
   }, [nextSectionId]);
 
