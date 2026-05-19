@@ -246,7 +246,7 @@ function SkillRail({
                 className={cx(
                   'font-headline block truncate text-[1.4rem] font-bold',
                   isSelected
-                    ? 'text-[var(--skill-accent)] [text-shadow:0_2px_8px_rgba(0,0,0,0.45)]'
+                    ? 'text-[var(--skill-accent)]'
                     : 'text-white',
                 )}
               >

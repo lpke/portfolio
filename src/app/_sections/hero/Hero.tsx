@@ -1,5 +1,6 @@
 import { SectionLink } from '@/components/SectionLink';
 import { RequestResumeButton } from './components/RequestResumeButton';
+import { StableHeroViewport } from './components/StableHeroViewport';
 import { ToolsBar } from './components/ToolsBar';
 
 const introCopy =
@@ -7,7 +8,10 @@ const introCopy =
 
 function HeroActions() {
   return (
-    <div className="hero-reveal hero-delay-5 flex flex-wrap items-center justify-center gap-4">
+    <div
+      data-hero-actions
+      className="hero-reveal hero-delay-5 flex flex-wrap items-center justify-center gap-4"
+    >
       <SectionLink
         to="contact"
         scrollTargetId="contact-card-first"
@@ -34,7 +38,7 @@ function HeroPortrait({ className = '' }: { className?: string }) {
   return (
     <div
       aria-label="Luke Perich headshot"
-      className={`hero-portrait hero-reveal h-20 w-20 shrink-0 min-[360px]:h-24 min-[360px]:w-24 min-[420px]:h-32 min-[420px]:w-32 sm:h-44 sm:w-44 md:h-52 md:w-52 ${className}`}
+      className={`hero-portrait hero-reveal shrink-0 ${className}`}
       role="img"
     >
       <span className="sr-only">Luke Perich</span>
@@ -44,9 +48,12 @@ function HeroPortrait({ className = '' }: { className?: string }) {
 
 function KineticName() {
   return (
-    <h1 className="font-headline hero-reveal hero-delay-1 min-w-max overflow-visible text-4xl leading-none font-black text-white min-[360px]:text-5xl min-[420px]:text-6xl sm:text-7xl md:text-8xl lg:text-9xl">
+    <h1 className="font-headline hero-name hero-reveal hero-delay-1 min-w-max overflow-visible font-black text-white">
       <span className="block">LUKE</span>
-      <span className="hero-title-accent hero-type-text text-primary block italic">
+      <span
+        data-hero-perich
+        className="hero-title-accent hero-type-text text-primary block italic"
+      >
         PERICH
       </span>
     </h1>
@@ -55,7 +62,7 @@ function KineticName() {
 
 function NameLockup() {
   return (
-    <div className="flex items-center justify-center gap-3 text-left min-[420px]:gap-4 sm:gap-6 md:gap-8">
+    <div className="hero-name-lockup flex items-center justify-center text-left">
       <HeroPortrait className="hero-delay-1" />
       <KineticName />
     </div>
@@ -66,11 +73,15 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="hero-shell hero-waves relative flex h-screen items-center overflow-hidden px-5 pt-24 pb-16 md:px-8 md:pt-28"
+      className="hero-shell hero-waves relative flex min-h-[44rem] items-center overflow-hidden px-5 pt-24 pb-16 min-[390px]:min-h-[46rem] md:min-h-[48rem] md:px-8 md:pt-28"
     >
+      <StableHeroViewport />
       <div className="hero-grid pointer-events-none absolute inset-0" />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center text-center">
+      <div
+        data-hero-content
+        className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center text-center"
+      >
         <p className="hero-reveal hero-delay-2 font-mono text-primary mb-6 text-lg font-semibold md:text-xl">
           Senior Software Engineer
         </p>
@@ -78,7 +89,7 @@ export function Hero() {
         <NameLockup />
 
         <div className="hero-reveal hero-delay-3 mt-8 max-w-2xl">
-          <p className="text-on-surface-variant text-lg leading-relaxed opacity-75">
+          <p className="text-on-surface-variant text-base leading-relaxed opacity-75 md:text-lg">
             {introCopy} When not coding, I&apos;m training - calisthenics and
             competitive swimming.
           </p>
@@ -93,7 +104,7 @@ export function Hero() {
 
       <div
         aria-hidden
-        className="hero-scroll-indicator hero-reveal hero-delay-6 absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2"
+        className="hero-scroll-indicator hero-reveal hero-delay-6 absolute bottom-5 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex"
       >
         <span className="font-mono text-on-surface-variant/55 text-[10px] font-semibold tracking-[0.28em] uppercase">
           Scroll

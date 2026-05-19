@@ -1,11 +1,51 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { NAV_LINKS, SITE } from '@/utils/constants';
 import { useSectionNav } from '@/hooks/SectionRouterProvider';
 
+const MOBILE_QUERY = '(max-width: 767px)';
+
 export function Header() {
   const { activeId, navigateTo } = useSectionNav();
+  const [isConcealedForHero, setIsConcealedForHero] = useState(true);
+
+  useEffect(() => {
+    const mobileQuery = window.matchMedia(MOBILE_QUERY);
+    let frame = 0;
+
+    const updateVisibility = () => {
+      frame = 0;
+
+      if (!mobileQuery.matches) {
+        setIsConcealedForHero(false);
+        return;
+      }
+
+      const actions = document.querySelector('[data-hero-actions]');
+      setIsConcealedForHero(
+        actions ? actions.getBoundingClientRect().top > 0 : false,
+      );
+    };
+
+    const requestUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(updateVisibility);
+    };
+
+    updateVisibility();
+    mobileQuery.addEventListener('change', updateVisibility);
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      mobileQuery.removeEventListener('change', updateVisibility);
+      window.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', requestUpdate);
+    };
+  }, []);
 
   const handleNavigate =
     (sectionId: string, scrollTargetId?: string) =>
@@ -16,7 +56,11 @@ export function Header() {
 
   return (
     <header
-      className="glass-nav ambient-shadow fixed top-0 z-50 w-full"
+      className={`glass-nav ambient-shadow fixed top-0 z-50 w-full transition-opacity duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-[opacity] motion-reduce:transition-none md:opacity-100 ${
+        isConcealedForHero
+          ? 'pointer-events-none opacity-0 md:pointer-events-auto'
+          : 'opacity-100'
+      }`}
       style={{ paddingRight: 'var(--scrollbar-gutter, 0px)' }}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-8">
