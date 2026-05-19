@@ -111,7 +111,6 @@ export const LAYOUT_CONFIG = {
     heroToolsSpeed: 0.4,
     hydratedCopyCount: 3,
     pauseMs: 2000,
-    scrollResumeDelayMs: 180,
     fadeWidthPx: 64,
     safetyMarginPx: 2,
   },

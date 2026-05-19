@@ -20,7 +20,10 @@ export function getSkillStyle(skill: SkillData): SkillTokenStyle {
 export function SkillsHeading() {
   return (
     <header>
-      <h1 className="font-headline text-5xl leading-none font-black tracking-tighter text-white sm:text-6xl md:text-7xl lg:text-8xl">
+      <h1
+        data-section-heading
+        className="font-headline text-5xl leading-none font-black tracking-tighter text-white sm:text-6xl md:text-7xl lg:text-8xl"
+      >
         {SKILLS_SECTION_CONTENT.heading.lead}{' '}
         <span className="text-primary italic">
           {SKILLS_SECTION_CONTENT.heading.accent}

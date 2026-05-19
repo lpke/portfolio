@@ -14,7 +14,7 @@ export function SectionScrollIndicator({
   nextSectionId,
   className = '',
 }: SectionScrollIndicatorProps) {
-  const [isNextHeadingBottomVisible, setIsNextHeadingBottomVisible] =
+  const [isNextHeadingEncountered, setIsNextHeadingEncountered] =
     useState(false);
 
   useEffect(() => {
@@ -38,25 +38,33 @@ export function SectionScrollIndicator({
       const nextSection = document.getElementById(nextSectionId);
       if (!nextSection) return;
 
-      const headings = Array.from(
-        nextSection.querySelectorAll<HTMLElement>(
-          '[data-section-heading], h1, h2',
-        ),
-      );
-      const target =
-        headings.find((heading) => heading.offsetParent !== null) ??
-        headings[0] ??
-        nextSection;
+      const getTarget = () => {
+        const headings = Array.from(
+          nextSection.querySelectorAll<HTMLElement>(
+            '[data-section-heading], h1, h2',
+          ),
+        );
+
+        return headings.find((heading) => heading.offsetParent !== null) ?? null;
+      };
 
       const updateVisibility = (isVisible: boolean) => {
-        setIsNextHeadingBottomVisible((current) =>
+        setIsNextHeadingEncountered((current) =>
           current === isVisible ? current : isVisible,
         );
       };
 
       const updateFromRect = () => {
-        const { bottom } = target.getBoundingClientRect();
-        updateVisibility(bottom <= window.innerHeight);
+        const target = getTarget();
+
+        if (!target) {
+          updateVisibility(false);
+          return;
+        }
+
+        const { top } = target.getBoundingClientRect();
+
+        updateVisibility(top <= window.innerHeight);
       };
 
       let frame = 0;
@@ -69,18 +77,28 @@ export function SectionScrollIndicator({
         });
       };
 
-      const observer = new IntersectionObserver(requestUpdate, {
+      const intersectionObserver = new IntersectionObserver(requestUpdate, {
         threshold: [0, 1],
       });
+      const mutationObserver = new MutationObserver(requestUpdate);
+      const resizeObserver =
+        'ResizeObserver' in window ? new ResizeObserver(requestUpdate) : null;
 
       updateFromRect();
 
-      observer.observe(target);
+      intersectionObserver.observe(nextSection);
+      mutationObserver.observe(nextSection, {
+        childList: true,
+        subtree: true,
+      });
+      resizeObserver?.observe(nextSection);
       window.addEventListener('scroll', requestUpdate, { passive: true });
       window.addEventListener('resize', requestUpdate);
 
       cleanupActiveIndicator = () => {
-        observer.disconnect();
+        intersectionObserver.disconnect();
+        mutationObserver.disconnect();
+        resizeObserver?.disconnect();
         window.removeEventListener('scroll', requestUpdate);
         window.removeEventListener('resize', requestUpdate);
         if (frame) {
@@ -103,7 +121,7 @@ export function SectionScrollIndicator({
       aria-hidden
       className={[
         'section-scroll-indicator pointer-events-none absolute bottom-5 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 select-none md:flex',
-        isNextHeadingBottomVisible
+        isNextHeadingEncountered
           ? 'invisible opacity-0'
           : 'visible opacity-100',
         className,

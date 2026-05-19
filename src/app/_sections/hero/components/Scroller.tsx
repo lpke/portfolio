@@ -29,7 +29,7 @@ function applyTrackTransform(track: HTMLDivElement | null, offset: number) {
  * - Auto-scrolls using translateX for reliable, jank-free infinite looping.
  * - Click-and-drag on any device (desktop included).
  * - Shift+scroll on desktop and touch-drag on mobile.
- * - Pauses auto-scroll while the user interacts, resumes after a delay.
+ * - Pauses auto-scroll while the user interacts with the scroller, resumes after a delay.
  * - Uses CSS mask-image for background-agnostic opacity fade on edges.
  * - Content is not selectable.
  */
@@ -45,10 +45,8 @@ export function Scroller({
   const isPaused = useRef(false);
   const isInViewport = useRef(true);
   const isPageVisible = useRef(true);
-  const isPageScrolling = useRef(false);
   const reduceMotion = useRef(false);
   const pauseTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const scrollTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
   const lastTimestamp = useRef<number | null>(null);
 
   // Drag state
@@ -122,15 +120,6 @@ export function Scroller({
       lastTimestamp.current = null;
     };
 
-    const handlePageScroll = () => {
-      isPageScrolling.current = true;
-      lastTimestamp.current = null;
-      clearTimeout(scrollTimeout.current);
-      scrollTimeout.current = setTimeout(() => {
-        isPageScrolling.current = false;
-      }, scroller.scrollResumeDelayMs);
-    };
-
     const observer =
       container && 'IntersectionObserver' in window
         ? new IntersectionObserver(
@@ -147,13 +136,11 @@ export function Scroller({
     }
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('scroll', handlePageScroll, { passive: true });
     motionQuery.addEventListener('change', handleMotionChange);
 
     const tick = (timestamp: number) => {
       const shouldAnimate =
         !isPaused.current &&
-        !isPageScrolling.current &&
         !reduceMotion.current &&
         isInViewport.current &&
         isPageVisible.current &&
@@ -180,10 +167,8 @@ export function Scroller({
     return () => {
       cancelAnimationFrame(animationRef.current);
       clearTimeout(pauseTimeout.current);
-      clearTimeout(scrollTimeout.current);
       observer?.disconnect();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('scroll', handlePageScroll);
       motionQuery.removeEventListener('change', handleMotionChange);
     };
   }, [isHydrated, speed, wrapOffset]);

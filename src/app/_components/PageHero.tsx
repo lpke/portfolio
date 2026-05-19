@@ -10,6 +10,7 @@ export function PageHero({ title, subtitle }: PageHeroProps) {
   return (
     <header className={subtitle ? 'mb-20' : 'mb-14'}>
       <h1
+        data-section-heading
         className={`font-headline text-5xl font-black tracking-tighter text-white md:text-7xl lg:text-8xl ${
           subtitle ? 'mb-6' : ''
         }`}
