@@ -195,9 +195,7 @@
   --hero-name-italic-start-offset: 0.16em;
   /* Manual trim: lower this if the portrait extends past LUKE/PERICH. */
   --hero-portrait-scale: 0.9;
-  --hero-name-block: calc(
-    var(--hero-name-size) * var(--hero-name-line) * 2
-  );
+  --hero-name-block: calc(var(--hero-name-size) * var(--hero-name-line) * 2);
   gap: 0.75rem;
 }
 
@@ -246,12 +244,11 @@
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: 50%;
-  background-image:
-    linear-gradient(
-      135deg,
-      var(--color-surface-container-high),
-      var(--color-primary-container)
-    );
+  background-image: linear-gradient(
+    135deg,
+    var(--color-surface-container-high),
+    var(--color-primary-container)
+  );
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -328,6 +325,26 @@
   animation: sectionScrollLine 1.8s ease-in-out infinite;
 }
 
+.skill-page-panel {
+  will-change: opacity, transform;
+}
+
+.skill-page-panel[data-skill-page-direction='next'][data-skill-page-phase='enter'] {
+  animation: skillPageEnterNext 190ms ease-out both;
+}
+
+.skill-page-panel[data-skill-page-direction='next'][data-skill-page-phase='exit'] {
+  animation: skillPageExitNext 130ms ease-in both;
+}
+
+.skill-page-panel[data-skill-page-direction='previous'][data-skill-page-phase='enter'] {
+  animation: skillPageEnterPrevious 190ms ease-out both;
+}
+
+.skill-page-panel[data-skill-page-direction='previous'][data-skill-page-phase='exit'] {
+  animation: skillPageExitPrevious 130ms ease-in both;
+}
+
 @keyframes heroReveal {
   to {
     opacity: 1;
@@ -361,6 +378,54 @@
   }
 }
 
+@keyframes skillPageEnterNext {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes skillPageExitNext {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+}
+
+@keyframes skillPageEnterPrevious {
+  from {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes skillPageExitPrevious {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+}
+
 @media (max-height: 999px) {
   .section-scroll-indicator {
     display: none;
@@ -385,6 +450,10 @@
   }
 
   .section-scroll-line::after {
+    animation: none !important;
+  }
+
+  .skill-page-panel {
     animation: none !important;
   }
 }

@@ -2,8 +2,11 @@ import { cx } from '../shared';
 import {
   CapabilityCard,
   ProofPointCard,
+  SkillGraphic,
   SkillGrid,
+  SkillPage,
   SkillPageShell,
+  SkillPager,
   StackSkillCard,
   getCapability,
   getProofPoint,
@@ -22,56 +25,75 @@ export function DeveloperToolingSkill({ skill, variant }: SkillPageProps) {
 
   return (
     <SkillPageShell intro={skill.intro} variant={variant}>
-      <SkillGrid>
-        <CapabilityCard
-          capability={internalTools}
-          eyebrow="DX"
-          type="feature"
-          className="lg:col-span-4"
+      <SkillPager>
+        <SkillPage
+          label="DX"
+          summary="Tools and environment work that remove friction."
         >
-          <ToolMatrix />
-        </CapabilityCard>
-        <StackSkillCard
-          skill={skill}
-          title="Tooling Stack"
-          className="lg:col-span-2 lg:row-span-2"
-        />
-        <ProofPointCard
-          proofPoint={docs}
-          eyebrow="Adoption"
-          className="lg:col-span-2"
-        />
-        <CapabilityCard
-          capability={mentoring}
-          eyebrow="People"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={montu}
-          eyebrow="Mentoring"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={hiring}
-          eyebrow="Hiring"
-          className="lg:col-span-2"
-        />
-        <CapabilityCard
-          capability={environment}
-          eyebrow="Environment"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={nvim}
-          eyebrow="Custom setup"
-          className="lg:col-span-3"
-        />
-        <ProofPointCard
-          proofPoint={reviews}
-          eyebrow="Review culture"
-          className="lg:col-span-3"
-        />
-      </SkillGrid>
+          <SkillGrid>
+            <CapabilityCard
+              capability={internalTools}
+              eyebrow="DX"
+              type="feature"
+              image={<SkillGraphic variant="tooling" />}
+              imagePosition="right"
+              imageRatio="34%"
+              className="lg:col-span-4"
+            >
+              <ToolMatrix />
+            </CapabilityCard>
+            <StackSkillCard
+              skill={skill}
+              title="Tooling Stack"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={docs}
+              eyebrow="Adoption"
+              className="lg:col-span-3"
+            />
+            <CapabilityCard
+              capability={environment}
+              eyebrow="Environment"
+              className="lg:col-span-3"
+            />
+          </SkillGrid>
+        </SkillPage>
+
+        <SkillPage
+          label="Team"
+          summary="Mentoring, reviews, hiring, and knowledge sharing."
+        >
+          <SkillGrid>
+            <CapabilityCard
+              capability={mentoring}
+              eyebrow="People"
+              type="feature"
+              className="lg:col-span-3"
+            />
+            <ProofPointCard
+              proofPoint={montu}
+              eyebrow="Mentoring"
+              className="lg:col-span-3"
+            />
+            <ProofPointCard
+              proofPoint={hiring}
+              eyebrow="Hiring"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={nvim}
+              eyebrow="Custom setup"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={reviews}
+              eyebrow="Review culture"
+              className="lg:col-span-2"
+            />
+          </SkillGrid>
+        </SkillPage>
+      </SkillPager>
     </SkillPageShell>
   );
 }

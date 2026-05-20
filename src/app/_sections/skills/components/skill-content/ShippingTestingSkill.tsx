@@ -1,8 +1,11 @@
 import {
   CapabilityCard,
   ProofPointCard,
+  SkillGraphic,
   SkillGrid,
+  SkillPage,
   SkillPageShell,
+  SkillPager,
   StackSkillCard,
   getCapability,
   getProofPoint,
@@ -21,60 +24,78 @@ export function ShippingTestingSkill({ skill, variant }: SkillPageProps) {
 
   return (
     <SkillPageShell intro={skill.intro} variant={variant}>
-      <SkillGrid>
-        <CapabilityCard
-          capability={testing}
-          eyebrow="Quality gate"
-          type="metric"
-          className="lg:col-span-2"
-        />
-        <CapabilityCard
-          capability={delivery}
-          eyebrow="Delivery"
-          type="metric"
-          className="lg:col-span-2"
-        />
-        <CapabilityCard
-          capability={accessibility}
-          eyebrow="Inclusive UI"
-          type="metric"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={e2e}
-          eyebrow="Coverage"
-          type="feature"
-          className="lg:col-span-3"
+      <SkillPager>
+        <SkillPage
+          label="Quality"
+          summary="Testing, accessibility, and quality gates before release."
         >
-          <QualityGateRow />
-        </ProofPointCard>
-        <ProofPointCard
-          proofPoint={pipeline}
-          eyebrow="Infrastructure"
-          type="feature"
-          className="lg:col-span-3"
-        />
-        <StackSkillCard
-          skill={skill}
-          title="Shipping Stack"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={qa}
-          eyebrow="Manual QA"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={a11y}
-          eyebrow="Accessibility"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={experiments}
-          eyebrow="Experimentation"
-          className="lg:col-span-6"
-        />
-      </SkillGrid>
+          <SkillGrid>
+            <CapabilityCard
+              capability={testing}
+              eyebrow="Quality gate"
+              type="metric"
+              className="lg:col-span-2"
+            />
+            <CapabilityCard
+              capability={delivery}
+              eyebrow="Delivery"
+              type="metric"
+              className="lg:col-span-2"
+            />
+            <CapabilityCard
+              capability={accessibility}
+              eyebrow="Inclusive UI"
+              type="metric"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={e2e}
+              eyebrow="Coverage"
+              type="feature"
+              image={<SkillGraphic variant="shipping" />}
+              imagePosition="right"
+              imageRatio="34%"
+              className="lg:col-span-6"
+            >
+              <QualityGateRow />
+            </ProofPointCard>
+          </SkillGrid>
+        </SkillPage>
+
+        <SkillPage
+          label="Release"
+          summary="Pipelines, QA tools, experiments, and shipping infrastructure."
+        >
+          <SkillGrid>
+            <ProofPointCard
+              proofPoint={pipeline}
+              eyebrow="Infrastructure"
+              type="feature"
+              className="lg:col-span-3"
+            />
+            <StackSkillCard
+              skill={skill}
+              title="Shipping Stack"
+              className="lg:col-span-3"
+            />
+            <ProofPointCard
+              proofPoint={qa}
+              eyebrow="Manual QA"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={a11y}
+              eyebrow="Accessibility"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={experiments}
+              eyebrow="Experimentation"
+              className="lg:col-span-2"
+            />
+          </SkillGrid>
+        </SkillPage>
+      </SkillPager>
     </SkillPageShell>
   );
 }

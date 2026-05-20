@@ -102,6 +102,11 @@ function MobileSkillPanel({
   }, [isOpen]);
 
   const handlePointerDown = (event: PointerEvent<HTMLElement>) => {
+    if (isInteractiveSkillContentTarget(event)) {
+      tapStartRef.current = null;
+      return;
+    }
+
     tapStartRef.current = {
       pointerId: event.pointerId,
       startedAt: Date.now(),
@@ -237,6 +242,7 @@ function MobileSkillPanel({
         >
           <div className="min-h-0 overflow-hidden">
             <div
+              data-skill-panel-content="true"
               className={cx(
                 'px-4 pt-0 pb-5 transition-opacity duration-300',
                 isContentVisible ? 'opacity-100' : 'opacity-0',
@@ -248,6 +254,26 @@ function MobileSkillPanel({
         </div>
       </article>
     </div>
+  );
+}
+
+function isInteractiveSkillContentTarget(event: PointerEvent<HTMLElement>) {
+  const target = event.target;
+
+  if (!(target instanceof Element)) {
+    return false;
+  }
+
+  const content = target.closest('[data-skill-panel-content="true"]');
+
+  if (!content || !event.currentTarget.contains(content)) {
+    return false;
+  }
+
+  return Boolean(
+    target.closest(
+      'a,button,input,select,textarea,[role="button"],[data-accordion-interactive="true"]',
+    ),
   );
 }
 

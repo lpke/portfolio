@@ -1,8 +1,11 @@
 import {
   CapabilityCard,
   ProofPointCard,
+  SkillGraphic,
   SkillGrid,
+  SkillPage,
   SkillPageShell,
+  SkillPager,
   StackSkillCard,
   getCapability,
   getProofPoint,
@@ -21,56 +24,74 @@ export function AiAutomationSkill({ skill, variant }: SkillPageProps) {
 
   return (
     <SkillPageShell intro={skill.intro} variant={variant}>
-      <SkillGrid>
-        <StackSkillCard
-          skill={skill}
-          title="Agent Stack"
-          className="lg:col-span-2 lg:row-span-2"
-        />
-        <CapabilityCard
-          capability={agentic}
-          eyebrow="Workflow"
-          type="feature"
-          className="lg:col-span-4"
+      <SkillPager>
+        <SkillPage
+          label="Workflow"
+          summary="Daily AI-assisted development patterns and local automation."
         >
-          <AutomationFlow />
-        </CapabilityCard>
-        <ProofPointCard
-          proofPoint={codeToNotion}
-          eyebrow="Open source"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={aspyn}
-          eyebrow="Pipeline engine"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={nvim}
-          eyebrow="Editor system"
-          className="lg:col-span-2"
-        />
-        <CapabilityCard
-          capability={context}
-          eyebrow="Context"
-          className="lg:col-span-2"
-        />
-        <CapabilityCard
-          capability={pipelines}
-          eyebrow="Automation"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={production}
-          eyebrow="Team usage"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={localLlm}
-          eyebrow="Local models"
-          className="lg:col-span-3"
-        />
-      </SkillGrid>
+          <SkillGrid>
+            <StackSkillCard
+              skill={skill}
+              title="Agent Stack"
+              className="lg:col-span-2"
+            />
+            <CapabilityCard
+              capability={agentic}
+              eyebrow="Workflow"
+              type="feature"
+              image={<SkillGraphic variant="automation" />}
+              imagePosition="right"
+              imageRatio="38%"
+              className="lg:col-span-4"
+            >
+              <AutomationFlow />
+            </CapabilityCard>
+            <CapabilityCard
+              capability={context}
+              eyebrow="Context"
+              className="lg:col-span-3"
+            />
+            <CapabilityCard
+              capability={pipelines}
+              eyebrow="Automation"
+              className="lg:col-span-3"
+            />
+          </SkillGrid>
+        </SkillPage>
+
+        <SkillPage
+          label="Tools"
+          summary="Open-source projects, editor workflows, and production team usage."
+        >
+          <SkillGrid>
+            <ProofPointCard
+              proofPoint={codeToNotion}
+              eyebrow="Open source"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={aspyn}
+              eyebrow="Pipeline engine"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={nvim}
+              eyebrow="Editor system"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={production}
+              eyebrow="Team usage"
+              className="lg:col-span-3"
+            />
+            <ProofPointCard
+              proofPoint={localLlm}
+              eyebrow="Local models"
+              className="lg:col-span-3"
+            />
+          </SkillGrid>
+        </SkillPage>
+      </SkillPager>
     </SkillPageShell>
   );
 }

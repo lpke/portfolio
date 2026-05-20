@@ -1,12 +1,20 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import {
   SKILL_CARD_CLASS_NAMES,
+  SKILL_CARD_IMAGE_BACKGROUND_SIZE,
+  SKILL_CARD_IMAGE_DEFAULT_RATIOS,
   SKILL_CARD_PADDING_CLASS_NAMES,
+  type SkillCardImageFit,
+  type SkillCardImagePosition,
   type SkillCardType,
 } from '../data/skills';
 import { SkillChips, cx } from './shared';
 
-export type { SkillCardType };
+export type { SkillCardImageFit, SkillCardImagePosition, SkillCardType };
+
+type SkillCardStyle = CSSProperties & {
+  '--skill-card-image-ratio'?: string;
+};
 
 type SkillCardProps = {
   title?: ReactNode;
@@ -17,6 +25,12 @@ type SkillCardProps = {
   meta?: ReactNode;
   href?: string;
   type?: SkillCardType;
+  image?: ReactNode | string;
+  imageAlt?: string;
+  imagePosition?: SkillCardImagePosition;
+  imageRatio?: string;
+  imageFit?: SkillCardImageFit;
+  imageClassName?: string;
   className?: string;
   contentClassName?: string;
   ariaLabel?: string;
@@ -32,31 +46,56 @@ export function SkillCard({
   meta,
   href,
   type = 'default',
+  image,
+  imageAlt = '',
+  imagePosition = 'top',
+  imageRatio,
+  imageFit = 'contain',
+  imageClassName,
   className,
   contentClassName,
   ariaLabel,
   children,
 }: SkillCardProps) {
   const isLinked = Boolean(href);
+  const hasImage = Boolean(image);
+  const resolvedImageRatio =
+    imageRatio ?? SKILL_CARD_IMAGE_DEFAULT_RATIOS[imagePosition];
+  const style: SkillCardStyle = {
+    '--skill-card-image-ratio': resolvedImageRatio,
+  };
+  const cardPaddingClassName = SKILL_CARD_PADDING_CLASS_NAMES[type];
   const cardClassName = cx(
-    'group/skill-card relative isolate min-w-0 overflow-hidden rounded-[8px] border transition-[border-color,background-color,box-shadow,transform] duration-250',
+    'group/skill-card relative isolate min-w-0 overflow-hidden rounded-[8px] border transition-[background-color,filter] duration-200',
     SKILL_CARD_CLASS_NAMES[type],
-    SKILL_CARD_PADDING_CLASS_NAMES[type],
-    isLinked &&
-      'block cursor-pointer hover:-translate-y-0.5 hover:border-[color:color-mix(in_srgb,var(--skill-accent)_48%,rgba(255,255,255,0.18))] hover:bg-white/[0.055]',
+    !hasImage && cardPaddingClassName,
+    isLinked && 'block cursor-pointer hover:brightness-110',
     className,
   );
 
   const body = (
-    <>
-      {type !== 'quiet' && (
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_88%_4%,var(--skill-accent-soft),transparent_46%)] opacity-0 transition-opacity duration-300 group-hover/skill-card:opacity-70"
+    <div
+      className={cx(
+        'relative min-w-0 gap-4',
+        hasImage && getImageLayoutClassName(imagePosition),
+      )}
+    >
+      {hasImage && shouldRenderImageBeforeContent(imagePosition) && (
+        <SkillCardImage
+          image={image}
+          imageAlt={imageAlt}
+          imageFit={imageFit}
+          imagePosition={imagePosition}
+          className={imageClassName}
         />
       )}
-
-      <div className={cx('relative min-w-0', contentClassName)}>
+      <div
+        className={cx(
+          'relative min-w-0',
+          hasImage && cardPaddingClassName,
+          contentClassName,
+        )}
+      >
         {(eyebrow || icon || meta || (isLinked && !meta)) && (
           <div className="mb-3 flex min-w-0 items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-2">
@@ -81,7 +120,7 @@ export function SkillCard({
         {title && (
           <h4
             className={cx(
-              'font-headline min-w-0 font-bold text-white transition-colors duration-200 group-hover/skill-card:text-[var(--skill-accent)]',
+              'font-headline min-w-0 font-bold text-white',
               type === 'feature'
                 ? 'text-xl leading-tight lg:text-2xl'
                 : 'text-base leading-snug lg:text-lg',
@@ -118,7 +157,16 @@ export function SkillCard({
           </div>
         )}
       </div>
-    </>
+      {hasImage && !shouldRenderImageBeforeContent(imagePosition) && (
+        <SkillCardImage
+          image={image}
+          imageAlt={imageAlt}
+          imageFit={imageFit}
+          imagePosition={imagePosition}
+          className={imageClassName}
+        />
+      )}
+    </div>
   );
 
   if (href) {
@@ -129,6 +177,7 @@ export function SkillCard({
         rel="noreferrer"
         aria-label={ariaLabel}
         className={cardClassName}
+        style={style}
       >
         {body}
       </a>
@@ -136,17 +185,69 @@ export function SkillCard({
   }
 
   return (
-    <article aria-label={ariaLabel} className={cardClassName}>
+    <article aria-label={ariaLabel} className={cardClassName} style={style}>
       {body}
     </article>
   );
+}
+
+function SkillCardImage({
+  image,
+  imageAlt,
+  imageFit,
+  imagePosition,
+  className,
+}: {
+  image: ReactNode | string | undefined;
+  imageAlt: string;
+  imageFit: SkillCardImageFit;
+  imagePosition: SkillCardImagePosition;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cx(
+        'min-w-0 shrink-0 overflow-hidden bg-white/[0.025]',
+        imagePosition === 'left' || imagePosition === 'right'
+          ? 'h-28 w-full lg:h-auto lg:w-[var(--skill-card-image-ratio)]'
+          : 'h-[var(--skill-card-image-ratio)] w-full',
+        className,
+      )}
+    >
+      {typeof image === 'string' ? (
+        <span
+          role={imageAlt ? 'img' : undefined}
+          aria-label={imageAlt || undefined}
+          className="block h-full w-full bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url("${image}")`,
+            backgroundSize: SKILL_CARD_IMAGE_BACKGROUND_SIZE[imageFit],
+          }}
+        />
+      ) : (
+        <div className="h-full w-full">{image}</div>
+      )}
+    </div>
+  );
+}
+
+function getImageLayoutClassName(position: SkillCardImagePosition) {
+  if (position === 'left' || position === 'right') {
+    return 'flex flex-col lg:flex-row';
+  }
+
+  return 'flex flex-col';
+}
+
+function shouldRenderImageBeforeContent(position: SkillCardImagePosition) {
+  return position === 'top' || position === 'left';
 }
 
 function ExternalLinkIcon() {
   return (
     <svg
       aria-hidden="true"
-      className="h-4 w-4 transition-colors duration-200 group-hover/skill-card:text-[var(--skill-accent)]"
+      className="h-4 w-4"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"

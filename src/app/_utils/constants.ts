@@ -246,16 +246,24 @@ export type SkillCardType =
   | 'metric'
   | 'quiet';
 
+export type SkillCardImagePosition = 'top' | 'right' | 'bottom' | 'left';
+
+export type SkillCardImageFit =
+  | 'contain'
+  | 'cover'
+  | 'fill'
+  | 'none'
+  | 'scale-down'
+  | 'stretch';
+
 export const SKILL_CARD_CLASS_NAMES = {
   default:
-    'border-white/10 bg-white/[0.035] shadow-[0_16px_42px_rgba(0,0,0,0.18)]',
+    'border-white/[0.075] bg-white/[0.025] shadow-[0_14px_34px_rgba(0,0,0,0.15)]',
   feature:
-    'border-[color:color-mix(in_srgb,var(--skill-accent)_34%,rgba(255,255,255,0.12))] bg-[linear-gradient(135deg,color-mix(in_srgb,var(--skill-accent)_13%,rgba(255,255,255,0.06)),rgba(255,255,255,0.035)_58%,rgba(255,255,255,0.015))] shadow-[0_20px_54px_rgba(0,0,0,0.26)]',
-  chips:
-    'border-[color:color-mix(in_srgb,var(--skill-accent)_20%,rgba(255,255,255,0.10))] bg-[color:color-mix(in_srgb,var(--skill-accent)_7%,rgba(255,255,255,0.035))]',
+    'border-white/[0.09] bg-white/[0.038] shadow-[0_18px_46px_rgba(0,0,0,0.20)]',
+  chips: 'border-white/[0.075] bg-white/[0.022]',
   compact: 'border-white/10 bg-white/[0.025]',
-  metric:
-    'border-[color:color-mix(in_srgb,var(--skill-accent)_28%,rgba(255,255,255,0.12))] bg-surface-container-high/40',
+  metric: 'border-white/[0.08] bg-surface-container-high/35',
   quiet: 'border-white/10 bg-transparent',
 } as const satisfies Record<SkillCardType, string>;
 
@@ -267,6 +275,27 @@ export const SKILL_CARD_PADDING_CLASS_NAMES = {
   metric: 'p-4 lg:p-5',
   quiet: 'p-0',
 } as const satisfies Record<SkillCardType, string>;
+
+export const SKILL_CARD_IMAGE_DEFAULT_RATIOS = {
+  top: '7rem',
+  right: '34%',
+  bottom: '7rem',
+  left: '34%',
+} as const satisfies Record<SkillCardImagePosition, string>;
+
+export const SKILL_CARD_IMAGE_BACKGROUND_SIZE = {
+  contain: 'contain',
+  cover: 'cover',
+  fill: '100% 100%',
+  none: 'auto',
+  'scale-down': 'contain',
+  stretch: '100% 100%',
+} as const satisfies Record<SkillCardImageFit, string>;
+
+export const SKILL_PAGER_COPY = {
+  previousLabel: 'Previous skill content page',
+  nextLabel: 'Next skill content page',
+} as const;
 
 export type DesktopSkillsLayout = {
   id: string;

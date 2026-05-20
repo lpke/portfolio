@@ -1,8 +1,11 @@
 import {
   CapabilityCard,
   ProofPointCard,
+  SkillGraphic,
   SkillGrid,
+  SkillPage,
   SkillPageShell,
+  SkillPager,
   StackSkillCard,
   getCapability,
   getProofPoint,
@@ -21,58 +24,76 @@ export function TechnicalStrategySkill({ skill, variant }: SkillPageProps) {
 
   return (
     <SkillPageShell intro={skill.intro} variant={variant}>
-      <SkillGrid>
-        <CapabilityCard
-          capability={decisions}
-          eyebrow="Trade-offs"
-          type="feature"
-          className="lg:col-span-4"
+      <SkillPager>
+        <SkillPage
+          label="Decide"
+          summary="Trade-offs, business cases, and technical direction."
         >
-          <DecisionScale />
-        </CapabilityCard>
-        <StackSkillCard
-          skill={skill}
-          title="Strategy Toolkit"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={migration}
-          eyebrow="Business case"
-          type="feature"
-          className="lg:col-span-3"
-        />
-        <ProofPointCard
-          proofPoint={demo}
-          eyebrow="Communication"
-          type="feature"
-          className="lg:col-span-3"
-        />
-        <CapabilityCard
-          capability={stakeholders}
-          eyebrow="Stakeholders"
-          className="lg:col-span-3"
-        />
-        <CapabilityCard
-          capability={business}
-          eyebrow="Context"
-          className="lg:col-span-3"
-        />
-        <ProofPointCard
-          proofPoint={danone}
-          eyebrow="Client delivery"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={nonTechnical}
-          eyebrow="Translation"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={commerce}
-          eyebrow="Background"
-          className="lg:col-span-2"
-        />
-      </SkillGrid>
+          <SkillGrid>
+            <CapabilityCard
+              capability={decisions}
+              eyebrow="Trade-offs"
+              type="feature"
+              image={<SkillGraphic variant="strategy" />}
+              imagePosition="right"
+              imageRatio="34%"
+              className="lg:col-span-4"
+            >
+              <DecisionScale />
+            </CapabilityCard>
+            <StackSkillCard
+              skill={skill}
+              title="Strategy Toolkit"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={migration}
+              eyebrow="Business case"
+              type="feature"
+              className="lg:col-span-3"
+            />
+            <ProofPointCard
+              proofPoint={demo}
+              eyebrow="Communication"
+              type="feature"
+              className="lg:col-span-3"
+            />
+          </SkillGrid>
+        </SkillPage>
+
+        <SkillPage
+          label="Align"
+          summary="Stakeholder communication and business-aware engineering."
+        >
+          <SkillGrid>
+            <CapabilityCard
+              capability={stakeholders}
+              eyebrow="Stakeholders"
+              className="lg:col-span-3"
+            />
+            <CapabilityCard
+              capability={business}
+              eyebrow="Context"
+              className="lg:col-span-3"
+            />
+            <ProofPointCard
+              proofPoint={danone}
+              eyebrow="Client delivery"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={nonTechnical}
+              eyebrow="Translation"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={commerce}
+              eyebrow="Background"
+              className="lg:col-span-2"
+            />
+          </SkillGrid>
+        </SkillPage>
+      </SkillPager>
     </SkillPageShell>
   );
 }

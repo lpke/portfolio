@@ -1,13 +1,18 @@
 export {
   DESKTOP_SKILLS_LAYOUT,
   SKILL_CARD_CLASS_NAMES,
+  SKILL_CARD_IMAGE_BACKGROUND_SIZE,
+  SKILL_CARD_IMAGE_DEFAULT_RATIOS,
   SKILL_CARD_PADDING_CLASS_NAMES,
+  SKILL_PAGER_COPY,
   SKILL_PROFILES,
   SKILL_THEME_TOKENS,
   SKILLS_SECTION_COPY,
 } from '@/utils/constants';
 export type {
   DesktopSkillsLayout,
+  SkillCardImageFit,
+  SkillCardImagePosition,
   SkillCardType,
   SkillCapability,
   SkillId,

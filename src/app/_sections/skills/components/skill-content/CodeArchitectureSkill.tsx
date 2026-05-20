@@ -2,8 +2,11 @@ import { cx } from '../shared';
 import {
   CapabilityCard,
   ProofPointCard,
+  SkillGraphic,
   SkillGrid,
+  SkillPage,
   SkillPageShell,
+  SkillPager,
   StackSkillCard,
   getCapability,
   getProofPoint,
@@ -22,58 +25,76 @@ export function CodeArchitectureSkill({ skill, variant }: SkillPageProps) {
 
   return (
     <SkillPageShell intro={skill.intro} variant={variant}>
-      <SkillGrid>
-        <CapabilityCard
-          capability={systems}
-          eyebrow="System layer"
-          type="feature"
-          className="lg:col-span-3"
+      <SkillPager>
+        <SkillPage
+          label="Systems"
+          summary="Reusable UI, package boundaries, and architecture primitives."
         >
-          <SystemBlocks />
-        </CapabilityCard>
-        <ProofPointCard
-          proofPoint={library}
-          eyebrow="Shared package"
-          type="feature"
-          className="lg:col-span-3"
-        />
-        <ProofPointCard
-          proofPoint={vite}
-          eyebrow="Build result"
-          type="metric"
-          className="lg:col-span-2"
-        />
-        <CapabilityCard
-          capability={monorepo}
-          eyebrow="Boundaries"
-          className="lg:col-span-2"
-        />
-        <StackSkillCard
-          skill={skill}
-          title="Architecture Stack"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={nx}
-          eyebrow="Monorepo"
-          className="lg:col-span-2"
-        />
-        <CapabilityCard
-          capability={builds}
-          eyebrow="Builds"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={rollout}
-          eyebrow="Adoption"
-          className="lg:col-span-2"
-        />
-        <ProofPointCard
-          proofPoint={pwa}
-          eyebrow="Commerce architecture"
-          className="lg:col-span-6"
-        />
-      </SkillGrid>
+          <SkillGrid>
+            <CapabilityCard
+              capability={systems}
+              eyebrow="System layer"
+              type="feature"
+              image={<SkillGraphic variant="architecture" />}
+              imagePosition="right"
+              imageRatio="34%"
+              className="lg:col-span-3"
+            >
+              <SystemBlocks />
+            </CapabilityCard>
+            <ProofPointCard
+              proofPoint={library}
+              eyebrow="Shared package"
+              type="feature"
+              className="lg:col-span-3"
+            />
+            <CapabilityCard
+              capability={monorepo}
+              eyebrow="Boundaries"
+              className="lg:col-span-3"
+            />
+            <StackSkillCard
+              skill={skill}
+              title="Architecture Stack"
+              className="lg:col-span-3"
+            />
+          </SkillGrid>
+        </SkillPage>
+
+        <SkillPage
+          label="Scale"
+          summary="Build pipelines, rollout work, and large workspace delivery."
+        >
+          <SkillGrid>
+            <ProofPointCard
+              proofPoint={vite}
+              eyebrow="Build result"
+              type="metric"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={nx}
+              eyebrow="Monorepo"
+              className="lg:col-span-2"
+            />
+            <CapabilityCard
+              capability={builds}
+              eyebrow="Builds"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={rollout}
+              eyebrow="Adoption"
+              className="lg:col-span-2"
+            />
+            <ProofPointCard
+              proofPoint={pwa}
+              eyebrow="Commerce architecture"
+              className="lg:col-span-4"
+            />
+          </SkillGrid>
+        </SkillPage>
+      </SkillPager>
     </SkillPageShell>
   );
 }
