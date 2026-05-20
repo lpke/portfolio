@@ -345,6 +345,17 @@
   animation: skillPageExitPrevious 130ms ease-in both;
 }
 
+.skill-pager-progress-bar {
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: skillPagerProgress var(--skill-pager-auto-ms) linear forwards;
+  will-change: transform;
+}
+
+.skill-pager-progress-bar[data-skill-pager-paused='true'] {
+  animation-play-state: paused;
+}
+
 @keyframes heroReveal {
   to {
     opacity: 1;
@@ -426,6 +437,16 @@
   }
 }
 
+@keyframes skillPagerProgress {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
 @media (max-height: 999px) {
   .section-scroll-indicator {
     display: none;
@@ -455,6 +476,11 @@
 
   .skill-page-panel {
     animation: none !important;
+  }
+
+  .skill-pager-progress-bar {
+    animation: none !important;
+    transform: scaleX(1);
   }
 }
 

@@ -12,7 +12,11 @@ import {
 } from './primitives';
 import type { SkillPageProps } from './types';
 
-export function AiAutomationSkill({ skill, variant }: SkillPageProps) {
+export function AiAutomationSkill({
+  isVisible = true,
+  skill,
+  variant,
+}: SkillPageProps) {
   const agentic = getCapability(skill, 'Agentic Development');
   const context = getCapability(skill, 'AI Tooling & Context');
   const pipelines = getCapability(skill, 'CLI & Pipelines');
@@ -24,7 +28,7 @@ export function AiAutomationSkill({ skill, variant }: SkillPageProps) {
 
   return (
     <SkillPageShell intro={skill.intro} variant={variant}>
-      <SkillPager>
+      <SkillPager isVisible={isVisible}>
         <SkillPage
           label="Workflow"
           summary="Daily AI-assisted development patterns and local automation."

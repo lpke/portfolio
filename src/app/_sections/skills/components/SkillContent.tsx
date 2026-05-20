@@ -49,7 +49,7 @@ export function SkillContent({
       )}
       style={getSkillStyle(skill)}
     >
-      {renderSkillPage(skill, variant)}
+      {renderSkillPage(skill, variant, !isDesktop || isSelected)}
     </article>
   );
 }
@@ -57,8 +57,9 @@ export function SkillContent({
 function renderSkillPage(
   skill: SkillProfile,
   variant: SkillContentVariant,
+  isVisible: boolean,
 ): ReactNode {
-  const props = { skill, variant };
+  const props = { isVisible, skill, variant };
 
   switch (skill.id) {
     case 'product-engineering':

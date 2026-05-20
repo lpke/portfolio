@@ -4,6 +4,8 @@ export {
   SKILL_CARD_IMAGE_BACKGROUND_SIZE,
   SKILL_CARD_IMAGE_DEFAULT_RATIOS,
   SKILL_CARD_PADDING_CLASS_NAMES,
+  SKILL_PAGE_SHELL_CONFIG,
+  SKILL_PAGER_CONFIG,
   SKILL_PAGER_COPY,
   SKILL_PROFILES,
   SKILL_THEME_TOKENS,
@@ -16,6 +18,8 @@ export type {
   SkillCardType,
   SkillCapability,
   SkillId,
+  SkillPageShellConfig,
+  SkillPagerConfig,
   SkillProfile,
   SkillProofPoint,
 } from '@/utils/constants';

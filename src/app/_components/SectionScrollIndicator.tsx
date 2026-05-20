@@ -45,7 +45,9 @@ export function SectionScrollIndicator({
           ),
         );
 
-        return headings.find((heading) => heading.offsetParent !== null) ?? null;
+        return (
+          headings.find((heading) => heading.offsetParent !== null) ?? null
+        );
       };
 
       const updateVisibility = (isVisible: boolean) => {
@@ -120,7 +122,7 @@ export function SectionScrollIndicator({
     <div
       aria-hidden
       className={[
-        'section-scroll-indicator pointer-events-none absolute bottom-5 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 select-none md:flex',
+        'section-scroll-indicator pointer-events-none absolute bottom-5 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 select-none lg:flex',
         isNextHeadingEncountered
           ? 'invisible opacity-0'
           : 'visible opacity-100',

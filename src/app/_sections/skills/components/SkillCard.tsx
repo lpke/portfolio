@@ -69,14 +69,14 @@ export function SkillCard({
     'group/skill-card relative isolate min-w-0 overflow-hidden rounded-[8px] border transition-[background-color,filter] duration-200',
     SKILL_CARD_CLASS_NAMES[type],
     !hasImage && cardPaddingClassName,
-    isLinked && 'block cursor-pointer hover:brightness-110',
+    isLinked && 'block cursor-pointer hover:brightness-105',
     className,
   );
 
   const body = (
     <div
       className={cx(
-        'relative min-w-0 gap-4',
+        'relative z-10 min-w-0 gap-4',
         hasImage && getImageLayoutClassName(imagePosition),
       )}
     >
@@ -120,7 +120,8 @@ export function SkillCard({
         {title && (
           <h4
             className={cx(
-              'font-headline min-w-0 font-bold text-white',
+              'font-headline min-w-0 font-bold text-white transition-colors duration-200',
+              isLinked && 'group-hover/skill-card:text-[var(--skill-accent)]',
               type === 'feature'
                 ? 'text-xl leading-tight lg:text-2xl'
                 : 'text-base leading-snug lg:text-lg',
@@ -179,6 +180,7 @@ export function SkillCard({
         className={cardClassName}
         style={style}
       >
+        <SkillCardHoverOverlay />
         {body}
       </a>
     );
@@ -188,6 +190,15 @@ export function SkillCard({
     <article aria-label={ariaLabel} className={cardClassName} style={style}>
       {body}
     </article>
+  );
+}
+
+function SkillCardHoverOverlay() {
+  return (
+    <span
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 bg-[color:color-mix(in_srgb,var(--skill-accent)_7%,rgba(255,255,255,0.045))] opacity-0 transition-opacity duration-200 group-hover/skill-card:opacity-100"
+    />
   );
 }
 

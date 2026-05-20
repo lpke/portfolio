@@ -85,12 +85,13 @@ export const LAYOUT_CONFIG = {
   breakpoints: {
     sm: 640,
     md: 768,
+    lg: 1024,
   },
   mediaQueries: {
     belowSm: '(max-width: 639px)',
     belowMd: '(max-width: 767px)',
     desktopSkills: '(min-width: 1024px)',
-    sectionScrollIndicator: '(min-width: 768px) and (min-height: 1000px)',
+    sectionScrollIndicator: '(min-width: 1024px) and (min-height: 1000px)',
   },
   cssVars: {
     heroStableHeight: '--hero-stable-height',
@@ -292,10 +293,49 @@ export const SKILL_CARD_IMAGE_BACKGROUND_SIZE = {
   stretch: '100% 100%',
 } as const satisfies Record<SkillCardImageFit, string>;
 
+export type SkillPageShellConfig = {
+  contentGapClassNames: {
+    desktop: string;
+    mobile: string;
+  };
+};
+
+export const SKILL_PAGE_SHELL_CONFIG: SkillPageShellConfig = {
+  contentGapClassNames: {
+    desktop: 'mt-4',
+    mobile: 'mt-3',
+  },
+};
+
 export const SKILL_PAGER_COPY = {
+  ariaLabel: 'Skill content pages',
+  pauseLabel: 'Pause skill content page timer',
+  playLabel: 'Resume skill content page timer',
   previousLabel: 'Previous skill content page',
   nextLabel: 'Next skill content page',
 } as const;
+
+export type SkillPagerConfig = {
+  autoTransitionMs: number;
+  desktopWidthClassName: string;
+  indicatorLineClassName: string;
+  scrollPauseMs: number;
+  showArrowButtons: boolean;
+  swapMs: number;
+  swipeMaxOffAxisPx: number;
+  swipeMinDistancePx: number;
+};
+
+export const SKILL_PAGER_CONFIG: SkillPagerConfig = {
+  autoTransitionMs: 8000,
+  desktopWidthClassName: 'sm:w-32',
+  indicatorLineClassName: 'h-1',
+  scrollPauseMs: 500,
+  showArrowButtons: false,
+  swapMs: 130,
+  swipeMaxOffAxisPx: 56,
+  swipeMinDistancePx: 44,
+};
 
 export type DesktopSkillsLayout = {
   id: string;
