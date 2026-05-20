@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { SKILLS_SECTION_CONTENT, type SkillData } from '../data/skills';
+import { SKILLS_SECTION_COPY, type SkillProfile } from '../data/skills';
 
 type SkillTokenStyle = CSSProperties & {
   '--skill-accent': string;
@@ -10,7 +10,7 @@ export function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(' ');
 }
 
-export function getSkillStyle(skill: SkillData): SkillTokenStyle {
+export function getSkillStyle(skill: SkillProfile): SkillTokenStyle {
   return {
     '--skill-accent': skill.accent,
     '--skill-accent-soft': skill.accentSoft,
@@ -24,21 +24,21 @@ export function SkillsHeading() {
         data-section-heading
         className="font-headline text-5xl leading-none font-black tracking-tighter text-white sm:text-6xl md:text-7xl lg:text-8xl"
       >
-        {SKILLS_SECTION_CONTENT.heading.lead}{' '}
+        {SKILLS_SECTION_COPY.heading.lead}{' '}
         <span className="text-primary italic">
-          {SKILLS_SECTION_CONTENT.heading.accent}
+          {SKILLS_SECTION_COPY.heading.accent}
         </span>
       </h1>
     </header>
   );
 }
 
-export function StackChips({
+export function SkillChips({
   items,
   limit,
   className,
 }: {
-  items: string[];
+  items: readonly string[];
   limit?: number;
   className?: string;
 }) {
@@ -57,6 +57,8 @@ export function StackChips({
     </div>
   );
 }
+
+export const StackChips = SkillChips;
 
 export function ChevronIcon({ open }: { open?: boolean }) {
   return (

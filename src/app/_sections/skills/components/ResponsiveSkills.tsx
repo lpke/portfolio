@@ -22,20 +22,19 @@ type LoadedSkillVariant = {
 
 const { mediaQueries } = LAYOUT_CONFIG;
 
-const variantLoaders: Record<SkillVariant, () => Promise<SkillVariantComponent>> =
-  {
-    mobile: () =>
-      import('./AccordionIndexSkills').then(
-        (mod) => mod.AccordionIndexSkills,
-      ),
-    desktop: () =>
-      import('./ImmersiveShowcaseSkills').then(
-        (mod) => mod.ImmersiveShowcaseSkills,
-      ),
-  };
+const variantLoaders: Record<
+  SkillVariant,
+  () => Promise<SkillVariantComponent>
+> = {
+  mobile: () =>
+    import('./AccordionIndexSkills').then((mod) => mod.MobileSkills),
+  desktop: () =>
+    import('./ImmersiveShowcaseSkills').then((mod) => mod.DesktopSkills),
+};
 
-const variantCache: Partial<Record<SkillVariant, Promise<SkillVariantComponent>>> =
-  {};
+const variantCache: Partial<
+  Record<SkillVariant, Promise<SkillVariantComponent>>
+> = {};
 
 function loadSkillVariant(variant: SkillVariant) {
   const cached = variantCache[variant];
