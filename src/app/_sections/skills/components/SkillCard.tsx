@@ -14,6 +14,9 @@ export type { SkillCardImageFit, SkillCardImagePosition, SkillCardType };
 
 type SkillCardStyle = CSSProperties & {
   '--skill-card-image-ratio'?: string;
+  '--skill-card-image-width'?: string;
+  '--skill-card-image-min-width'?: string;
+  '--skill-card-image-max-width'?: string;
 };
 
 type SkillCardProps = {
@@ -29,6 +32,9 @@ type SkillCardProps = {
   imageAlt?: string;
   imagePosition?: SkillCardImagePosition;
   imageRatio?: string;
+  imageWidth?: string;
+  imageMinWidth?: string;
+  imageMaxWidth?: string;
   imageFit?: SkillCardImageFit;
   imageClassName?: string;
   className?: string;
@@ -50,6 +56,9 @@ export function SkillCard({
   imageAlt = '',
   imagePosition = 'top',
   imageRatio,
+  imageWidth,
+  imageMinWidth,
+  imageMaxWidth,
   imageFit = 'contain',
   imageClassName,
   className,
@@ -61,8 +70,16 @@ export function SkillCard({
   const hasImage = Boolean(image);
   const resolvedImageRatio =
     imageRatio ?? SKILL_CARD_IMAGE_DEFAULT_RATIOS[imagePosition];
+  const isInlineImage = imagePosition === 'left' || imagePosition === 'right';
   const style: SkillCardStyle = {
     '--skill-card-image-ratio': resolvedImageRatio,
+    ...(isInlineImage
+      ? {
+          '--skill-card-image-width': imageWidth ?? resolvedImageRatio,
+          '--skill-card-image-min-width': imageMinWidth ?? '0%',
+          '--skill-card-image-max-width': imageMaxWidth ?? '100%',
+        }
+      : {}),
   };
   const cardPaddingClassName = SKILL_CARD_PADDING_CLASS_NAMES[type];
   const cardClassName = cx(
@@ -86,8 +103,8 @@ export function SkillCard({
           image={image}
           imageAlt={imageAlt}
           imageFit={imageFit}
-          imagePosition={imagePosition}
           imagePlacement={imagePosition}
+          isInlineImage={isInlineImage}
           className={imageClassName}
         />
       )}
@@ -169,8 +186,8 @@ export function SkillCard({
           image={image}
           imageAlt={imageAlt}
           imageFit={imageFit}
-          imagePosition={imagePosition}
           imagePlacement={imagePosition}
+          isInlineImage={isInlineImage}
           className={imageClassName}
         />
       )}
@@ -213,23 +230,23 @@ function SkillCardImage({
   image,
   imageAlt,
   imageFit,
-  imagePosition,
   imagePlacement,
+  isInlineImage,
   className,
 }: {
   image: ReactNode | string | undefined;
   imageAlt: string;
   imageFit: SkillCardImageFit;
-  imagePosition: SkillCardImagePosition;
   imagePlacement: SkillCardImagePosition;
+  isInlineImage: boolean;
   className?: string;
 }) {
   return (
     <div
       className={cx(
         'min-w-0 shrink-0 overflow-hidden bg-white/[0.025]',
-        imagePosition === 'left' || imagePosition === 'right'
-          ? 'h-28 w-full lg:h-auto lg:w-[var(--skill-card-image-ratio)]'
+        isInlineImage
+          ? 'h-28 w-full lg:h-auto lg:w-[var(--skill-card-image-width)] lg:max-w-[var(--skill-card-image-max-width)] lg:min-w-[var(--skill-card-image-min-width)]'
           : 'h-[var(--skill-card-image-ratio)] w-full',
         imagePlacement === 'right' && 'lg:order-last',
         className,

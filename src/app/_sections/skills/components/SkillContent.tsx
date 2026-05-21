@@ -1,15 +1,12 @@
 import type { ReactNode } from 'react';
 import type { SkillProfile } from '../data/skills';
-import {
-  AiAutomationSkill,
-  CodeArchitectureSkill,
-  DeveloperToolingSkill,
-  GenericSkill,
-  ProductEngineeringSkill,
-  ShippingTestingSkill,
-  TechnicalStrategySkill,
-  type SkillContentVariant,
-} from './skill-content';
+import { AiAutomationSkill } from './skill-content/AiAutomationSkill';
+import { CodeArchitectureSkill } from './skill-content/CodeArchitectureSkill';
+import { DeveloperToolingSkill } from './skill-content/DeveloperToolingSkill';
+import { ProductEngineeringSkill } from './skill-content/ProductEngineeringSkill';
+import { ShippingTestingSkill } from './skill-content/ShippingTestingSkill';
+import { TechnicalStrategySkill } from './skill-content/TechnicalStrategySkill';
+import type { SkillContentVariant } from './skill-content/types';
 import { cx, getSkillStyle } from './shared';
 
 type SkillContentProps = {
@@ -59,7 +56,7 @@ function renderSkillPage(
   variant: SkillContentVariant,
   isVisible: boolean,
 ): ReactNode {
-  const props = { isVisible, skill, variant };
+  const props = { isVisible, variant };
 
   switch (skill.id) {
     case 'product-engineering':
@@ -74,7 +71,7 @@ function renderSkillPage(
       return <ShippingTestingSkill {...props} />;
     case 'technical-strategy':
       return <TechnicalStrategySkill {...props} />;
-    default:
-      return <GenericSkill {...props} />;
   }
+
+  return null;
 }

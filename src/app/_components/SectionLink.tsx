@@ -10,7 +10,7 @@ const ID_TO_PATH: Record<string, string> = Object.fromEntries(
 );
 
 type SectionLinkProps = {
-  /** The section id to scroll to, e.g. 'projects' */
+  /** The section id to scroll to. */
   to: string;
   /** Optional DOM id to scroll to while keeping the URL/active section tied to `to`. */
   scrollTargetId?: string;
@@ -20,7 +20,7 @@ type SectionLinkProps = {
 
 /**
  * A client-side link that smooth-scrolls to a section and updates the URL
- * to a clean path (e.g. `/projects`). Renders an `<a>` for accessibility
+ * to a clean path. Renders an `<a>` for accessibility
  * with a real href as fallback.
  */
 export function SectionLink({

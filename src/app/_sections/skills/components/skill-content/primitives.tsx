@@ -15,11 +15,7 @@ import {
   SKILL_PAGER_CONFIG,
   SKILL_PAGER_COPY,
   SKILL_PROOF_POINT_CARD_SPAN_CLASS_NAMES,
-  SKILL_PROOF_POINT_PAGE_SIZE,
-  SKILL_PROOF_POINT_PAGER_COPY,
-  type SkillCapability,
-  type SkillProfile,
-  type SkillProofPoint,
+  type SkillProofPointCardSpan,
 } from '../../data/skills';
 import {
   SkillCard,
@@ -35,6 +31,9 @@ type SkillCardImageProps = {
   imageAlt?: string;
   imagePosition?: SkillCardImagePosition;
   imageRatio?: string;
+  imageWidth?: string;
+  imageMinWidth?: string;
+  imageMaxWidth?: string;
   imageFit?: SkillCardImageFit;
   imageClassName?: string;
 };
@@ -771,316 +770,49 @@ export function SkillPage({ children }: SkillPagerPageProps) {
   return <>{children}</>;
 }
 
-export function StackSkillCard({
-  skill,
+export function ProofPointCard({
   title,
-  className,
-}: {
-  skill: SkillProfile;
-  title: string;
-  className?: string;
-}) {
-  return (
-    <SkillCard
-      type="chips"
-      title={title}
-      eyebrow="Stack"
-      chips={skill.tools}
-      className={className}
-    />
-  );
-}
-
-export function SkillProofPointPager({
-  skill,
-  isVisible = true,
-}: {
-  skill: SkillProfile;
-  isVisible?: boolean;
-}) {
-  const pages = getProofPointPages(skill.proofPoints);
-
-  return (
-    <SkillPager isVisible={isVisible}>
-      {pages.map((proofPoints, index) => (
-        <SkillPage
-          key={`${skill.id}-${index}`}
-          label={`${SKILL_PROOF_POINT_PAGER_COPY.pageLabel} ${index + 1}`}
-          summary={`${skill.title} ${SKILL_PROOF_POINT_PAGER_COPY.examplesSummary} ${
-            index + 1
-          }`}
-        >
-          <SkillGrid>
-            {proofPoints.map((proofPoint) => (
-              <ProofPointCard
-                key={`${skill.id}-${proofPoint.title}`}
-                proofPoint={proofPoint}
-                type={proofPoint.image ? 'feature' : 'default'}
-                className={
-                  SKILL_PROOF_POINT_CARD_SPAN_CLASS_NAMES[
-                    proofPoint.cardSpan ?? 'half'
-                  ]
-                }
-              />
-            ))}
-          </SkillGrid>
-        </SkillPage>
-      ))}
-    </SkillPager>
-  );
-}
-
-export function CapabilityCard({
-  capability,
-  eyebrow = 'Capability',
-  type = 'default',
+  eyebrow = 'Proof point',
+  description,
+  href,
+  chips,
+  showGithubIcon,
+  cardSpan = 'half',
+  type,
   className,
   children,
   ...imageProps
 }: {
-  capability?: SkillCapability;
+  title: ReactNode;
   eyebrow?: string;
+  description?: ReactNode;
+  href?: string;
+  chips?: readonly string[];
+  showGithubIcon?: boolean;
+  cardSpan?: SkillProofPointCardSpan;
   type?: SkillCardType;
   className?: string;
   children?: ReactNode;
 } & SkillCardImageProps) {
-  if (!capability) {
-    return null;
-  }
+  const resolvedType = type ?? (imageProps.image ? 'feature' : 'default');
 
   return (
     <SkillCard
-      type={type}
-      title={capability.title}
+      type={resolvedType}
+      title={title}
       eyebrow={eyebrow}
-      description={capability.description}
-      className={className}
+      description={description}
+      href={href}
+      chips={chips}
+      meta={showGithubIcon ? <GithubIcon className="h-4 w-4" /> : undefined}
+      className={cx(
+        SKILL_PROOF_POINT_CARD_SPAN_CLASS_NAMES[cardSpan],
+        className,
+      )}
       {...imageProps}
     >
       {children}
     </SkillCard>
-  );
-}
-
-export function ProofPointCard({
-  proofPoint,
-  eyebrow = 'Proof point',
-  type = 'default',
-  className,
-  children,
-  ...imageProps
-}: {
-  proofPoint?: SkillProofPoint;
-  eyebrow?: string;
-  type?: SkillCardType;
-  className?: string;
-  children?: ReactNode;
-} & SkillCardImageProps) {
-  if (!proofPoint) {
-    return null;
-  }
-
-  return (
-    <SkillCard
-      type={type}
-      title={proofPoint.title}
-      eyebrow={proofPoint.eyebrow ?? eyebrow}
-      description={proofPoint.description || undefined}
-      href={proofPoint.url}
-      chips={proofPoint.chips}
-      meta={
-        proofPoint.showGithubIcon ? (
-          <GithubIcon className="h-4 w-4" />
-        ) : undefined
-      }
-      className={className}
-      image={proofPoint.image ?? imageProps.image}
-      imageAlt={proofPoint.imageAlt ?? imageProps.imageAlt}
-      imagePosition={proofPoint.imagePosition ?? imageProps.imagePosition}
-      imageRatio={proofPoint.imageRatio ?? imageProps.imageRatio}
-      imageFit={proofPoint.imageFit ?? imageProps.imageFit}
-      imageClassName={proofPoint.imageClassName ?? imageProps.imageClassName}
-    >
-      {children}
-    </SkillCard>
-  );
-}
-
-function getProofPointPages(proofPoints: readonly SkillProofPoint[]) {
-  const pages: SkillProofPoint[][] = [];
-
-  for (
-    let index = 0;
-    index < proofPoints.length;
-    index += SKILL_PROOF_POINT_PAGE_SIZE
-  ) {
-    pages.push(proofPoints.slice(index, index + SKILL_PROOF_POINT_PAGE_SIZE));
-  }
-
-  return pages;
-}
-
-export function getCapability(skill: SkillProfile, title: string) {
-  return skill.capabilities.find((capability) => capability.title === title);
-}
-
-export function getProofPoint(skill: SkillProfile, title: string) {
-  return skill.proofPoints.find((proofPoint) => proofPoint.title === title);
-}
-
-export function SkillGraphic({
-  variant,
-}: {
-  variant:
-    | 'product'
-    | 'automation'
-    | 'architecture'
-    | 'tooling'
-    | 'shipping'
-    | 'strategy';
-}) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 320 220"
-      className="h-full w-full text-[var(--skill-accent)]"
-      preserveAspectRatio="xMidYMid meet"
-    >
-      <rect width="320" height="220" rx="12" fill="rgba(255,255,255,0.02)" />
-      <GraphicPattern variant={variant} />
-    </svg>
-  );
-}
-
-function GraphicPattern({
-  variant,
-}: {
-  variant:
-    | 'product'
-    | 'automation'
-    | 'architecture'
-    | 'tooling'
-    | 'shipping'
-    | 'strategy';
-}) {
-  if (variant === 'automation') {
-    return (
-      <>
-        <path d="M64 110h192" stroke="currentColor" strokeOpacity="0.34" />
-        <circle cx="80" cy="110" r="24" fill="currentColor" opacity="0.16" />
-        <circle cx="160" cy="110" r="30" fill="currentColor" opacity="0.26" />
-        <circle cx="240" cy="110" r="24" fill="currentColor" opacity="0.16" />
-        <path d="M146 96h28v28h-28z" fill="currentColor" opacity="0.82" />
-      </>
-    );
-  }
-
-  if (variant === 'architecture') {
-    return (
-      <>
-        <path
-          d="m160 50 74 42v84l-74 42-74-42V92z"
-          fill="currentColor"
-          opacity="0.10"
-        />
-        <path
-          d="m160 50 74 42-74 42-74-42zm0 84v84m-74-126v84m148-84v84"
-          stroke="currentColor"
-          strokeOpacity="0.62"
-        />
-      </>
-    );
-  }
-
-  if (variant === 'tooling') {
-    return (
-      <>
-        <rect
-          x="54"
-          y="52"
-          width="212"
-          height="116"
-          rx="10"
-          fill="currentColor"
-          opacity="0.10"
-        />
-        <path d="M82 86h58M82 112h104M82 138h76" stroke="currentColor" />
-        <rect
-          x="204"
-          y="82"
-          width="34"
-          height="34"
-          rx="5"
-          fill="currentColor"
-        />
-      </>
-    );
-  }
-
-  if (variant === 'shipping') {
-    return (
-      <>
-        <path
-          d="M160 44 234 84v58c0 48-31 80-74 92-43-12-74-44-74-92V84z"
-          fill="currentColor"
-          opacity="0.12"
-        />
-        <path
-          d="m124 132 24 24 52-60"
-          stroke="currentColor"
-          strokeWidth="12"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          opacity="0.76"
-        />
-      </>
-    );
-  }
-
-  if (variant === 'strategy') {
-    return (
-      <>
-        <path
-          d="M58 158 116 112l46 34 92-88"
-          stroke="currentColor"
-          strokeWidth="8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          opacity="0.76"
-        />
-        <circle cx="116" cy="112" r="16" fill="currentColor" opacity="0.20" />
-        <circle cx="162" cy="146" r="16" fill="currentColor" opacity="0.20" />
-        <circle cx="254" cy="58" r="18" fill="currentColor" opacity="0.30" />
-      </>
-    );
-  }
-
-  return (
-    <>
-      <path
-        d="M44 72h232M44 112h232M44 152h232M84 44v132M160 44v132M236 44v132"
-        stroke="currentColor"
-        strokeOpacity="0.22"
-      />
-      <rect
-        x="116"
-        y="70"
-        width="88"
-        height="76"
-        rx="10"
-        fill="currentColor"
-        opacity="0.18"
-      />
-      <rect
-        x="142"
-        y="92"
-        width="36"
-        height="36"
-        rx="6"
-        fill="currentColor"
-        opacity="0.70"
-      />
-    </>
   );
 }
 
