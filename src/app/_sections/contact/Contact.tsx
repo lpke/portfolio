@@ -1,6 +1,6 @@
 import { PageHero } from '@/components/PageHero';
 import { CONTACT_SECTION_CONTENT, SECTION_IDS } from '@/utils/constants';
-import { ContactContent } from './components/ContactContent';
+import { ContactContent } from '@/components/contact/ContactContent';
 
 export function Contact() {
   return (

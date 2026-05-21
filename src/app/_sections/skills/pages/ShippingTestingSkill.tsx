@@ -1,11 +1,11 @@
+import { SkillCard } from '@/components/skills/SkillCard';
 import {
-  ProofPointCard,
   SkillGrid,
   SkillPage,
   SkillPageShell,
   SkillPager,
-} from './primitives';
-import type { SkillPageProps } from './types';
+} from '@/components/skills/SkillPagePrimitives';
+import type { SkillPageProps } from '@/components/skills/types';
 
 export function ShippingTestingSkill({
   isVisible = true,
@@ -19,17 +19,17 @@ export function ShippingTestingSkill({
       <SkillPager isVisible={isVisible}>
         <SkillPage label="Page 1" summary="Shipping & Testing examples page 1">
           <SkillGrid>
-            <ProofPointCard
+            <SkillCard
               title="Custom CI/CD Pipeline"
               eyebrow="CI/CD"
               description="GitHub Actions pipeline with AWS CDK infrastructure (S3 + CloudFront) for a multi-site Vite build."
             />
-            <ProofPointCard
+            <SkillCard
               title="Shared Tool E2E Suite"
               eyebrow="E2E testing"
               description="Built comprehensive Playwright E2E tests for an internal form tool used across multiple patient-facing apps."
             />
-            <ProofPointCard
+            <SkillCard
               title="A/B Experimentation"
               eyebrow="Experimentation"
               description="Built and shipped multiple VWO A/B campaigns with custom variant UIs, client-side logic, and GA4 event tracking."
@@ -38,12 +38,12 @@ export function ShippingTestingSkill({
         </SkillPage>
         <SkillPage label="Page 2" summary="Shipping & Testing examples page 2">
           <SkillGrid>
-            <ProofPointCard
+            <SkillCard
               title="Accessibility at Montu"
               eyebrow="Accessibility"
               description="Implemented keyboard navigation, ARIA attributes, and contrast fixes across patient-facing apps."
             />
-            <ProofPointCard
+            <SkillCard
               title="Healthcare App QA"
               eyebrow="Unit testing"
               description="Unit testing with Vitest and a custom GUI testing tool with state controls for rapid manual QA."
@@ -51,7 +51,7 @@ export function ShippingTestingSkill({
               imageAlt="Healthcare app QA screenshot"
               imageFit="cover"
             />
-            <ProofPointCard
+            <SkillCard
               title="Stack"
               eyebrow="Stack"
               cardSpan="full"

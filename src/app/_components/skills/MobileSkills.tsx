@@ -8,9 +8,11 @@ import {
   type PointerEvent,
 } from 'react';
 import { MOBILE_OPEN_ACCORDION_INSET_REM } from '@/utils/constants';
-import { SKILL_PROFILES, type SkillProfile } from '../data/skills';
+import {
+  SKILL_PAGES,
+  type SkillPageDefinition,
+} from '@/sections/skills/pages/skillPages';
 import { getSkillIcon } from './SkillIcons';
-import { SkillContent } from './SkillContent';
 import { SkillsShell } from './SkillsShell';
 import { ChevronIcon, SkillsHeading, cx, getSkillStyle } from './shared';
 
@@ -38,7 +40,7 @@ export function MobileSkills({ withShell = true }: { withShell?: boolean }) {
       </div>
 
       <div className="relative mx-auto grid w-full max-w-7xl gap-3 px-5 pb-6 md:px-8">
-        {SKILL_PROFILES.map((skill) => {
+        {SKILL_PAGES.map((skill) => {
           const isOpen = openIds.has(skill.id);
 
           return (
@@ -61,14 +63,12 @@ export function MobileSkills({ withShell = true }: { withShell?: boolean }) {
   return <SkillsShell>{content}</SkillsShell>;
 }
 
-export const AccordionIndexSkills = MobileSkills;
-
 function MobileSkillPanel({
   skill,
   isOpen,
   onToggle,
 }: {
-  skill: SkillProfile;
+  skill: SkillPageDefinition;
   isOpen: boolean;
   onToggle: (id: string) => void;
 }) {
@@ -103,7 +103,7 @@ function MobileSkillPanel({
   }, [isOpen]);
 
   const handlePointerDown = (event: PointerEvent<HTMLElement>) => {
-    if (isInteractiveSkillContentTarget(event)) {
+    if (isInteractiveSkillPageTarget(event)) {
       tapStartRef.current = null;
       return;
     }
@@ -165,6 +165,7 @@ function MobileSkillPanel({
 
   const railInset = isOpen ? `-${MOBILE_OPEN_ACCORDION_INSET_REM}rem` : '0rem';
   const railInsetStyle = { left: railInset, right: railInset };
+  const Page = skill.Page;
 
   return (
     <div className="relative">
@@ -254,7 +255,7 @@ function MobileSkillPanel({
                 isContentVisible ? 'opacity-100' : 'opacity-0',
               )}
             >
-              <SkillContent skill={skill} variant="mobile" />
+              <Page variant="mobile" isVisible />
             </div>
           </div>
         </div>
@@ -263,7 +264,7 @@ function MobileSkillPanel({
   );
 }
 
-function isInteractiveSkillContentTarget(event: PointerEvent<HTMLElement>) {
+function isInteractiveSkillPageTarget(event: PointerEvent<HTMLElement>) {
   const target = event.target;
 
   if (!(target instanceof Element)) {
@@ -283,7 +284,7 @@ function isInteractiveSkillContentTarget(event: PointerEvent<HTMLElement>) {
   );
 }
 
-function SkillStateIcon({ skill }: { skill: SkillProfile }) {
+function SkillStateIcon({ skill }: { skill: SkillPageDefinition }) {
   return (
     <span className="grid h-7 w-7 place-items-center">
       <span

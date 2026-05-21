@@ -1,11 +1,11 @@
+import { SkillCard } from '@/components/skills/SkillCard';
 import {
-  ProofPointCard,
   SkillGrid,
   SkillPage,
   SkillPageShell,
   SkillPager,
-} from './primitives';
-import type { SkillPageProps } from './types';
+} from '@/components/skills/SkillPagePrimitives';
+import type { SkillPageProps } from '@/components/skills/types';
 
 export function ProductEngineeringSkill({
   isVisible = true,
@@ -19,7 +19,7 @@ export function ProductEngineeringSkill({
       <SkillPager isVisible={isVisible}>
         <SkillPage label="Page 1" summary="Product Engineering examples page 1">
           <SkillGrid>
-            <ProofPointCard
+            <SkillCard
               title="Healthcare Patient Portal"
               eyebrow="Health tech"
               description="Sole frontend architect of a greenfield React SPA serving ~1,500 new users daily across AU and NZ."
@@ -28,7 +28,7 @@ export function ProductEngineeringSkill({
               imageFit="cover"
               imagePosition="right"
             />
-            <ProofPointCard
+            <SkillCard
               title="McDonald's Menu Boards"
               eyebrow="Retail"
               description="Built React components deployed to digital screens at 2,000+ McDonald's stores across Australia and New Zealand."
@@ -38,7 +38,7 @@ export function ProductEngineeringSkill({
               imageFit="cover"
               imagePosition="right"
             />
-            <ProofPointCard
+            <SkillCard
               title="Nutricia / Danone"
               eyebrow="Commerce"
               description="SSO, loyalty program, and branded checkout on a headless React/Magento PWA for one of the world's largest food companies."
@@ -51,7 +51,7 @@ export function ProductEngineeringSkill({
         </SkillPage>
         <SkillPage label="Page 2" summary="Product Engineering examples page 2">
           <SkillGrid>
-            <ProofPointCard
+            <SkillCard
               title="Property Listings Portal"
               eyebrow="Full-stack"
               description="Full-stack Next.js/MongoDB app with auth, serverless functions, and a dynamic data grid for real estate launches."
@@ -59,7 +59,7 @@ export function ProductEngineeringSkill({
               imageAlt="Property listings portal screenshot"
               imageFit="cover"
             />
-            <ProofPointCard
+            <SkillCard
               title="Milkrun"
               eyebrow="E-commerce"
               description="Senior frontend on a TypeScript/React Shopify site built with Next.js. Code reviews and mentoring."
@@ -68,7 +68,7 @@ export function ProductEngineeringSkill({
               imageAlt="Milkrun website screenshot"
               imageFit="cover"
             />
-            <ProofPointCard
+            <SkillCard
               title="Stack"
               eyebrow="Stack"
               cardSpan="full"

@@ -1,11 +1,11 @@
+import { SkillCard } from '@/components/skills/SkillCard';
 import {
-  ProofPointCard,
   SkillGrid,
   SkillPage,
   SkillPageShell,
   SkillPager,
-} from './primitives';
-import type { SkillPageProps } from './types';
+} from '@/components/skills/SkillPagePrimitives';
+import type { SkillPageProps } from '@/components/skills/types';
 
 export function AiAutomationSkill({
   isVisible = true,
@@ -19,34 +19,35 @@ export function AiAutomationSkill({
       <SkillPager isVisible={isVisible}>
         <SkillPage label="Page 1" summary="AI & Automation examples page 1">
           <SkillGrid>
-            <ProofPointCard
+            <SkillCard
               title="code-to-notion"
               eyebrow="Open source"
               description="Node CLI that uploads codebases to Notion with full Git context. Built to give AI agents structured code reasoning."
               href="https://github.com/lpke/code-to-notion"
-              showGithubIcon
+              showGithubIndicator
               image="/images/skills/notion-ai.png"
               imageAlt="code-to-notion project screenshot"
               imageFit="cover"
             />
-            <ProofPointCard
+            <SkillCard
               title="aspyn"
               eyebrow="Open source"
               description="Local pipeline engine that gives your scripts a memory. Stateful step runners, change detection, crash recovery, and scheduling."
               cardSpan="full"
               href="https://github.com/lpke/aspyn-legacy"
-              showGithubIcon
+              showGithubIndicator
               image="/images/skills/aspyn-cli.png"
               imageAlt="aspyn CLI screenshot"
               imageFit="cover"
               imagePosition="right"
+              imageWidth="46%"
             />
-            <ProofPointCard
+            <SkillCard
               title="Neovim + CodeCompanion"
               eyebrow="Dev environment"
               description="Custom Lua-based AI config with multi-model support, agentic workflows, slash commands, and tool approval flows."
               href="https://github.com/lpke/nvim"
-              showGithubIcon
+              showGithubIndicator
               image="/images/skills/nvim-codecompanion.png"
               imageAlt="Neovim CodeCompanion screenshot"
               imageFit="cover"
@@ -55,17 +56,17 @@ export function AiAutomationSkill({
         </SkillPage>
         <SkillPage label="Page 2" summary="AI & Automation examples page 2">
           <SkillGrid>
-            <ProofPointCard
+            <SkillCard
               title="AI in Production Teams"
               eyebrow="Production"
               description="Used agentic coding tools daily for feature development, debugging, and iteration across a 100+ engineer codebase."
             />
-            <ProofPointCard
+            <SkillCard
               title="Local LLM Automation"
               eyebrow="Local AI"
               description="Ollama-powered local models for lightweight tasks like web page parsing and text processing."
             />
-            <ProofPointCard
+            <SkillCard
               title="Stack"
               eyebrow="Stack"
               cardSpan="full"

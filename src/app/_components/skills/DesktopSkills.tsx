@@ -3,13 +3,14 @@
 import { useState, type CSSProperties, type KeyboardEvent } from 'react';
 import {
   DESKTOP_SKILLS_LAYOUT,
-  SKILL_PROFILES,
   SKILLS_SECTION_COPY,
   type DesktopSkillsLayout,
-  type SkillProfile,
-} from '../data/skills';
+} from '@/utils/constants';
+import {
+  SKILL_PAGES,
+  type SkillPageDefinition,
+} from '@/sections/skills/pages/skillPages';
 import { getSkillIcon } from './SkillIcons';
-import { SkillContent } from './SkillContent';
 import { SkillsShell } from './SkillsShell';
 import { SkillsHeading, cx, getSkillStyle } from './shared';
 
@@ -25,12 +26,11 @@ type RailItemStyle = CSSProperties & {
 
 export function DesktopSkills({ withShell = true }: { withShell?: boolean }) {
   const layout = DESKTOP_SKILLS_LAYOUT;
-  const initialId = SKILL_PROFILES[0]?.id ?? '';
+  const initialId = SKILL_PAGES[0]?.id ?? '';
   const [selectedId, setSelectedId] = useState<string>(initialId);
 
   const selectedSkill =
-    SKILL_PROFILES.find((skill) => skill.id === selectedId) ??
-    SKILL_PROFILES[0];
+    SKILL_PAGES.find((skill) => skill.id === selectedId) ?? SKILL_PAGES[0];
 
   if (!selectedSkill) {
     return null;
@@ -43,13 +43,13 @@ export function DesktopSkills({ withShell = true }: { withShell?: boolean }) {
   };
 
   const selectByOffset = (offset: number) => {
-    const currentIndex = SKILL_PROFILES.findIndex(
+    const currentIndex = SKILL_PAGES.findIndex(
       (skill) => skill.id === selectedId,
     );
     const baseIndex = currentIndex >= 0 ? currentIndex : 0;
     const nextIndex =
-      (baseIndex + offset + SKILL_PROFILES.length) % SKILL_PROFILES.length;
-    const nextSkill = SKILL_PROFILES[nextIndex];
+      (baseIndex + offset + SKILL_PAGES.length) % SKILL_PAGES.length;
+    const nextSkill = SKILL_PAGES[nextIndex];
 
     if (nextSkill) {
       selectSkill(nextSkill.id);
@@ -71,13 +71,13 @@ export function DesktopSkills({ withShell = true }: { withShell?: boolean }) {
 
     if (event.key === 'Home') {
       event.preventDefault();
-      selectSkill(SKILL_PROFILES[0]?.id ?? '');
+      selectSkill(SKILL_PAGES[0]?.id ?? '');
       return;
     }
 
     if (event.key === 'End') {
       event.preventDefault();
-      selectSkill(SKILL_PROFILES[SKILL_PROFILES.length - 1]?.id ?? '');
+      selectSkill(SKILL_PAGES[SKILL_PAGES.length - 1]?.id ?? '');
     }
   };
 
@@ -118,17 +118,30 @@ export function DesktopSkills({ withShell = true }: { withShell?: boolean }) {
               layout.contentAlignClassName,
             )}
           >
-            {SKILL_PROFILES.map((skill) => (
-              <SkillContent
-                key={skill.id}
-                skill={skill}
-                variant="desktop"
-                isSelected={skill.id === selectedId}
-                panelId={getPanelId(layout.id, skill.id)}
-                labelledBy={getTabId(layout.id, skill.id)}
-                className={layout.contentMaxClassName}
-              />
-            ))}
+            {SKILL_PAGES.map((skill) => {
+              const { Page } = skill;
+              const isSelected = skill.id === selectedId;
+
+              return (
+                <article
+                  key={skill.id}
+                  id={getPanelId(layout.id, skill.id)}
+                  role="tabpanel"
+                  aria-labelledby={getTabId(layout.id, skill.id)}
+                  aria-hidden={!isSelected}
+                  className={cx(
+                    'w-full col-start-1 row-start-1 py-4 transition-[opacity,visibility] duration-250 ease-out lg:pt-0 lg:pb-4',
+                    isSelected
+                      ? 'visible opacity-100'
+                      : 'pointer-events-none invisible opacity-0',
+                    layout.contentMaxClassName,
+                  )}
+                  style={getSkillStyle(skill)}
+                >
+                  <Page variant="desktop" isVisible={isSelected} />
+                </article>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -141,8 +154,6 @@ export function DesktopSkills({ withShell = true }: { withShell?: boolean }) {
 
   return <SkillsShell>{content}</SkillsShell>;
 }
-
-export const ImmersiveShowcaseSkills = DesktopSkills;
 
 function SkillRail({
   layout,
@@ -162,7 +173,7 @@ function SkillRail({
       onKeyDown={onKeyDown}
       className="grid flex-1 gap-3"
     >
-      {SKILL_PROFILES.map((skill) => (
+      {SKILL_PAGES.map((skill) => (
         <SkillRailItem
           key={skill.id}
           skill={skill}
@@ -183,7 +194,7 @@ function SkillRailItem({
   panelId,
   onSelect,
 }: {
-  skill: SkillProfile;
+  skill: SkillPageDefinition;
   isSelected: boolean;
   tabId: string;
   panelId: string;
@@ -256,7 +267,7 @@ function getPanelId(layoutId: string, skillId: string) {
   return `skill-${layoutId}-panel-${skillId}`;
 }
 
-function getRailTextStyle(skill: SkillProfile): RailTextStyle {
+function getRailTextStyle(skill: SkillPageDefinition): RailTextStyle {
   return {
     '--skill-rail-text-extra': `${skill.railTextExtraRem ?? 0}rem`,
     width: `calc(${
@@ -267,7 +278,7 @@ function getRailTextStyle(skill: SkillProfile): RailTextStyle {
 }
 
 function getRailItemStyle(
-  skill: SkillProfile,
+  skill: SkillPageDefinition,
   isSelected: boolean,
 ): RailItemStyle {
   return {

@@ -26,10 +26,8 @@ const variantLoaders: Record<
   SkillVariant,
   () => Promise<SkillVariantComponent>
 > = {
-  mobile: () =>
-    import('./AccordionIndexSkills').then((mod) => mod.MobileSkills),
-  desktop: () =>
-    import('./ImmersiveShowcaseSkills').then((mod) => mod.DesktopSkills),
+  mobile: () => import('./MobileSkills').then((mod) => mod.MobileSkills),
+  desktop: () => import('./DesktopSkills').then((mod) => mod.DesktopSkills),
 };
 
 const variantCache: Partial<

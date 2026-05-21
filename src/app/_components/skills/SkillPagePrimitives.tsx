@@ -14,29 +14,9 @@ import {
   SKILL_PAGE_SHELL_CONFIG,
   SKILL_PAGER_CONFIG,
   SKILL_PAGER_COPY,
-  SKILL_PROOF_POINT_CARD_SPAN_CLASS_NAMES,
-  type SkillProofPointCardSpan,
-} from '../../data/skills';
-import {
-  SkillCard,
-  type SkillCardImageFit,
-  type SkillCardImagePosition,
-  type SkillCardType,
-} from '../SkillCard';
-import { GithubIcon, cx } from '../shared';
-import type { SkillContentVariant } from './types';
-
-type SkillCardImageProps = {
-  image?: ReactNode | string;
-  imageAlt?: string;
-  imagePosition?: SkillCardImagePosition;
-  imageRatio?: string;
-  imageWidth?: string;
-  imageMinWidth?: string;
-  imageMaxWidth?: string;
-  imageFit?: SkillCardImageFit;
-  imageClassName?: string;
-};
+} from '@/utils/constants';
+import { cx } from './shared';
+import type { SkillPageVariant } from './types';
 
 type SkillPagerPageProps = {
   label: string;
@@ -70,7 +50,7 @@ export function SkillPageShell({
   children,
 }: {
   intro: string;
-  variant: SkillContentVariant;
+  variant: SkillPageVariant;
   children: ReactNode;
 }) {
   return (
@@ -768,52 +748,6 @@ function PagerArrowIcon({ direction }: { direction: SkillPagerDirection }) {
 
 export function SkillPage({ children }: SkillPagerPageProps) {
   return <>{children}</>;
-}
-
-export function ProofPointCard({
-  title,
-  eyebrow = 'Proof point',
-  description,
-  href,
-  chips,
-  showGithubIcon,
-  cardSpan = 'half',
-  type,
-  className,
-  children,
-  ...imageProps
-}: {
-  title: ReactNode;
-  eyebrow?: string;
-  description?: ReactNode;
-  href?: string;
-  chips?: readonly string[];
-  showGithubIcon?: boolean;
-  cardSpan?: SkillProofPointCardSpan;
-  type?: SkillCardType;
-  className?: string;
-  children?: ReactNode;
-} & SkillCardImageProps) {
-  const resolvedType = type ?? (imageProps.image ? 'feature' : 'default');
-
-  return (
-    <SkillCard
-      type={resolvedType}
-      title={title}
-      eyebrow={eyebrow}
-      description={description}
-      href={href}
-      chips={chips}
-      meta={showGithubIcon ? <GithubIcon className="h-4 w-4" /> : undefined}
-      className={cx(
-        SKILL_PROOF_POINT_CARD_SPAN_CLASS_NAMES[cardSpan],
-        className,
-      )}
-      {...imageProps}
-    >
-      {children}
-    </SkillCard>
-  );
 }
 
 function getSkillPages(children: ReactNode) {

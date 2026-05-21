@@ -1,11 +1,11 @@
+import { SkillCard } from '@/components/skills/SkillCard';
 import {
-  ProofPointCard,
   SkillGrid,
   SkillPage,
   SkillPageShell,
   SkillPager,
-} from './primitives';
-import type { SkillPageProps } from './types';
+} from '@/components/skills/SkillPagePrimitives';
+import type { SkillPageProps } from '@/components/skills/types';
 
 export function TechnicalStrategySkill({
   isVisible = true,
@@ -19,7 +19,7 @@ export function TechnicalStrategySkill({
       <SkillPager isVisible={isVisible}>
         <SkillPage label="Page 1" summary="Technical Strategy examples page 1">
           <SkillGrid>
-            <ProofPointCard
+            <SkillCard
               title="Code Migration Proposal"
               eyebrow="Decision-making"
               description="Proposed a full code migration over quick-fix no-code workarounds. Built the business case, got buy-in, and delivered."
@@ -27,12 +27,12 @@ export function TechnicalStrategySkill({
               imageAlt="Code migration project screenshot"
               imageFit="cover"
             />
-            <ProofPointCard
+            <SkillCard
               title="Company-Wide Product Demo"
               eyebrow="Communication"
               description="Presented a new patient onboarding flow to ~400 people on a near-company-wide call."
             />
-            <ProofPointCard
+            <SkillCard
               title="Danone Client Communication"
               eyebrow="Client comms"
               description="Communicated technical decisions directly to senior stakeholders at Nutricia/Danone while implementing systems like Yotpo reviews."
@@ -44,17 +44,17 @@ export function TechnicalStrategySkill({
         </SkillPage>
         <SkillPage label="Page 2" summary="Technical Strategy examples page 2">
           <SkillGrid>
-            <ProofPointCard
+            <SkillCard
               title="Non-Technical Stakeholders"
               eyebrow="Stakeholders"
               description="Explained web app architecture and technical constraints to property developers with no engineering background."
             />
-            <ProofPointCard
+            <SkillCard
               title="Commerce to Code"
               eyebrow="Background"
               description="Bachelor of Commerce graduate who moved from marketing strategy to engineering. Business thinking is built in, not bolted on."
             />
-            <ProofPointCard
+            <SkillCard
               title="Stack"
               eyebrow="Stack"
               cardSpan="full"

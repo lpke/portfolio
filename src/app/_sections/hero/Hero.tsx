@@ -7,9 +7,9 @@ import {
   SECTION_IDS,
   SITE,
 } from '@/utils/constants';
-import { RequestResumeButton } from './components/RequestResumeButton';
-import { StableHeroViewport } from './components/StableHeroViewport';
-import { ToolsBar } from './components/ToolsBar';
+import { RequestResumeButton } from '@/components/hero/RequestResumeButton';
+import { StableHeroViewport } from '@/components/hero/StableHeroViewport';
+import { ToolsBar } from '@/components/hero/ToolsBar';
 
 export function Hero() {
   return (

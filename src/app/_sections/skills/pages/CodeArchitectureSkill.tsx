@@ -1,11 +1,11 @@
+import { SkillCard } from '@/components/skills/SkillCard';
 import {
-  ProofPointCard,
   SkillGrid,
   SkillPage,
   SkillPageShell,
   SkillPager,
-} from './primitives';
-import type { SkillPageProps } from './types';
+} from '@/components/skills/SkillPagePrimitives';
+import type { SkillPageProps } from '@/components/skills/types';
 
 export function CodeArchitectureSkill({
   isVisible = true,
@@ -19,7 +19,7 @@ export function CodeArchitectureSkill({
       <SkillPager isVisible={isVisible}>
         <SkillPage label="Page 1" summary="Code Architecture examples page 1">
           <SkillGrid>
-            <ProofPointCard
+            <SkillCard
               title="Custom Multi-Site Build"
               eyebrow="Build"
               description="Vite build pipeline with AWS CDK infra that replaced a no-code platform's limits. 75% bundle reduction, 70% faster builds."
@@ -27,12 +27,12 @@ export function CodeArchitectureSkill({
               imageAlt="Custom multi-site build screenshot"
               imageFit="cover"
             />
-            <ProofPointCard
+            <SkillCard
               title="100+ Engineer Monorepo"
               eyebrow="Monorepo"
               description="Implemented new apps and packages in a large-scale Nx monorepo, including full CI/CD and IaC for new projects."
             />
-            <ProofPointCard
+            <SkillCard
               title="Shared Component Library"
               eyebrow="Components"
               description="Migrated an internal React form tool into a standalone shared package in an Nx monorepo. Owned the Storybook library and E2E coverage."
@@ -41,12 +41,12 @@ export function CodeArchitectureSkill({
         </SkillPage>
         <SkillPage label="Page 2" summary="Code Architecture examples page 2">
           <SkillGrid>
-            <ProofPointCard
+            <SkillCard
               title="Design System Rollout"
               eyebrow="Design system"
               description="Key contributor to design system adoption across multiple patient-facing apps at Montu."
             />
-            <ProofPointCard
+            <SkillCard
               title="Headless PWA (Nutricia)"
               eyebrow="Architecture"
               description="Frontend architecture for a headless React/Magento PWA with component reuse across checkout, SSO, and loyalty flows."
@@ -54,7 +54,7 @@ export function CodeArchitectureSkill({
               imageAlt="Nutricia headless PWA screenshot"
               imageFit="cover"
             />
-            <ProofPointCard
+            <SkillCard
               title="Stack"
               eyebrow="Stack"
               cardSpan="full"
