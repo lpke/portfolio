@@ -205,6 +205,8 @@ export const SKILLS_SECTION_COPY = {
   railAriaLabel: 'Skill focus areas',
 } as const;
 
+export const MOBILE_OPEN_ACCORDION_INSET_REM = 0.75;
+
 export type SkillCapability = {
   title: string;
   description: string;

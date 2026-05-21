@@ -7,6 +7,7 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from 'react';
+import { MOBILE_OPEN_ACCORDION_INSET_REM } from '@/utils/constants';
 import { SKILL_PROFILES, type SkillProfile } from '../data/skills';
 import { getSkillIcon } from './SkillIcons';
 import { SkillContent } from './SkillContent';
@@ -162,15 +163,18 @@ function MobileSkillPanel({
     onToggle(skill.id);
   };
 
+  const railInset = isOpen ? `-${MOBILE_OPEN_ACCORDION_INSET_REM}rem` : '0rem';
+  const railInsetStyle = { left: railInset, right: railInset };
+
   return (
     <div className="relative">
       <div
         className={cx(
-          'pointer-events-none absolute inset-y-0 z-0 rounded-lg transition-[box-shadow,inset] duration-500 ease-out',
+          'pointer-events-none absolute inset-y-0 z-0 rounded-lg transition-[box-shadow,left,right] duration-500 ease-out',
           isOpen &&
-            '-inset-x-2 shadow-[0_3px_10px_rgba(0,0,0,0.72),0_18px_36px_rgba(0,0,0,0.62),0_34px_90px_rgba(0,0,0,0.6)]',
-          !isOpen && 'inset-x-0',
+            'shadow-[0_3px_10px_rgba(0,0,0,0.72),0_18px_36px_rgba(0,0,0,0.62),0_34px_90px_rgba(0,0,0,0.6)]',
         )}
+        style={railInsetStyle}
       />
 
       <article
@@ -183,17 +187,19 @@ function MobileSkillPanel({
       >
         <div
           className={cx(
-            'bg-surface-container-high/80 pointer-events-none absolute inset-y-0 rounded-lg border border-white/10 transition-[background-color,border-color,inset] duration-500 ease-out',
+            'bg-surface-container-high/80 pointer-events-none absolute inset-y-0 rounded-lg border border-white/10 transition-[background-color,border-color,left,right] duration-500 ease-out',
             isOpen
-              ? '-inset-x-2 border-white/15 bg-white/[0.075]'
-              : 'inset-x-0',
+              ? 'border-white/15 bg-white/[0.075]'
+              : 'bg-surface-container-high/80 border-white/10',
           )}
+          style={railInsetStyle}
         />
         <div
           className={cx(
-            'pointer-events-none absolute inset-y-0 rounded-lg bg-[radial-gradient(circle_at_92%_-8%,var(--skill-accent-soft),transparent_56%)] transition-[inset,opacity] duration-300',
-            isOpen ? '-inset-x-2 opacity-45' : 'inset-x-0 opacity-0',
+            'pointer-events-none absolute inset-y-0 rounded-lg bg-[radial-gradient(circle_at_92%_-8%,var(--skill-accent-soft),transparent_56%)] transition-[left,right,opacity] duration-300',
+            isOpen ? 'opacity-45' : 'opacity-0',
           )}
+          style={railInsetStyle}
         />
 
         <button
