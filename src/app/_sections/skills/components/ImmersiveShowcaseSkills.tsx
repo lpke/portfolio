@@ -15,6 +15,12 @@ import { SkillsHeading, cx, getSkillStyle } from './shared';
 
 type RailTextStyle = CSSProperties & {
   '--skill-rail-text-extra': string;
+  width: string;
+};
+
+type RailItemStyle = CSSProperties & {
+  '--skill-accent': string;
+  '--skill-accent-soft': string;
 };
 
 export function DesktopSkills({ withShell = true }: { withShell?: boolean }) {
@@ -196,11 +202,11 @@ function SkillRailItem({
       }}
       onClick={() => onSelect(skill.id)}
       className={cx(
-        'grid w-full cursor-pointer grid-cols-[1.75rem_minmax(0,1fr)] items-start gap-2.5 justify-self-start overflow-hidden rounded-lg border border-transparent px-4 py-4 text-left transition-[width,background-color,border-color,color,box-shadow] duration-600',
-        isSelected ? 'lg:w-[calc(100%+1.5rem)]' : 'lg:w-full',
+        'grid w-full cursor-pointer grid-cols-[1.75rem_minmax(0,1fr)] items-start gap-2.5 justify-self-start overflow-hidden rounded-lg border border-transparent text-left transition-[width,background-color,border-color,color,box-shadow] duration-600',
+        DESKTOP_SKILLS_LAYOUT.railItemPaddingClassName,
         getRailItemClass(isSelected),
       )}
-      style={getSkillStyle(skill)}
+      style={getRailItemStyle(skill, isSelected)}
     >
       <span className="flex h-7 w-7 items-center justify-center">
         {isSelected ? (
@@ -215,10 +221,7 @@ function SkillRailItem({
         )}
       </span>
 
-      <span
-        className="min-w-0 lg:w-[calc(21rem-4.75rem+var(--skill-rail-text-extra))]"
-        style={getRailTextStyle(skill)}
-      >
+      <span className="min-w-0" style={getRailTextStyle(skill)}>
         <span
           className={cx(
             'font-headline block truncate text-[1.4rem] font-bold',
@@ -256,6 +259,24 @@ function getPanelId(layoutId: string, skillId: string) {
 function getRailTextStyle(skill: SkillProfile): RailTextStyle {
   return {
     '--skill-rail-text-extra': `${skill.railTextExtraRem ?? 0}rem`,
+    width: `calc(${
+      DESKTOP_SKILLS_LAYOUT.selectedRailItemWidthRem -
+      DESKTOP_SKILLS_LAYOUT.railTextInsetRem
+    }rem + var(--skill-rail-text-extra))`,
+  };
+}
+
+function getRailItemStyle(
+  skill: SkillProfile,
+  isSelected: boolean,
+): RailItemStyle {
+  return {
+    ...getSkillStyle(skill),
+    width: `${
+      isSelected
+        ? DESKTOP_SKILLS_LAYOUT.selectedRailItemWidthRem
+        : DESKTOP_SKILLS_LAYOUT.railItemWidthRem
+    }rem`,
   };
 }
 

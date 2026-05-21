@@ -365,14 +365,22 @@ export type DesktopSkillsLayout = {
   panelClassName: string;
   contentAlignClassName: string;
   railWidthClassName: string;
+  railItemWidthRem: number;
+  selectedRailItemWidthRem: number;
+  railTextInsetRem: number;
+  railItemPaddingClassName: string;
   contentMaxClassName: string;
 };
 
 export const DESKTOP_SKILLS_LAYOUT = {
   id: 'primary',
   panelClassName: 'bg-skill-stage',
-  contentAlignClassName: 'lg:pl-[24rem]',
-  railWidthClassName: 'lg:w-[19.5rem]',
+  contentAlignClassName: 'lg:pl-[25.75rem]',
+  railWidthClassName: 'lg:w-[21rem]',
+  railItemWidthRem: 21,
+  selectedRailItemWidthRem: 22.6,
+  railTextInsetRem: 4.625,
+  railItemPaddingClassName: 'px-[1.125rem] py-[1.125rem]',
   contentMaxClassName: 'max-w-4xl',
 } as const satisfies DesktopSkillsLayout;
 
