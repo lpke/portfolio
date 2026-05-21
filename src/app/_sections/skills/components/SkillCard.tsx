@@ -76,8 +76,9 @@ export function SkillCard({
   const body = (
     <div
       className={cx(
-        'relative z-10 min-w-0 gap-4',
+        'relative z-10 min-w-0',
         hasImage && getImageLayoutClassName(imagePosition),
+        hasImage && getImageGapClassName(imagePosition),
       )}
     >
       {hasImage && shouldRenderImageBeforeContent(imagePosition) && (
@@ -86,6 +87,7 @@ export function SkillCard({
           imageAlt={imageAlt}
           imageFit={imageFit}
           imagePosition={imagePosition}
+          imagePlacement={imagePosition}
           className={imageClassName}
         />
       )}
@@ -93,6 +95,10 @@ export function SkillCard({
         className={cx(
           'relative min-w-0',
           hasImage && cardPaddingClassName,
+          hasImage && imagePosition === 'top' && 'pt-3 lg:pt-4',
+          hasImage &&
+            (imagePosition === 'left' || imagePosition === 'right') &&
+            'lg:flex-1',
           contentClassName,
         )}
       >
@@ -164,6 +170,7 @@ export function SkillCard({
           imageAlt={imageAlt}
           imageFit={imageFit}
           imagePosition={imagePosition}
+          imagePlacement={imagePosition}
           className={imageClassName}
         />
       )}
@@ -207,12 +214,14 @@ function SkillCardImage({
   imageAlt,
   imageFit,
   imagePosition,
+  imagePlacement,
   className,
 }: {
   image: ReactNode | string | undefined;
   imageAlt: string;
   imageFit: SkillCardImageFit;
   imagePosition: SkillCardImagePosition;
+  imagePlacement: SkillCardImagePosition;
   className?: string;
 }) {
   return (
@@ -222,6 +231,7 @@ function SkillCardImage({
         imagePosition === 'left' || imagePosition === 'right'
           ? 'h-28 w-full lg:h-auto lg:w-[var(--skill-card-image-ratio)]'
           : 'h-[var(--skill-card-image-ratio)] w-full',
+        imagePlacement === 'right' && 'lg:order-last',
         className,
       )}
     >
@@ -250,8 +260,16 @@ function getImageLayoutClassName(position: SkillCardImagePosition) {
   return 'flex flex-col';
 }
 
+function getImageGapClassName(position: SkillCardImagePosition) {
+  if (position === 'top') {
+    return 'gap-0';
+  }
+
+  return 'gap-4';
+}
+
 function shouldRenderImageBeforeContent(position: SkillCardImagePosition) {
-  return position === 'top' || position === 'left';
+  return position === 'top' || position === 'left' || position === 'right';
 }
 
 function ExternalLinkIcon() {

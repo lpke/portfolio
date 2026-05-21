@@ -210,13 +210,6 @@ export type SkillCapability = {
   description: string;
 };
 
-export type SkillProofPoint = {
-  title: string;
-  description: string;
-  url?: string;
-  showGithubIcon?: boolean;
-};
-
 export type SkillId =
   | 'product-engineering'
   | 'ai-automation'
@@ -256,6 +249,24 @@ export type SkillCardImageFit =
   | 'none'
   | 'scale-down'
   | 'stretch';
+
+export type SkillProofPointCardSpan = 'half' | 'full';
+
+export type SkillProofPoint = {
+  title: string;
+  eyebrow?: string;
+  description: string;
+  cardSpan?: SkillProofPointCardSpan;
+  url?: string;
+  showGithubIcon?: boolean;
+  chips?: readonly string[];
+  image?: string;
+  imageAlt?: string;
+  imagePosition?: SkillCardImagePosition;
+  imageRatio?: string;
+  imageFit?: SkillCardImageFit;
+  imageClassName?: string;
+};
 
 export const SKILL_CARD_CLASS_NAMES = {
   default:
@@ -337,6 +348,18 @@ export const SKILL_PAGER_CONFIG: SkillPagerConfig = {
   swipeMinDistancePx: 44,
 };
 
+export const SKILL_PROOF_POINT_PAGE_SIZE = 3;
+
+export const SKILL_PROOF_POINT_CARD_SPAN_CLASS_NAMES = {
+  half: 'lg:col-span-3',
+  full: 'lg:col-span-6',
+} as const satisfies Record<SkillProofPointCardSpan, string>;
+
+export const SKILL_PROOF_POINT_PAGER_COPY = {
+  pageLabel: 'Page',
+  examplesSummary: 'examples page',
+} as const;
+
 export type DesktopSkillsLayout = {
   id: string;
   panelClassName: string;
@@ -368,26 +391,10 @@ export const SKILL_PROFILES = [
     title: 'Product Engineering',
     subtitle: 'React, TypeScript, full-stack features, end-to-end ownership.',
     intro:
-      'I build the apps people actually use. React and TypeScript frontend, with enough backend to own features end-to-end.',
+      'I build the apps people actually use — SPAs, portals, and interactive experiences shipped at scale. React and TypeScript frontend, with enough backend to own features end-to-end.',
     iconKey: 'product',
     ...SKILL_THEME_TOKENS.product,
-    capabilities: [
-      {
-        title: 'User-Facing Apps',
-        description:
-          'SPAs, portals, and interactive web experiences shipped to real users at scale. Greenfield to production.',
-      },
-      {
-        title: 'Full-Stack Delivery',
-        description:
-          'Frontend-first, but comfortable owning API integration, serverless functions, and data layers.',
-      },
-      {
-        title: 'Platform & CMS Work',
-        description:
-          'Shopify, Magento, Webflow, and headless CMS integrations across commerce and marketing.',
-      },
-    ],
+    capabilities: [],
     tools: [
       'React',
       'TypeScript',
@@ -403,30 +410,71 @@ export const SKILL_PROFILES = [
     proofPoints: [
       {
         title: 'Healthcare Patient Portal',
+        eyebrow: 'Health tech',
         description:
           'Sole frontend architect of a greenfield React SPA serving ~1,500 new users daily across AU and NZ.',
+        image: '/images/skills/pre-consultation-portal.png',
+        imageAlt: 'Healthcare patient portal screenshot',
+        imageFit: 'cover',
+        imagePosition: 'right',
       },
       {
         title: "McDonald's Menu Boards",
+        eyebrow: 'Retail',
         description:
           "Built React components deployed to digital screens at 2,000+ McDonald's stores across Australia and New Zealand.",
+        cardSpan: 'full',
+        image: '/images/skills/mcdonalds-digital-menu.png',
+        imageAlt: "McDonald's digital menu board screenshot",
+        imageFit: 'cover',
+        imagePosition: 'right',
       },
       {
         title: 'Nutricia / Danone',
+        eyebrow: 'Commerce',
         description:
           "SSO, loyalty program, and branded checkout on a headless React/Magento PWA for one of the world's largest food companies.",
         url: 'https://www.nutriciastore.com.au',
+        image: '/images/skills/nutriciastore.png',
+        imageAlt: 'Nutricia Store screenshot',
+        imageFit: 'cover',
       },
       {
         title: 'Property Listings Portal',
+        eyebrow: 'Full-stack',
         description:
           'Full-stack Next.js/MongoDB app with auth, serverless functions, and a dynamic data grid for real estate launches.',
+        image: '/images/skills/opt-releases.png',
+        imageAlt: 'Property listings portal screenshot',
+        imageFit: 'cover',
       },
       {
         title: 'Milkrun',
+        eyebrow: 'E-commerce',
         description:
-          'Senior frontend on a TypeScript/React Shopify site built with Next.js. Provided code reviews and mentoring.',
+          'Senior frontend on a TypeScript/React Shopify site built with Next.js. Code reviews and mentoring.',
         url: 'https://www.milkrun.com',
+        image: '/images/skills/milkrun.png',
+        imageAlt: 'Milkrun website screenshot',
+        imageFit: 'cover',
+      },
+      {
+        title: 'Stack',
+        eyebrow: 'Stack',
+        description: '',
+        cardSpan: 'full',
+        chips: [
+          'React',
+          'TypeScript',
+          'Next.js',
+          'Vite',
+          'Node.js',
+          'GraphQL',
+          'MongoDB',
+          'Tailwind',
+          'Vercel',
+          'Shopify',
+        ],
       },
     ],
   },
@@ -435,26 +483,10 @@ export const SKILL_PROFILES = [
     title: 'AI & Automation',
     subtitle: 'Agentic coding, AI-assisted workflows, CLI tools, and scripts.',
     intro:
-      'AI is part of how I build every day. Agentic coding workflows, custom tooling, and terminal automation from editor to deploy.',
+      'AI is part of how I build every day — multi-model agentic workflows in the editor, custom context tools for AI agents, and terminal automation from editor to deploy.',
     iconKey: 'ai',
     ...SKILL_THEME_TOKENS.ai,
-    capabilities: [
-      {
-        title: 'Agentic Development',
-        description:
-          'Multi-model AI workflows embedded in the editor. Not autocomplete, actual coding partners.',
-      },
-      {
-        title: 'AI Tooling & Context',
-        description:
-          'Custom tools that feed structured codebase context to AI agents for planning and generation.',
-      },
-      {
-        title: 'CLI & Pipelines',
-        description:
-          'Purpose-built terminal tools, local pipeline engines, bash scripts, and workflow glue.',
-      },
-    ],
+    capabilities: [],
     tools: [
       'GitHub Copilot',
       'Codex',
@@ -467,34 +499,65 @@ export const SKILL_PROFILES = [
     proofPoints: [
       {
         title: 'code-to-notion',
+        eyebrow: 'Open source',
         description:
-          'Open-source Node CLI that uploads codebases to Notion with full Git context. Built to give AI agents structured code reasoning.',
+          'Node CLI that uploads codebases to Notion with full Git context. Built to give AI agents structured code reasoning.',
         url: 'https://github.com/lpke/code-to-notion',
         showGithubIcon: true,
+        image: '/images/skills/notion-ai.png',
+        imageAlt: 'code-to-notion project screenshot',
+        imageFit: 'cover',
       },
       {
         title: 'aspyn',
+        eyebrow: 'Open source',
         description:
           'Local pipeline engine that gives your scripts a memory. Stateful step runners, change detection, crash recovery, and scheduling.',
+        cardSpan: 'full',
         url: 'https://github.com/lpke/aspyn-legacy',
         showGithubIcon: true,
+        image: '/images/skills/aspyn-cli.png',
+        imageAlt: 'aspyn CLI screenshot',
+        imageFit: 'cover',
+        imagePosition: 'right',
       },
       {
         title: 'Neovim + CodeCompanion',
+        eyebrow: 'Dev environment',
         description:
           'Custom Lua-based AI config with multi-model support, agentic workflows, slash commands, and tool approval flows.',
         url: 'https://github.com/lpke/nvim',
         showGithubIcon: true,
+        image: '/images/skills/nvim-codecompanion.png',
+        imageAlt: 'Neovim CodeCompanion screenshot',
+        imageFit: 'cover',
       },
       {
         title: 'AI in Production Teams',
+        eyebrow: 'Production',
         description:
           'Used agentic coding tools daily for feature development, debugging, and iteration across a 100+ engineer codebase.',
       },
       {
         title: 'Local LLM Automation',
+        eyebrow: 'Local AI',
         description:
           'Ollama-powered local models for lightweight tasks like web page parsing and text processing.',
+      },
+      {
+        title: 'Stack',
+        eyebrow: 'Stack',
+        description: '',
+        cardSpan: 'full',
+        chips: [
+          'GitHub Copilot',
+          'Codex',
+          'Claude',
+          'Ollama',
+          'Neovim',
+          'Lua',
+          'Bash',
+        ],
       },
     ],
   },
@@ -504,26 +567,10 @@ export const SKILL_PROFILES = [
     subtitle:
       'Design systems, component libraries, monorepos, and build pipelines.',
     intro:
-      'I care about how the code is organised, not just that it works. Package boundaries, shared systems, and builds that scale.',
+      'I care about how code is organised, not just that it works. Component libraries, monorepo architecture with clean boundaries, and custom build pipelines that cut bundle sizes dramatically.',
     iconKey: 'architecture',
     ...SKILL_THEME_TOKENS.architecture,
-    capabilities: [
-      {
-        title: 'Design Systems & Components',
-        description:
-          'Component libraries, Storybook, visual testing, and design consistency at scale.',
-      },
-      {
-        title: 'Monorepo Structure',
-        description:
-          'Nx workspaces, app/package architecture, and clean dependency boundaries.',
-      },
-      {
-        title: 'Build & Bundle Optimisation',
-        description:
-          'Custom Vite pipelines, multi-site builds, and performance-focused tooling.',
-      },
-    ],
+    capabilities: [],
     tools: [
       'Nx',
       'Vite',
@@ -535,29 +582,55 @@ export const SKILL_PROFILES = [
     ],
     proofPoints: [
       {
-        title: 'Shared Component Library',
-        description:
-          'Migrated an internal React form tool into a standalone shared package in an Nx monorepo. Owned the Storybook library and E2E coverage.',
-      },
-      {
         title: 'Custom Multi-Site Build',
+        eyebrow: 'Build',
         description:
           "Vite build pipeline with AWS CDK infra that replaced a no-code platform's limits. 75% bundle reduction, 70% faster builds.",
+        image: '/images/skills/webflow-pre-screening.png',
+        imageAlt: 'Custom multi-site build screenshot',
+        imageFit: 'cover',
       },
       {
         title: '100+ Engineer Monorepo',
+        eyebrow: 'Monorepo',
         description:
           'Implemented new apps and packages in a large-scale Nx monorepo, including full CI/CD and IaC for new projects.',
       },
       {
+        title: 'Shared Component Library',
+        eyebrow: 'Components',
+        description:
+          'Migrated an internal React form tool into a standalone shared package in an Nx monorepo. Owned the Storybook library and E2E coverage.',
+      },
+      {
         title: 'Design System Rollout',
+        eyebrow: 'Design system',
         description:
           'Key contributor to design system adoption across multiple patient-facing apps at Montu.',
       },
       {
         title: 'Headless PWA (Nutricia)',
+        eyebrow: 'Architecture',
         description:
           'Frontend architecture for a headless React/Magento PWA with component reuse across checkout, SSO, and loyalty flows.',
+        image: '/images/skills/nutriciastore.png',
+        imageAlt: 'Nutricia headless PWA screenshot',
+        imageFit: 'cover',
+      },
+      {
+        title: 'Stack',
+        eyebrow: 'Stack',
+        description: '',
+        cardSpan: 'full',
+        chips: [
+          'Nx',
+          'Vite',
+          'Storybook',
+          'Chromatic',
+          'TypeScript',
+          'AWS CDK',
+          'GitHub Actions',
+        ],
       },
     ],
   },
@@ -567,54 +640,61 @@ export const SKILL_PROFILES = [
     subtitle:
       'Internal tools, DX improvements, mentoring, and knowledge sharing.',
     intro:
-      'I build the things that make the team faster. Internal tools, better workflows, and engineers who level up.',
+      "I build the things that make the team faster — internal tools, streamlined workflows, and mentoring that turns juniors into confident contributors. The layer that multiplies everyone's output.",
     iconKey: 'tooling',
     ...SKILL_THEME_TOKENS.tooling,
-    capabilities: [
-      {
-        title: 'Internal Tools',
-        description:
-          'Purpose-built tools and utilities that solve real workflow problems for the team.',
-      },
-      {
-        title: 'Mentoring & Growth',
-        description:
-          'Levelling up junior engineers through pairing, code reviews, and structured guidance.',
-      },
-      {
-        title: 'Dev Environment',
-        description:
-          'Neovim, dotfiles, and Linux config, precision-tuned for speed and control.',
-      },
-    ],
+    capabilities: [],
     tools: ['Neovim', 'Lua', 'Linux', 'Bash', 'Storybook', 'Playwright', 'Git'],
     proofPoints: [
       {
-        title: 'Internal Tool Documentation',
-        description:
-          'Wrote docs and streamlined a Storybook library to drive adoption of a shared form tool across engineering.',
-      },
-      {
-        title: 'Mentoring at Montu',
-        description:
-          'Mentored several junior-mid engineers on React patterns, frontend fundamentals, and code quality.',
-      },
-      {
-        title: 'Technical Hiring',
-        description:
-          "Conducted technical candidate reviews for Montu's international engineering expansion.",
-      },
-      {
         title: 'Neovim Config',
+        eyebrow: 'Dev environment',
         description:
           'Comprehensive custom Neovim setup in Lua. LSP, linting, type checking, keymaps, and AI integration from scratch.',
         url: 'https://github.com/lpke/nvim',
         showGithubIcon: true,
+        image: '/images/skills/nvim-codecompanion.png',
+        imageAlt: 'Neovim config screenshot',
+        imageFit: 'cover',
+      },
+      {
+        title: 'Mentoring at Montu',
+        eyebrow: 'Mentoring',
+        description:
+          'Mentored several junior-mid engineers on React patterns, frontend fundamentals, and code quality.',
+      },
+      {
+        title: 'Internal Tool Documentation',
+        eyebrow: 'Adoption',
+        description:
+          'Wrote docs and streamlined a Storybook library to drive adoption of a shared form tool across engineering.',
       },
       {
         title: 'Senior Code Reviews',
+        eyebrow: 'Code quality',
         description:
           'Provided code reviews and mentorship on a Next.js/React Shopify build as the senior frontend on the project.',
+      },
+      {
+        title: 'Technical Hiring',
+        eyebrow: 'Hiring',
+        description:
+          "Conducted technical candidate reviews for Montu's international engineering expansion.",
+      },
+      {
+        title: 'Stack',
+        eyebrow: 'Stack',
+        description: '',
+        cardSpan: 'full',
+        chips: [
+          'Neovim',
+          'Lua',
+          'Linux',
+          'Bash',
+          'Storybook',
+          'Playwright',
+          'Git',
+        ],
       },
     ],
   },
@@ -624,26 +704,10 @@ export const SKILL_PROFILES = [
     subtitle:
       'CI/CD, automated testing, accessibility, and cloud infrastructure.',
     intro:
-      "I write the tests, build the pipelines, and make sure what ships is solid. Quality isn't a phase. It's how I work.",
+      'I write the tests, build the pipelines, and make sure what ships is solid. Playwright suites, GitHub Actions CI/CD with AWS IaC, accessibility audits, and A/B experimentation.',
     iconKey: 'shipping',
     ...SKILL_THEME_TOKENS.shipping,
-    capabilities: [
-      {
-        title: 'Automated Testing',
-        description:
-          'Unit tests, E2E coverage, and quality gates across the test pyramid.',
-      },
-      {
-        title: 'CI/CD & Infrastructure',
-        description:
-          'GitHub Actions pipelines, AWS CDK, and infrastructure-as-code for frontend delivery.',
-      },
-      {
-        title: 'Accessibility',
-        description:
-          'Semantic HTML, ARIA, keyboard navigation, contrast ratios, and compliance audits.',
-      },
-    ],
+    capabilities: [],
     tools: [
       'Playwright',
       'Vitest',
@@ -655,29 +719,52 @@ export const SKILL_PROFILES = [
     ],
     proofPoints: [
       {
-        title: 'Shared Tool E2E Suite',
-        description:
-          'Built comprehensive Playwright E2E tests for an internal form tool used across multiple patient-facing apps.',
-      },
-      {
         title: 'Custom CI/CD Pipeline',
+        eyebrow: 'CI/CD',
         description:
           'GitHub Actions pipeline with AWS CDK infrastructure (S3 + CloudFront) for a multi-site Vite build.',
       },
       {
-        title: 'Healthcare App QA',
+        title: 'Shared Tool E2E Suite',
+        eyebrow: 'E2E testing',
         description:
-          'Unit testing with Vitest and a custom GUI testing tool with state controls for rapid manual QA.',
+          'Built comprehensive Playwright E2E tests for an internal form tool used across multiple patient-facing apps.',
+      },
+      {
+        title: 'A/B Experimentation',
+        eyebrow: 'Experimentation',
+        description:
+          'Built and shipped multiple VWO A/B campaigns with custom variant UIs, client-side logic, and GA4 event tracking.',
       },
       {
         title: 'Accessibility at Montu',
+        eyebrow: 'Accessibility',
         description:
           'Implemented keyboard navigation, ARIA attributes, and contrast fixes across patient-facing apps.',
       },
       {
-        title: 'A/B Experimentation',
+        title: 'Healthcare App QA',
+        eyebrow: 'Unit testing',
         description:
-          'Built and shipped multiple VWO A/B campaigns with custom variant UIs, client-side logic, and GA4 event tracking.',
+          'Unit testing with Vitest and a custom GUI testing tool with state controls for rapid manual QA.',
+        image: '/images/skills/pre-consultation-portal.png',
+        imageAlt: 'Healthcare app QA screenshot',
+        imageFit: 'cover',
+      },
+      {
+        title: 'Stack',
+        eyebrow: 'Stack',
+        description: '',
+        cardSpan: 'full',
+        chips: [
+          'Playwright',
+          'Vitest',
+          'GitHub Actions',
+          'AWS CDK',
+          'Docker',
+          'LaunchDarkly',
+          'VWO',
+        ],
       },
     ],
   },
@@ -688,52 +775,54 @@ export const SKILL_PROFILES = [
       'Trade-offs, stakeholder communication, and business-minded decisions.',
     railTextExtraRem: 0.3,
     intro:
-      'Commerce graduate turned engineer. I understand the business side because I came from it, and that shapes every technical decision I make.',
+      'Commerce graduate turned engineer. I evaluate trade-offs, build business cases for technical decisions, and communicate architecture to non-technical stakeholders. Business thinking built in, not bolted on.',
     iconKey: 'strategy',
     ...SKILL_THEME_TOKENS.strategy,
-    capabilities: [
-      {
-        title: 'Technical Decision-Making',
-        description:
-          'Evaluating trade-offs, proposing solutions, and choosing the right approach over the easy one.',
-      },
-      {
-        title: 'Stakeholder Communication',
-        description:
-          'Explaining technical concepts to non-technical people: clients, product, leadership.',
-      },
-      {
-        title: 'Business Context',
-        description:
-          'Commerce degree, marketing background, and understanding the why behind the code.',
-      },
-    ],
+    capabilities: [],
     tools: ['GA4', 'GTM', 'VWO', 'A/B Testing', 'Figma'],
     proofPoints: [
       {
         title: 'Code Migration Proposal',
+        eyebrow: 'Decision-making',
         description:
           'Proposed a full code migration over quick-fix no-code workarounds. Built the business case, got buy-in, and delivered.',
+        image: '/images/skills/webflow-pre-screening.png',
+        imageAlt: 'Code migration project screenshot',
+        imageFit: 'cover',
       },
       {
         title: 'Company-Wide Product Demo',
+        eyebrow: 'Communication',
         description:
           'Presented a new patient onboarding flow to ~400 people on a near-company-wide call.',
       },
       {
         title: 'Danone Client Communication',
+        eyebrow: 'Client comms',
         description:
           'Communicated technical decisions directly to senior stakeholders at Nutricia/Danone while implementing systems like Yotpo reviews.',
+        image: '/images/skills/nutriciastore.png',
+        imageAlt: 'Danone Nutricia Store screenshot',
+        imageFit: 'cover',
       },
       {
         title: 'Non-Technical Stakeholders',
+        eyebrow: 'Stakeholders',
         description:
           'Explained web app architecture and technical constraints to property developers with no engineering background.',
       },
       {
         title: 'Commerce to Code',
+        eyebrow: 'Background',
         description:
           'Bachelor of Commerce graduate who moved from marketing strategy to engineering. Business thinking is built in, not bolted on.',
+      },
+      {
+        title: 'Stack',
+        eyebrow: 'Stack',
+        description: '',
+        cardSpan: 'full',
+        chips: ['GA4', 'GTM', 'VWO', 'A/B Testing', 'Figma'],
       },
     ],
   },

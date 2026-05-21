@@ -14,6 +14,9 @@ import {
   SKILL_PAGE_SHELL_CONFIG,
   SKILL_PAGER_CONFIG,
   SKILL_PAGER_COPY,
+  SKILL_PROOF_POINT_CARD_SPAN_CLASS_NAMES,
+  SKILL_PROOF_POINT_PAGE_SIZE,
+  SKILL_PROOF_POINT_PAGER_COPY,
   type SkillCapability,
   type SkillProfile,
   type SkillProofPoint,
@@ -98,7 +101,9 @@ export function SkillPageShell({
 
 export function SkillGrid({ children }: { children: ReactNode }) {
   return (
-    <div className="grid grid-cols-1 gap-3 lg:grid-cols-6">{children}</div>
+    <div className="grid grid-cols-1 gap-3 lg:grid-flow-dense lg:grid-cols-6">
+      {children}
+    </div>
   );
 }
 
@@ -214,11 +219,7 @@ export function SkillPager({
     autoTransitionRemainingMsRef.current = resolvedAutoTransitionMs;
     setPhase('enter');
     setIsManualAutoTransitionPaused(true);
-  }, [
-    cancelScheduledNavigation,
-    hasAutoTransition,
-    resolvedAutoTransitionMs,
-  ]);
+  }, [cancelScheduledNavigation, hasAutoTransition, resolvedAutoTransitionMs]);
 
   const toggleManualAutoTransitionPause = useCallback(() => {
     if (!hasAutoTransition) {
@@ -696,7 +697,7 @@ function SkillPagerTimerButton({
         className={cx(
           'grid h-[18px] w-[18px] place-items-center rounded-full border transition-[background-color,border-color,color,opacity] duration-200',
           isPaused
-            ? 'border-white/[0.13] bg-white/[0.025] text-on-surface-variant/55 opacity-65 group-hover/timer:border-white/[0.22] group-hover/timer:bg-white/[0.045] group-hover/timer:text-on-surface-variant/75 group-hover/timer:opacity-90'
+            ? 'text-on-surface-variant/55 group-hover/timer:text-on-surface-variant/75 border-white/[0.13] bg-white/[0.025] opacity-65 group-hover/timer:border-white/[0.22] group-hover/timer:bg-white/[0.045] group-hover/timer:opacity-90'
             : 'border-[color:color-mix(in_srgb,var(--skill-accent)_38%,transparent)] bg-[color:color-mix(in_srgb,var(--skill-accent)_7%,transparent)] text-[var(--skill-accent)] opacity-72 group-hover/timer:border-[color:color-mix(in_srgb,var(--skill-accent)_68%,transparent)] group-hover/timer:bg-[color:color-mix(in_srgb,var(--skill-accent)_12%,transparent)] group-hover/timer:opacity-100',
         )}
       >
@@ -790,6 +791,45 @@ export function StackSkillCard({
   );
 }
 
+export function SkillProofPointPager({
+  skill,
+  isVisible = true,
+}: {
+  skill: SkillProfile;
+  isVisible?: boolean;
+}) {
+  const pages = getProofPointPages(skill.proofPoints);
+
+  return (
+    <SkillPager isVisible={isVisible}>
+      {pages.map((proofPoints, index) => (
+        <SkillPage
+          key={`${skill.id}-${index}`}
+          label={`${SKILL_PROOF_POINT_PAGER_COPY.pageLabel} ${index + 1}`}
+          summary={`${skill.title} ${SKILL_PROOF_POINT_PAGER_COPY.examplesSummary} ${
+            index + 1
+          }`}
+        >
+          <SkillGrid>
+            {proofPoints.map((proofPoint) => (
+              <ProofPointCard
+                key={`${skill.id}-${proofPoint.title}`}
+                proofPoint={proofPoint}
+                type={proofPoint.image ? 'feature' : 'default'}
+                className={
+                  SKILL_PROOF_POINT_CARD_SPAN_CLASS_NAMES[
+                    proofPoint.cardSpan ?? 'half'
+                  ]
+                }
+              />
+            ))}
+          </SkillGrid>
+        </SkillPage>
+      ))}
+    </SkillPager>
+  );
+}
+
 export function CapabilityCard({
   capability,
   eyebrow = 'Capability',
@@ -844,20 +884,40 @@ export function ProofPointCard({
     <SkillCard
       type={type}
       title={proofPoint.title}
-      eyebrow={eyebrow}
-      description={proofPoint.description}
+      eyebrow={proofPoint.eyebrow ?? eyebrow}
+      description={proofPoint.description || undefined}
       href={proofPoint.url}
+      chips={proofPoint.chips}
       meta={
         proofPoint.showGithubIcon ? (
           <GithubIcon className="h-4 w-4" />
         ) : undefined
       }
       className={className}
-      {...imageProps}
+      image={proofPoint.image ?? imageProps.image}
+      imageAlt={proofPoint.imageAlt ?? imageProps.imageAlt}
+      imagePosition={proofPoint.imagePosition ?? imageProps.imagePosition}
+      imageRatio={proofPoint.imageRatio ?? imageProps.imageRatio}
+      imageFit={proofPoint.imageFit ?? imageProps.imageFit}
+      imageClassName={proofPoint.imageClassName ?? imageProps.imageClassName}
     >
       {children}
     </SkillCard>
   );
+}
+
+function getProofPointPages(proofPoints: readonly SkillProofPoint[]) {
+  const pages: SkillProofPoint[][] = [];
+
+  for (
+    let index = 0;
+    index < proofPoints.length;
+    index += SKILL_PROOF_POINT_PAGE_SIZE
+  ) {
+    pages.push(proofPoints.slice(index, index + SKILL_PROOF_POINT_PAGE_SIZE));
+  }
+
+  return pages;
 }
 
 export function getCapability(skill: SkillProfile, title: string) {
