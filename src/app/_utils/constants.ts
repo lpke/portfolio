@@ -341,7 +341,7 @@ export type SkillPagerConfig = {
 
 export const SKILL_PAGER_CONFIG: SkillPagerConfig = {
   autoTransitionMs: 8000,
-  desktopWidthClassName: 'sm:w-32',
+  desktopWidthClassName: 'sm:w-40',
   indicatorLineClassName: 'h-1',
   scrollPauseMs: 500,
   showArrowButtons: false,
@@ -434,7 +434,7 @@ export const SKILL_PROFILES = [
         description:
           "Built React components deployed to digital screens at 2,000+ McDonald's stores across Australia and New Zealand.",
         cardSpan: 'full',
-        image: '/images/skills/mcdonalds-digital-menu.png',
+        image: '/images/skills/mcdonalds-digital-menu.jpg',
         imageAlt: "McDonald's digital menu board screenshot",
         imageFit: 'cover',
         imagePosition: 'right',
@@ -445,7 +445,7 @@ export const SKILL_PROFILES = [
         description:
           "SSO, loyalty program, and branded checkout on a headless React/Magento PWA for one of the world's largest food companies.",
         url: 'https://www.nutriciastore.com.au',
-        image: '/images/skills/nutriciastore.png',
+        image: '/images/skills/nutriciastore.jpg',
         imageAlt: 'Nutricia Store screenshot',
         imageFit: 'cover',
       },
@@ -596,7 +596,7 @@ export const SKILL_PROFILES = [
         eyebrow: 'Build',
         description:
           "Vite build pipeline with AWS CDK infra that replaced a no-code platform's limits. 75% bundle reduction, 70% faster builds.",
-        image: '/images/skills/webflow-pre-screening.png',
+        image: '/images/skills/webflow-pre-screening.jpg',
         imageAlt: 'Custom multi-site build screenshot',
         imageFit: 'cover',
       },
@@ -623,7 +623,7 @@ export const SKILL_PROFILES = [
         eyebrow: 'Architecture',
         description:
           'Frontend architecture for a headless React/Magento PWA with component reuse across checkout, SSO, and loyalty flows.',
-        image: '/images/skills/nutriciastore.png',
+        image: '/images/skills/nutriciastore.jpg',
         imageAlt: 'Nutricia headless PWA screenshot',
         imageFit: 'cover',
       },
@@ -796,7 +796,7 @@ export const SKILL_PROFILES = [
         eyebrow: 'Decision-making',
         description:
           'Proposed a full code migration over quick-fix no-code workarounds. Built the business case, got buy-in, and delivered.',
-        image: '/images/skills/webflow-pre-screening.png',
+        image: '/images/skills/webflow-pre-screening.jpg',
         imageAlt: 'Code migration project screenshot',
         imageFit: 'cover',
       },
@@ -811,7 +811,7 @@ export const SKILL_PROFILES = [
         eyebrow: 'Client comms',
         description:
           'Communicated technical decisions directly to senior stakeholders at Nutricia/Danone while implementing systems like Yotpo reviews.',
-        image: '/images/skills/nutriciastore.png',
+        image: '/images/skills/nutriciastore.jpg',
         imageAlt: 'Danone Nutricia Store screenshot',
         imageFit: 'cover',
       },
