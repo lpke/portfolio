@@ -83,8 +83,10 @@ function SkillCardRoot({
     showGithubIndicator: showGithubIndicator ?? false,
   });
   const resolvedImagePosition = imagePosition;
-  const resolvedImageSize =
-    imageSize ?? SKILL_CARD_IMAGE_DEFAULT_SIZES[resolvedImagePosition];
+  const resolvedImageSize = getImageSize({
+    imagePosition: resolvedImagePosition,
+    imageSize,
+  });
   const isInlineImage =
     resolvedImagePosition === 'left' || resolvedImagePosition === 'right';
   const style: SkillCardStyle = {
@@ -205,4 +207,30 @@ function getImageGapClassName(position: SkillCardImagePosition) {
 
 function shouldRenderImageBeforeContent(position: SkillCardImagePosition) {
   return position === 'top' || position === 'left' || position === 'right';
+}
+
+function getImageSize({
+  imagePosition,
+  imageSize,
+}: {
+  imagePosition: SkillCardImagePosition;
+  imageSize?: string;
+}) {
+  if (
+    imageSize &&
+    isStackedImagePosition(imagePosition) &&
+    isPercentageImageSize(imageSize)
+  ) {
+    return SKILL_CARD_IMAGE_DEFAULT_SIZES[imagePosition];
+  }
+
+  return imageSize ?? SKILL_CARD_IMAGE_DEFAULT_SIZES[imagePosition];
+}
+
+function isStackedImagePosition(position: SkillCardImagePosition) {
+  return position === 'top' || position === 'bottom';
+}
+
+function isPercentageImageSize(imageSize: string) {
+  return imageSize.includes('%');
 }
