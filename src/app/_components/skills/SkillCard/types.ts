@@ -1,7 +1,9 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type {
   SkillCardImageFit,
   SkillCardImagePosition,
+  SkillCardNamedSpan,
+  SkillCardNumericSpan,
   SkillCardSpan,
   SkillCardType,
 } from '@/utils/constants';
@@ -9,6 +11,8 @@ import type {
 export type {
   SkillCardImageFit,
   SkillCardImagePosition,
+  SkillCardNamedSpan,
+  SkillCardNumericSpan,
   SkillCardSpan,
   SkillCardType,
 };
@@ -99,10 +103,17 @@ export type SkillCardBaseProps = {
   type?: SkillCardType;
   /**
    * Grid span used by the skills page layout.
-   * Options: `half`, `full`.
+   * Options: `1`, `2`, `3`, `4`, `5`, `6`, `half`, `full`.
+   * `half` is an alias for `3`; `full` is an alias for `6`.
    * Default: `half`.
    */
   cardSpan?: SkillCardSpan;
+  /** Direct CSS height for the root card. Example: `18rem` or `320`. */
+  cardHeight?: CSSProperties['height'];
+  /** Direct CSS min-height for the root card. Example: `14rem`. */
+  cardMinHeight?: CSSProperties['minHeight'];
+  /** Direct CSS max-height for the root card. Example: `28rem`. */
+  cardMaxHeight?: CSSProperties['maxHeight'];
   /** Optional image content or image URL. */
   image?: ReactNode | string;
   /** Accessible label for string image URLs. Use an empty string for decorative images. */

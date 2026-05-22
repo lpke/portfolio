@@ -12,6 +12,9 @@ export const SKILL_CARD_TITLE_SIZE_CLASS_NAMES = {
 
 export const SKILL_CARD_DEFAULT_PROP_CONFIG = {
   ariaLabel: { values: { base: undefined } },
+  cardHeight: { values: { base: undefined } },
+  cardMaxHeight: { values: { base: undefined } },
+  cardMinHeight: { values: { base: undefined } },
   cardSpan: { values: { base: 'half' } },
   children: { values: { base: undefined } },
   chips: { values: { base: undefined } },
@@ -62,6 +65,12 @@ export const SKILL_CARD_PROP_KEYS = Object.keys(
 
 type SkillCardDefaultBaseProps = {
   [Key in keyof typeof SKILL_CARD_DEFAULT_PROP_CONFIG]: (typeof SKILL_CARD_DEFAULT_PROP_CONFIG)[Key]['values']['base'];
+};
+
+export type SkillCardResolvedBaseProps = {
+  [Key in keyof SkillCardBaseProps]-?: undefined extends SkillCardDefaultBaseProps[Key]
+    ? SkillCardBaseProps[Key]
+    : Exclude<SkillCardBaseProps[Key], undefined>;
 };
 
 export const SKILL_CARD_DEFAULT_BASE_PROPS = Object.fromEntries(

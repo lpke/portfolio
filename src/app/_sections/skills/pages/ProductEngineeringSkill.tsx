@@ -13,7 +13,7 @@ export function ProductEngineeringSkill({
 }: SkillPageProps) {
   return (
     <SkillPageShell
-      intro="I build the apps people actually use — SPAs, portals, and interactive experiences shipped at scale. React and TypeScript frontend, with enough backend to own features end-to-end."
+      intro="I build web apps that serve thousands of users daily. Interactive SPAs, dashboards, portals, marketing sites, and integrations across the stack."
       variant={variant}
     >
       <SkillPager isVisible={isVisible}>

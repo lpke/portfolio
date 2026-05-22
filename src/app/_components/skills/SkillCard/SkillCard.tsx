@@ -8,17 +8,18 @@ import {
   SKILL_CARD_SPAN_CLASS_NAMES,
 } from '@/utils/constants';
 import { SurfaceOverlay } from '@/components/SurfaceOverlay';
-import { SKILL_CARD_DEFAULT_BASE_PROPS } from './defaults';
+import type { SkillCardResolvedBaseProps } from './defaults';
 import { getSkillCardIndicators } from './icons';
 import { useResolvedSkillCardProps } from './responsive';
 import { SkillCardContent } from './SkillCardContent';
 import { SkillCardImage } from './SkillCardImage';
 import type {
-  SkillCardBaseProps,
+  SkillCardImageFit,
   SkillCardImagePosition,
   SkillCardProps,
+  SkillCardSpan,
+  SkillCardType,
 } from './types';
-import type { SkillCardImageFit, SkillCardSpan, SkillCardType } from './types';
 import { cx } from '../shared';
 
 export type {
@@ -43,33 +44,36 @@ export function SkillCard(props: SkillCardProps) {
 
 function SkillCardRoot({
   title,
-  titleSize = SKILL_CARD_DEFAULT_BASE_PROPS.titleSize,
+  titleSize,
   eyebrow,
   description,
   chips,
   icon,
   indicatorIcons,
   showExternalLinkIndicator,
-  showGithubIndicator = SKILL_CARD_DEFAULT_BASE_PROPS.showGithubIndicator,
+  showGithubIndicator,
   href,
   type,
-  cardSpan = SKILL_CARD_DEFAULT_BASE_PROPS.cardSpan,
+  cardSpan,
+  cardHeight,
+  cardMinHeight,
+  cardMaxHeight,
   image,
-  imageAlt = SKILL_CARD_DEFAULT_BASE_PROPS.imageAlt,
+  imageAlt,
   imagePosition,
   imageSize,
   imageMinSize,
   imageMaxSize,
-  imageFit = SKILL_CARD_DEFAULT_BASE_PROPS.imageFit,
-  imageObjectPosition = SKILL_CARD_DEFAULT_BASE_PROPS.imageObjectPosition,
-  imageObjectScale = SKILL_CARD_DEFAULT_BASE_PROPS.imageObjectScale,
-  imageBlurBackground = SKILL_CARD_DEFAULT_BASE_PROPS.imageBlurBackground,
+  imageFit,
+  imageObjectPosition,
+  imageObjectScale,
+  imageBlurBackground,
   imageClassName,
   className,
   contentClassName,
   ariaLabel,
   children,
-}: SkillCardBaseProps) {
+}: SkillCardResolvedBaseProps) {
   const isLinked = Boolean(href);
   const hasImage = Boolean(image);
   const resolvedType = type ?? (hasImage ? 'feature' : 'default');
@@ -78,13 +82,15 @@ function SkillCardRoot({
     showExternalLinkIndicator: showExternalLinkIndicator ?? isLinked,
     showGithubIndicator: showGithubIndicator ?? false,
   });
-  const resolvedImagePosition =
-    imagePosition ?? SKILL_CARD_DEFAULT_BASE_PROPS.imagePosition;
+  const resolvedImagePosition = imagePosition;
   const resolvedImageSize =
     imageSize ?? SKILL_CARD_IMAGE_DEFAULT_SIZES[resolvedImagePosition];
   const isInlineImage =
     resolvedImagePosition === 'left' || resolvedImagePosition === 'right';
   const style: SkillCardStyle = {
+    height: cardHeight,
+    minHeight: cardMinHeight,
+    maxHeight: cardMaxHeight,
     '--skill-card-image-size': resolvedImageSize,
     ...(isInlineImage
       ? {

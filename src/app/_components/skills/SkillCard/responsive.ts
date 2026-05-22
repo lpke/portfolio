@@ -3,6 +3,7 @@ import {
   SKILL_CARD_DEFAULT_PROP_CONFIG,
   SKILL_CARD_PROP_KEYS,
 } from './defaults';
+import type { SkillCardResolvedBaseProps } from './defaults';
 import type {
   SkillCardBaseProps,
   SkillCardDefaultConfig,
@@ -71,7 +72,7 @@ let skillCardViewportAnimationFrame: number | null = null;
 
 export function useResolvedSkillCardProps(
   props: SkillCardResponsiveProps,
-): SkillCardBaseProps {
+): SkillCardResolvedBaseProps {
   const viewportWidth = useSyncExternalStore(
     subscribeSkillCardViewport,
     getSkillCardViewportSnapshot,
@@ -84,7 +85,7 @@ export function useResolvedSkillCardProps(
 function resolveSkillCardProps(
   props: SkillCardResponsiveProps,
   viewportWidth: number | null,
-) {
+): SkillCardResolvedBaseProps {
   const resolvedProps: Partial<Record<keyof SkillCardBaseProps, unknown>> = {};
 
   SKILL_CARD_PROP_KEYS.forEach((propKey) => {
@@ -97,7 +98,7 @@ function resolveSkillCardProps(
     );
   });
 
-  return resolvedProps as SkillCardBaseProps;
+  return resolvedProps as SkillCardResolvedBaseProps;
 }
 
 function resolveSkillCardProp<T>(

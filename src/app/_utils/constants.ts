@@ -308,7 +308,9 @@ export type SkillCardImageFit =
   | 'scale-down'
   | 'stretch';
 
-export type SkillCardSpan = 'half' | 'full';
+export type SkillCardNumericSpan = 1 | 2 | 3 | 4 | 5 | 6;
+export type SkillCardNamedSpan = 'half' | 'full';
+export type SkillCardSpan = SkillCardNamedSpan | SkillCardNumericSpan;
 
 export const SKILL_CARD_CLASS_NAMES = {
   default:
@@ -390,6 +392,12 @@ export const SKILL_PAGER_CONFIG: SkillPagerConfig = {
 };
 
 export const SKILL_CARD_SPAN_CLASS_NAMES = {
+  1: 'lg:col-span-1',
+  2: 'lg:col-span-2',
+  3: 'lg:col-span-3',
+  4: 'lg:col-span-4',
+  5: 'lg:col-span-5',
+  6: 'lg:col-span-6',
   half: 'lg:col-span-3',
   full: 'lg:col-span-6',
 } as const satisfies Record<SkillCardSpan, string>;
