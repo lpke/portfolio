@@ -110,9 +110,14 @@ const skillCardMediaQuerySubscriptions = new Map<
 type SkillCardBaseProps = {
   /** Main card heading. */
   title?: ReactNode;
-  /** Responsive title scale. Example: `lg` for a featured project card. Defaults to `md`. */
+  /**
+   * Responsive title scale.
+   * Options: `sm`, `md`, `lg`.
+   * Example: `lg` for a featured project card.
+   * Default: `md`.
+   */
   titleSize?: SkillCardTitleSize;
-  /** Small uppercase label rendered above the title. Defaults to `Proof point`. */
+  /** Small uppercase label rendered above the title. Default: `Proof point`. */
   eyebrow?: ReactNode;
   /** Supporting body copy rendered below the title. */
   description?: ReactNode;
@@ -122,21 +127,34 @@ type SkillCardBaseProps = {
   icon?: ReactNode;
   /** Custom trailing indicators shown in the card header. Example: `<CodeIcon />`. */
   indicatorIcons?: SkillCardIndicatorIcons;
-  /** Whether to show the external-link indicator. Defaults to true when `href` is set. */
+  /** Whether to show the external-link indicator. Default: true when `href` is set. */
   showExternalLinkIndicator?: boolean;
   /** Whether to show the GitHub indicator. */
   showGithubIndicator?: boolean;
   /** External URL. Example: `https://github.com/user/repo`. When present, the card renders as a link. */
   href?: string;
-  /** Visual treatment for card padding, background, borders, and description scale. Example: `feature`. */
+  /**
+   * Visual treatment for card padding, background, borders, and description scale.
+   * Options: `default`, `feature`, `chips`, `compact`, `metric`, `quiet`.
+   * Example: `feature`.
+   */
   type?: SkillCardType;
-  /** Grid span used by the skills page layout. Defaults to `half`. */
+  /**
+   * Grid span used by the skills page layout.
+   * Options: `half`, `full`.
+   * Default: `half`.
+   */
   cardSpan?: SkillCardSpan;
   /** Optional image content or image URL. */
   image?: ReactNode | string;
   /** Accessible label for string image URLs. Use an empty string for decorative images. */
   imageAlt?: string;
-  /** Image placement relative to the card content. Example: `left`. Defaults to `top`. */
+  /**
+   * Image placement relative to the card content.
+   * Options: `top`, `right`, `bottom`, `left`.
+   * Example: `left`.
+   * Default: `top` on base/lg and `right` on md/1250px.
+   */
   imagePosition?: SkillCardImagePosition;
   /** CSS size for the image area. Example: `9rem` for top/bottom height or `42%` for left/right width. */
   imageSize?: string;
@@ -144,15 +162,17 @@ type SkillCardBaseProps = {
   imageMinSize?: string;
   /** CSS maximum size for left/right image widths. Example: `22rem`. */
   imageMaxSize?: string;
-  /** Object-fit style for string image URLs.
-  Options: `contain`, `cover`, `none`, `scale-down`, `stretch`.
-  Defaults to `contain`. */
+  /**
+   * Object-fit style for string image URLs.
+   * Options: `contain`, `cover`, `none`, `scale-down`, `stretch`.
+   * Default: `contain`.
+   */
   imageFit?: SkillCardImageFit;
   /** CSS background-position for string image URLs. Example: `center top` or `65% 50%`. Useful with `imageFit="cover"`. */
   imageObjectPosition?: string;
-  /** Visual scale for string image URLs. Example: `1.08` zooms the image in by 8%. Defaults to `1`. */
+  /** Visual scale for string image URLs. Example: `1.08` zooms the image in by 8%. Default: `1`. */
   imageObjectScale?: number | string;
-  /** Whether to fill contain/none/scale-down letterboxing with a blurred cover copy of the image. Defaults to `true`. */
+  /** Whether to fill contain/none/scale-down letterboxing with a blurred cover copy of the image. Default: `true`. */
   imageBlurBackground?: boolean;
   /** Extra class names for the image wrapper. Example: `bg-black/20`. */
   imageClassName?: string;
@@ -263,9 +283,11 @@ function SkillCardRoot({
     showExternalLinkIndicator: showExternalLinkIndicator ?? isLinked,
     showGithubIndicator,
   });
+  const resolvedImagePosition = imagePosition ?? 'top';
   const resolvedImageSize =
-    imageSize ?? SKILL_CARD_IMAGE_DEFAULT_SIZES[imagePosition];
-  const isInlineImage = imagePosition === 'left' || imagePosition === 'right';
+    imageSize ?? SKILL_CARD_IMAGE_DEFAULT_SIZES[resolvedImagePosition];
+  const isInlineImage =
+    resolvedImagePosition === 'left' || resolvedImagePosition === 'right';
   const style: SkillCardStyle = {
     '--skill-card-image-size': resolvedImageSize,
     ...(isInlineImage
@@ -289,12 +311,12 @@ function SkillCardRoot({
     <div
       className={cx(
         'relative z-10 min-w-0',
-        hasImage && getImageLayoutClassName(imagePosition),
-        hasImage && getImageGapClassName(imagePosition),
+        hasImage && getImageLayoutClassName(resolvedImagePosition),
+        hasImage && getImageGapClassName(resolvedImagePosition),
         hasImage && isInlineImage && 'h-full',
       )}
     >
-      {hasImage && shouldRenderImageBeforeContent(imagePosition) && (
+      {hasImage && shouldRenderImageBeforeContent(resolvedImagePosition) && (
         <SkillCardImage
           image={image}
           imageAlt={imageAlt}
@@ -302,7 +324,7 @@ function SkillCardRoot({
           imageFit={imageFit}
           imageObjectPosition={imageObjectPosition}
           imageObjectScale={imageObjectScale}
-          imagePlacement={imagePosition}
+          imagePlacement={resolvedImagePosition}
           isInlineImage={isInlineImage}
           className={imageClassName}
         />
@@ -318,13 +340,13 @@ function SkillCardRoot({
         isLinked={isLinked}
         type={resolvedType}
         hasImage={hasImage}
-        imagePosition={imagePosition}
+        imagePosition={resolvedImagePosition}
         cardPaddingClassName={cardPaddingClassName}
         className={contentClassName}
       >
         {children}
       </SkillCardContent>
-      {hasImage && !shouldRenderImageBeforeContent(imagePosition) && (
+      {hasImage && !shouldRenderImageBeforeContent(resolvedImagePosition) && (
         <SkillCardImage
           image={image}
           imageAlt={imageAlt}
@@ -332,7 +354,7 @@ function SkillCardRoot({
           imageFit={imageFit}
           imageObjectPosition={imageObjectPosition}
           imageObjectScale={imageObjectScale}
-          imagePlacement={imagePosition}
+          imagePlacement={resolvedImagePosition}
           isInlineImage={isInlineImage}
           className={imageClassName}
         />
