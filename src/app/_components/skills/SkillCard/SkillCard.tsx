@@ -8,10 +8,7 @@ import {
   SKILL_CARD_SPAN_CLASS_NAMES,
 } from '@/utils/constants';
 import { SurfaceOverlay } from '@/components/SurfaceOverlay';
-import {
-  SKILL_CARD_RESPONSIVE_DEFAULT_PROPS,
-  SKILL_CARD_STATIC_DEFAULT_PROPS,
-} from './defaults';
+import { SKILL_CARD_DEFAULT_BASE_PROPS } from './defaults';
 import { getSkillCardIndicators } from './icons';
 import { useResolvedSkillCardProps } from './responsive';
 import { SkillCardContent } from './SkillCardContent';
@@ -46,27 +43,27 @@ export function SkillCard(props: SkillCardProps) {
 
 function SkillCardRoot({
   title,
-  titleSize = SKILL_CARD_STATIC_DEFAULT_PROPS.titleSize,
+  titleSize = SKILL_CARD_DEFAULT_BASE_PROPS.titleSize,
   eyebrow,
   description,
   chips,
   icon,
   indicatorIcons,
   showExternalLinkIndicator,
-  showGithubIndicator = SKILL_CARD_STATIC_DEFAULT_PROPS.showGithubIndicator,
+  showGithubIndicator = SKILL_CARD_DEFAULT_BASE_PROPS.showGithubIndicator,
   href,
   type,
-  cardSpan = SKILL_CARD_STATIC_DEFAULT_PROPS.cardSpan,
+  cardSpan = SKILL_CARD_DEFAULT_BASE_PROPS.cardSpan,
   image,
-  imageAlt = SKILL_CARD_STATIC_DEFAULT_PROPS.imageAlt,
+  imageAlt = SKILL_CARD_DEFAULT_BASE_PROPS.imageAlt,
   imagePosition,
   imageSize,
   imageMinSize,
   imageMaxSize,
-  imageFit = SKILL_CARD_STATIC_DEFAULT_PROPS.imageFit,
-  imageObjectPosition = SKILL_CARD_STATIC_DEFAULT_PROPS.imageObjectPosition,
-  imageObjectScale = SKILL_CARD_STATIC_DEFAULT_PROPS.imageObjectScale,
-  imageBlurBackground = SKILL_CARD_STATIC_DEFAULT_PROPS.imageBlurBackground,
+  imageFit = SKILL_CARD_DEFAULT_BASE_PROPS.imageFit,
+  imageObjectPosition = SKILL_CARD_DEFAULT_BASE_PROPS.imageObjectPosition,
+  imageObjectScale = SKILL_CARD_DEFAULT_BASE_PROPS.imageObjectScale,
+  imageBlurBackground = SKILL_CARD_DEFAULT_BASE_PROPS.imageBlurBackground,
   imageClassName,
   className,
   contentClassName,
@@ -82,8 +79,7 @@ function SkillCardRoot({
     showGithubIndicator: showGithubIndicator ?? false,
   });
   const resolvedImagePosition =
-    imagePosition ??
-    SKILL_CARD_RESPONSIVE_DEFAULT_PROPS.imagePosition.values.base;
+    imagePosition ?? SKILL_CARD_DEFAULT_BASE_PROPS.imagePosition;
   const resolvedImageSize =
     imageSize ?? SKILL_CARD_IMAGE_DEFAULT_SIZES[resolvedImagePosition];
   const isInlineImage =

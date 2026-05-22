@@ -157,8 +157,8 @@ export type SkillCardDefaultConfig<T> = {
   direction?: SkillCardResponsiveDirection;
 };
 
-export type SkillCardDefaultConfigMap = Partial<{
+export type SkillCardDefaultConfigMap = {
   [Key in keyof SkillCardBaseProps]: SkillCardDefaultConfig<
     SkillCardBaseProps[Key]
   >;
-}>;
+};

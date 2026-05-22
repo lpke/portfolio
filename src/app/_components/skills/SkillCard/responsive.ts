@@ -89,9 +89,9 @@ function resolveSkillCardProps(
 
   SKILL_CARD_PROP_KEYS.forEach((propKey) => {
     resolvedProps[propKey] = resolveSkillCardProp(
-      SKILL_CARD_DEFAULT_PROP_CONFIG[propKey] as
-        | SkillCardDefaultConfig<unknown>
-        | undefined,
+      SKILL_CARD_DEFAULT_PROP_CONFIG[
+        propKey
+      ] as SkillCardDefaultConfig<unknown>,
       (props as Partial<Record<keyof SkillCardBaseProps, unknown>>)[propKey],
       viewportWidth,
     );

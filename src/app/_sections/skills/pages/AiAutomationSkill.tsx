@@ -22,7 +22,7 @@ export function AiAutomationSkill({
             <SkillCard
               eyebrow="Personal Project"
               title="code-to-notion"
-              description="Node CLI that uploads codebases to Notion. Filesystem is mapped 1:1 to notion pages. including Git context. Built to give AI agents structured code reasoning."
+              description="Node CLI that uploads codebases to Notion, retaining filesystem structure and Git data. Built to give my Notion AI agents structured code reasoning ability."
               cardSpan="full"
               href="https://github.com/lpke/code-to-notion"
               showGithubIndicator
