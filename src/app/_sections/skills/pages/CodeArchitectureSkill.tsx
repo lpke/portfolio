@@ -1,4 +1,4 @@
-import { SkillCard } from '@/components/skills/SkillCard';
+import { SkillCard } from '@/components/skills/SkillCard/SkillCard';
 import {
   SkillGrid,
   SkillPage,

@@ -1,4 +1,4 @@
-import { SkillCard } from '@/components/skills/SkillCard';
+import { SkillCard } from '@/components/skills/SkillCard/SkillCard';
 import {
   SkillGrid,
   SkillPage,
@@ -20,12 +20,14 @@ export function AiAutomationSkill({
         <SkillPage label="Page 1" summary="AI & Automation examples page 1">
           <SkillGrid>
             <SkillCard
-              eyebrow="Open source"
+              eyebrow="Personal Project"
               title="code-to-notion"
-              description="Node CLI that uploads codebases to Notion with full Git context. Built to give AI agents structured code reasoning."
+              description="Node CLI that uploads codebases to Notion. Filesystem is mapped 1:1 to notion pages. including Git context. Built to give AI agents structured code reasoning."
+              cardSpan="full"
               href="https://github.com/lpke/code-to-notion"
               showGithubIndicator
               image="/images/skills/notion-ai.png"
+              imageObjectPosition="center"
               imageAlt="code-to-notion project screenshot"
               imageFit="cover"
             />
@@ -39,16 +41,18 @@ export function AiAutomationSkill({
               image="/images/skills/aspyn-cli.png"
               imageAlt="aspyn CLI screenshot"
               imageFit="cover"
-              imagePosition="right"
+              imagePosition="left"
               imageSize="46%"
             />
             <SkillCard
               eyebrow="Dev environment"
               title="Neovim + CodeCompanion"
               description="Custom Lua-based AI config with multi-model support, agentic workflows, slash commands, and tool approval flows."
+              cardSpan="full"
               href="https://github.com/lpke/nvim"
               showGithubIndicator
               image="/images/skills/nvim-codecompanion.png"
+              imageObjectPosition="60% top"
               imageAlt="Neovim CodeCompanion screenshot"
               imageFit="cover"
             />
