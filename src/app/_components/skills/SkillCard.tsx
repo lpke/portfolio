@@ -10,6 +10,7 @@ import {
   type SkillCardSpan,
   type SkillCardType,
 } from '@/utils/constants';
+import { SurfaceOverlay } from '@/components/SurfaceOverlay';
 import { SkillChips, cx } from './shared';
 
 export type {
@@ -169,7 +170,7 @@ export function SkillCard({
         className={cardClassName}
         style={style}
       >
-        <SkillCardHoverOverlay />
+        <SurfaceOverlay className="bg-[color:color-mix(in_srgb,var(--skill-accent)_7%,rgba(255,255,255,0.045))] opacity-0 transition-opacity duration-200 group-hover/skill-card:opacity-100" />
         {body}
       </a>
     );
@@ -326,15 +327,6 @@ function normalizeIndicatorIcons(indicatorIcons?: SkillCardIndicatorIcons) {
   }
 
   return Array.isArray(indicatorIcons) ? [...indicatorIcons] : [indicatorIcons];
-}
-
-function SkillCardHoverOverlay() {
-  return (
-    <span
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 bg-[color:color-mix(in_srgb,var(--skill-accent)_7%,rgba(255,255,255,0.045))] opacity-0 transition-opacity duration-200 group-hover/skill-card:opacity-100"
-    />
-  );
 }
 
 function SkillCardImage({

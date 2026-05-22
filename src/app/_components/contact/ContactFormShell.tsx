@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { SurfaceOverlay } from '@/components/SurfaceOverlay';
 
 export function ContactFormShell({ children }: { children: ReactNode }) {
   const handlePointerDown = (
@@ -33,8 +34,8 @@ export function ContactFormShell({ children }: { children: ReactNode }) {
             'radial-gradient(circle, rgba(123,208,255,0.09) 0%, rgba(60,221,199,0.045) 34%, transparent 64%)',
         }}
       />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-800 group-focus-within/contact-form:opacity-100"
+      <SurfaceOverlay
+        className="opacity-0 transition-opacity duration-800 group-focus-within/contact-form:opacity-100"
         style={{
           background:
             'radial-gradient(circle at 82% 0%, rgba(92,196,255,0.098), rgba(32,232,204,0.049) 28%, transparent 50%), radial-gradient(circle at 0% 100%, rgba(255,184,108,0.085), rgba(255,124,148,0.043) 30%, transparent 52%)',

@@ -15,6 +15,7 @@ import {
   SKILL_PAGER_CONFIG,
   SKILL_PAGER_COPY,
 } from '@/utils/constants';
+import { SurfaceOverlay } from '@/components/SurfaceOverlay';
 import { cx } from './shared';
 import type { SkillPageVariant } from './types';
 
@@ -559,10 +560,7 @@ export function SkillPager({
                     )}
                   >
                     {!isActive && (
-                      <span
-                        aria-hidden="true"
-                        className="pointer-events-none absolute inset-0 rounded-full bg-white/[0.55] opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                      />
+                      <SurfaceOverlay className="rounded-full bg-white/[0.55] opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
                     )}
 
                     {isActive && (
