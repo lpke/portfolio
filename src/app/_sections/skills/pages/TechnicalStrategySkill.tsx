@@ -20,21 +20,21 @@ export function TechnicalStrategySkill({
         <SkillPage label="Page 1" summary="Technical Strategy examples page 1">
           <SkillGrid>
             <SkillCard
-              title="Code Migration Proposal"
               eyebrow="Decision-making"
+              title="Code Migration Proposal"
               description="Proposed a full code migration over quick-fix no-code workarounds. Built the business case, got buy-in, and delivered."
               image="/images/skills/webflow-pre-screening.jpg"
               imageAlt="Code migration project screenshot"
               imageFit="cover"
             />
             <SkillCard
-              title="Company-Wide Product Demo"
               eyebrow="Communication"
+              title="Company-Wide Product Demo"
               description="Presented a new patient onboarding flow to ~400 people on a near-company-wide call."
             />
             <SkillCard
-              title="Danone Client Communication"
               eyebrow="Client comms"
+              title="Danone Client Communication"
               description="Communicated technical decisions directly to senior stakeholders at Nutricia/Danone while implementing systems like Yotpo reviews."
               image="/images/skills/nutriciastore.jpg"
               imageAlt="Danone Nutricia Store screenshot"
@@ -45,18 +45,18 @@ export function TechnicalStrategySkill({
         <SkillPage label="Page 2" summary="Technical Strategy examples page 2">
           <SkillGrid>
             <SkillCard
-              title="Non-Technical Stakeholders"
               eyebrow="Stakeholders"
+              title="Non-Technical Stakeholders"
               description="Explained web app architecture and technical constraints to property developers with no engineering background."
             />
             <SkillCard
-              title="Commerce to Code"
               eyebrow="Background"
+              title="Commerce to Code"
               description="Bachelor of Commerce graduate who moved from marketing strategy to engineering. Business thinking is built in, not bolted on."
             />
             <SkillCard
-              title="Stack"
               eyebrow="Stack"
+              title="Stack"
               cardSpan="full"
               chips={['GA4', 'GTM', 'VWO', 'A/B Testing', 'Figma']}
             />

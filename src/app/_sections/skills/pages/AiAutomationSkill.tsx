@@ -20,8 +20,8 @@ export function AiAutomationSkill({
         <SkillPage label="Page 1" summary="AI & Automation examples page 1">
           <SkillGrid>
             <SkillCard
-              title="code-to-notion"
               eyebrow="Open source"
+              title="code-to-notion"
               description="Node CLI that uploads codebases to Notion with full Git context. Built to give AI agents structured code reasoning."
               href="https://github.com/lpke/code-to-notion"
               showGithubIndicator
@@ -30,8 +30,8 @@ export function AiAutomationSkill({
               imageFit="cover"
             />
             <SkillCard
-              title="aspyn"
               eyebrow="Open source"
+              title="aspyn"
               description="Local pipeline engine that gives your scripts a memory. Stateful step runners, change detection, crash recovery, and scheduling."
               cardSpan="full"
               href="https://github.com/lpke/aspyn-legacy"
@@ -43,8 +43,8 @@ export function AiAutomationSkill({
               imageSize="46%"
             />
             <SkillCard
-              title="Neovim + CodeCompanion"
               eyebrow="Dev environment"
+              title="Neovim + CodeCompanion"
               description="Custom Lua-based AI config with multi-model support, agentic workflows, slash commands, and tool approval flows."
               href="https://github.com/lpke/nvim"
               showGithubIndicator
@@ -57,18 +57,18 @@ export function AiAutomationSkill({
         <SkillPage label="Page 2" summary="AI & Automation examples page 2">
           <SkillGrid>
             <SkillCard
-              title="AI in Production Teams"
               eyebrow="Production"
+              title="AI in Production Teams"
               description="Used agentic coding tools daily for feature development, debugging, and iteration across a 100+ engineer codebase."
             />
             <SkillCard
-              title="Local LLM Automation"
               eyebrow="Local AI"
+              title="Local LLM Automation"
               description="Ollama-powered local models for lightweight tasks like web page parsing and text processing."
             />
             <SkillCard
-              title="Stack"
               eyebrow="Stack"
+              title="Stack"
               cardSpan="full"
               chips={[
                 'GitHub Copilot',

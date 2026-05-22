@@ -20,18 +20,18 @@ export function ShippingTestingSkill({
         <SkillPage label="Page 1" summary="Shipping & Testing examples page 1">
           <SkillGrid>
             <SkillCard
-              title="Custom CI/CD Pipeline"
               eyebrow="CI/CD"
+              title="Custom CI/CD Pipeline"
               description="GitHub Actions pipeline with AWS CDK infrastructure (S3 + CloudFront) for a multi-site Vite build."
             />
             <SkillCard
-              title="Shared Tool E2E Suite"
               eyebrow="E2E testing"
+              title="Shared Tool E2E Suite"
               description="Built comprehensive Playwright E2E tests for an internal form tool used across multiple patient-facing apps."
             />
             <SkillCard
-              title="A/B Experimentation"
               eyebrow="Experimentation"
+              title="A/B Experimentation"
               description="Built and shipped multiple VWO A/B campaigns with custom variant UIs, client-side logic, and GA4 event tracking."
             />
           </SkillGrid>
@@ -39,21 +39,21 @@ export function ShippingTestingSkill({
         <SkillPage label="Page 2" summary="Shipping & Testing examples page 2">
           <SkillGrid>
             <SkillCard
-              title="Accessibility at Montu"
               eyebrow="Accessibility"
+              title="Accessibility at Montu"
               description="Implemented keyboard navigation, ARIA attributes, and contrast fixes across patient-facing apps."
             />
             <SkillCard
-              title="Healthcare App QA"
               eyebrow="Unit testing"
+              title="Healthcare App QA"
               description="Unit testing with Vitest and a custom GUI testing tool with state controls for rapid manual QA."
               image="/images/skills/pre-consultation-portal.png"
               imageAlt="Healthcare app QA screenshot"
               imageFit="cover"
             />
             <SkillCard
-              title="Stack"
               eyebrow="Stack"
+              title="Stack"
               cardSpan="full"
               chips={[
                 'Playwright',

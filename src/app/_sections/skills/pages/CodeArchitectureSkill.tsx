@@ -20,21 +20,21 @@ export function CodeArchitectureSkill({
         <SkillPage label="Page 1" summary="Code Architecture examples page 1">
           <SkillGrid>
             <SkillCard
-              title="Custom Multi-Site Build"
               eyebrow="Build"
+              title="Custom Multi-Site Build"
               description="Vite build pipeline with AWS CDK infra that replaced a no-code platform's limits. 75% bundle reduction, 70% faster builds."
               image="/images/skills/webflow-pre-screening.jpg"
               imageAlt="Custom multi-site build screenshot"
               imageFit="cover"
             />
             <SkillCard
-              title="100+ Engineer Monorepo"
               eyebrow="Monorepo"
+              title="100+ Engineer Monorepo"
               description="Implemented new apps and packages in a large-scale Nx monorepo, including full CI/CD and IaC for new projects."
             />
             <SkillCard
-              title="Shared Component Library"
               eyebrow="Components"
+              title="Shared Component Library"
               description="Migrated an internal React form tool into a standalone shared package in an Nx monorepo. Owned the Storybook library and E2E coverage."
             />
           </SkillGrid>
@@ -42,21 +42,21 @@ export function CodeArchitectureSkill({
         <SkillPage label="Page 2" summary="Code Architecture examples page 2">
           <SkillGrid>
             <SkillCard
-              title="Design System Rollout"
               eyebrow="Design system"
+              title="Design System Rollout"
               description="Key contributor to design system adoption across multiple patient-facing apps at Montu."
             />
             <SkillCard
-              title="Headless PWA (Nutricia)"
               eyebrow="Architecture"
+              title="Headless PWA (Nutricia)"
               description="Frontend architecture for a headless React/Magento PWA with component reuse across checkout, SSO, and loyalty flows."
               image="/images/skills/nutriciastore.jpg"
               imageAlt="Nutricia headless PWA screenshot"
               imageFit="cover"
             />
             <SkillCard
-              title="Stack"
               eyebrow="Stack"
+              title="Stack"
               cardSpan="full"
               chips={[
                 'Nx',

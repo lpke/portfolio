@@ -1,4 +1,13 @@
-import type { CSSProperties, ReactNode } from 'react';
+'use client';
+
+import {
+  isValidElement,
+  useCallback,
+  useMemo,
+  useSyncExternalStore,
+  type CSSProperties,
+  type ReactNode,
+} from 'react';
 import {
   SKILL_CARD_CLASS_NAMES,
   SKILL_CARD_IMAGE_BACKGROUND_SIZE,
@@ -28,6 +37,27 @@ type SkillCardStyle = CSSProperties & {
 
 type SkillCardIndicatorIcons = ReactNode | readonly ReactNode[];
 type SkillCardTitleSize = 'sm' | 'md' | 'lg';
+type SkillCardTailwindBreakpoint = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+type SkillCardCustomBreakpoint =
+  | number
+  | `${number}`
+  | `${number}px`
+  | `${number}rem`
+  | `${number}em`;
+type SkillCardResponsiveValues<T> = {
+  /** Applies below the first matching breakpoint. */
+  base?: T;
+  /** Alias for `base`. */
+  default?: T;
+} & Partial<Record<SkillCardTailwindBreakpoint, T>> &
+  Partial<Record<SkillCardCustomBreakpoint, T>>;
+type SkillCardResponsiveProp<T> = T | SkillCardResponsiveValues<T>;
+
+type SkillCardBreakpointConfig = {
+  key: string;
+  query: string;
+  order: number;
+};
 
 const SKILL_CARD_TITLE_SIZE_CLASS_NAMES = {
   sm: 'text-sm leading-snug lg:text-base',
@@ -35,7 +65,32 @@ const SKILL_CARD_TITLE_SIZE_CLASS_NAMES = {
   lg: 'text-xl leading-tight lg:text-2xl',
 } as const satisfies Record<SkillCardTitleSize, string>;
 
-type SkillCardProps = {
+const SKILL_CARD_TAILWIND_BREAKPOINTS = {
+  sm: { key: 'sm', query: '(min-width: 40rem)', order: 640 },
+  md: { key: 'md', query: '(min-width: 48rem)', order: 768 },
+  lg: { key: 'lg', query: '(min-width: 64rem)', order: 1024 },
+  xl: { key: 'xl', query: '(min-width: 80rem)', order: 1280 },
+  '2xl': { key: '2xl', query: '(min-width: 96rem)', order: 1536 },
+} as const satisfies Record<
+  SkillCardTailwindBreakpoint,
+  SkillCardBreakpointConfig
+>;
+
+const SKILL_CARD_BASE_BREAKPOINT_KEYS = new Set(['base', 'default']);
+const SKILL_CARD_CUSTOM_BREAKPOINT_PATTERN = /^(\d+(?:\.\d+)?)(px|rem|em)?$/;
+
+type SkillCardMediaQuerySubscription = {
+  mediaQueryList: MediaQueryList;
+  listener: () => void;
+  subscribers: Set<() => void>;
+};
+
+const skillCardMediaQuerySubscriptions = new Map<
+  string,
+  SkillCardMediaQuerySubscription
+>();
+
+type SkillCardBaseProps = {
   /** Main card heading. */
   title?: ReactNode;
   /** Responsive title scale. Example: `lg` for a featured project card. Defaults to `md`. */
@@ -88,7 +143,47 @@ type SkillCardProps = {
   children?: ReactNode;
 };
 
-export function SkillCard({
+type SkillCardProps = {
+  [Key in keyof SkillCardBaseProps]: SkillCardResponsiveProp<
+    SkillCardBaseProps[Key]
+  >;
+};
+
+const SKILL_CARD_PROP_KEYS = [
+  'ariaLabel',
+  'cardSpan',
+  'children',
+  'chips',
+  'className',
+  'contentClassName',
+  'description',
+  'eyebrow',
+  'href',
+  'icon',
+  'image',
+  'imageAlt',
+  'imageClassName',
+  'imageFit',
+  'imageMaxSize',
+  'imageMinSize',
+  'imageObjectPosition',
+  'imagePosition',
+  'imageSize',
+  'indicatorIcons',
+  'showExternalLinkIndicator',
+  'showGithubIndicator',
+  'title',
+  'titleSize',
+  'type',
+] as const satisfies readonly (keyof SkillCardBaseProps)[];
+
+export function SkillCard(props: SkillCardProps) {
+  const resolvedProps = useResolvedSkillCardProps(props);
+
+  return <SkillCardRoot {...resolvedProps} />;
+}
+
+function SkillCardRoot({
   title,
   titleSize = 'md',
   eyebrow = 'Proof point',
@@ -114,7 +209,7 @@ export function SkillCard({
   contentClassName,
   ariaLabel,
   children,
-}: SkillCardProps) {
+}: SkillCardBaseProps) {
   const isLinked = Boolean(href);
   const hasImage = Boolean(image);
   const resolvedType = type ?? (hasImage ? 'feature' : 'default');
@@ -123,6 +218,7 @@ export function SkillCard({
     showExternalLinkIndicator: showExternalLinkIndicator ?? isLinked,
     showGithubIndicator,
   });
+  const hasCustomImageSize = imageSize !== undefined;
   const resolvedImageSize =
     imageSize ?? SKILL_CARD_IMAGE_DEFAULT_SIZES[imagePosition];
   const isInlineImage = imagePosition === 'left' || imagePosition === 'right';
@@ -161,6 +257,7 @@ export function SkillCard({
           imageObjectPosition={imageObjectPosition}
           imagePlacement={imagePosition}
           isInlineImage={isInlineImage}
+          hasCustomImageSize={hasCustomImageSize}
           className={imageClassName}
         />
       )}
@@ -189,6 +286,7 @@ export function SkillCard({
           imageObjectPosition={imageObjectPosition}
           imagePlacement={imagePosition}
           isInlineImage={isInlineImage}
+          hasCustomImageSize={hasCustomImageSize}
           className={imageClassName}
         />
       )}
@@ -332,6 +430,290 @@ export function SkillCardContent({
   );
 }
 
+function useResolvedSkillCardProps(props: SkillCardProps): SkillCardBaseProps {
+  const breakpointSignature = getSkillCardResponsiveBreakpointSignature(props);
+  const viewportSignature = useSyncExternalStore(
+    useCallback(
+      (onStoreChange) =>
+        subscribeSkillCardBreakpoints(breakpointSignature, onStoreChange),
+      [breakpointSignature],
+    ),
+    useCallback(
+      () => getSkillCardBreakpointSnapshot(breakpointSignature),
+      [breakpointSignature],
+    ),
+    getSkillCardServerSnapshot,
+  );
+  const activeBreakpointKeys = useMemo(
+    () => getSkillCardActiveBreakpointKeys(viewportSignature),
+    [viewportSignature],
+  );
+
+  return resolveSkillCardProps(props, activeBreakpointKeys);
+}
+
+function resolveSkillCardProps(
+  props: SkillCardProps,
+  activeBreakpointKeys: ReadonlySet<string>,
+) {
+  const resolvedProps: Partial<Record<keyof SkillCardBaseProps, unknown>> = {};
+
+  SKILL_CARD_PROP_KEYS.forEach((propKey) => {
+    resolvedProps[propKey] = resolveSkillCardResponsiveProp(
+      props[propKey],
+      activeBreakpointKeys,
+    );
+  });
+
+  return resolvedProps as SkillCardBaseProps;
+}
+
+function resolveSkillCardResponsiveProp<T>(
+  value: SkillCardResponsiveProp<T> | undefined,
+  activeBreakpointKeys: ReadonlySet<string>,
+): T | undefined {
+  if (!isSkillCardResponsiveValue(value)) {
+    return value;
+  }
+
+  const responsiveValue = value as SkillCardResponsiveValues<T>;
+  const baseValue = Object.hasOwn(responsiveValue, 'base')
+    ? responsiveValue.base
+    : responsiveValue.default;
+
+  return getSkillCardResponsiveEntries(responsiveValue).reduce<T | undefined>(
+    (resolvedValue, entry) =>
+      activeBreakpointKeys.has(entry.breakpoint.key)
+        ? entry.value
+        : resolvedValue,
+    baseValue,
+  );
+}
+
+function getSkillCardResponsiveBreakpointSignature(props: SkillCardProps) {
+  const breakpointKeys = new Set<string>();
+
+  SKILL_CARD_PROP_KEYS.forEach((propKey) => {
+    const propValue = props[propKey];
+
+    if (!isSkillCardResponsiveValue(propValue)) {
+      return;
+    }
+
+    getSkillCardResponsiveEntries(propValue).forEach(({ breakpoint }) => {
+      breakpointKeys.add(breakpoint.key);
+    });
+  });
+
+  return Array.from(breakpointKeys)
+    .map((breakpointKey) => getSkillCardBreakpoint(breakpointKey))
+    .filter((breakpoint): breakpoint is SkillCardBreakpointConfig =>
+      Boolean(breakpoint),
+    )
+    .sort(compareSkillCardBreakpoints)
+    .map(({ key }) => key)
+    .join('|');
+}
+
+function getSkillCardResponsiveEntries<T>(
+  responsiveValue: SkillCardResponsiveValues<T>,
+) {
+  return Object.entries(responsiveValue)
+    .map(([key, value], index) => {
+      const breakpoint = getSkillCardBreakpoint(key);
+
+      if (!breakpoint) {
+        return null;
+      }
+
+      return { breakpoint, index, value: value as T };
+    })
+    .filter(
+      (
+        entry,
+      ): entry is {
+        breakpoint: SkillCardBreakpointConfig;
+        index: number;
+        value: T;
+      } => Boolean(entry),
+    )
+    .sort(
+      (firstEntry, secondEntry) =>
+        compareSkillCardBreakpoints(
+          firstEntry.breakpoint,
+          secondEntry.breakpoint,
+        ) || firstEntry.index - secondEntry.index,
+    );
+}
+
+function getSkillCardBreakpoint(
+  breakpointKey: string,
+): SkillCardBreakpointConfig | null {
+  if (SKILL_CARD_BASE_BREAKPOINT_KEYS.has(breakpointKey)) {
+    return null;
+  }
+
+  if (isSkillCardTailwindBreakpoint(breakpointKey)) {
+    return SKILL_CARD_TAILWIND_BREAKPOINTS[breakpointKey];
+  }
+
+  const match = breakpointKey.match(SKILL_CARD_CUSTOM_BREAKPOINT_PATTERN);
+
+  if (!match) {
+    return null;
+  }
+
+  const [, numericValue = '0', unit = 'px'] = match;
+  const parsedValue = Number(numericValue);
+
+  return {
+    key: breakpointKey,
+    query: `(min-width: ${numericValue}${unit})`,
+    order: getSkillCardBreakpointOrder(parsedValue, unit),
+  };
+}
+
+function getSkillCardBreakpointOrder(value: number, unit: string) {
+  if (unit === 'rem' || unit === 'em') {
+    return value * 16;
+  }
+
+  return value;
+}
+
+function compareSkillCardBreakpoints(
+  firstBreakpoint: SkillCardBreakpointConfig,
+  secondBreakpoint: SkillCardBreakpointConfig,
+) {
+  return firstBreakpoint.order - secondBreakpoint.order;
+}
+
+function isSkillCardTailwindBreakpoint(
+  breakpointKey: string,
+): breakpointKey is SkillCardTailwindBreakpoint {
+  return breakpointKey in SKILL_CARD_TAILWIND_BREAKPOINTS;
+}
+
+function isSkillCardResponsiveValue(
+  value: unknown,
+): value is SkillCardResponsiveValues<unknown> {
+  if (
+    typeof value !== 'object' ||
+    value === null ||
+    Array.isArray(value) ||
+    isValidElement(value)
+  ) {
+    return false;
+  }
+
+  if ('$$typeof' in value) {
+    return false;
+  }
+
+  return Object.keys(value).some(
+    (key) =>
+      SKILL_CARD_BASE_BREAKPOINT_KEYS.has(key) ||
+      isSkillCardTailwindBreakpoint(key) ||
+      SKILL_CARD_CUSTOM_BREAKPOINT_PATTERN.test(key),
+  );
+}
+
+function subscribeSkillCardBreakpoints(
+  breakpointSignature: string,
+  onStoreChange: () => void,
+) {
+  if (!breakpointSignature || typeof window === 'undefined') {
+    return () => {};
+  }
+
+  const unsubscribes = getSkillCardBreakpointsFromSignature(
+    breakpointSignature,
+  ).map((breakpoint) =>
+    subscribeSkillCardBreakpoint(breakpoint, onStoreChange),
+  );
+
+  return () => {
+    unsubscribes.forEach((unsubscribe) => {
+      unsubscribe();
+    });
+  };
+}
+
+function subscribeSkillCardBreakpoint(
+  breakpoint: SkillCardBreakpointConfig,
+  onStoreChange: () => void,
+) {
+  const subscription =
+    skillCardMediaQuerySubscriptions.get(breakpoint.query) ??
+    createSkillCardBreakpointSubscription(breakpoint.query);
+
+  subscription.subscribers.add(onStoreChange);
+
+  return () => {
+    subscription.subscribers.delete(onStoreChange);
+
+    if (subscription.subscribers.size === 0) {
+      subscription.mediaQueryList.removeEventListener(
+        'change',
+        subscription.listener,
+      );
+      skillCardMediaQuerySubscriptions.delete(breakpoint.query);
+    }
+  };
+}
+
+function createSkillCardBreakpointSubscription(query: string) {
+  const mediaQueryList = window.matchMedia(query);
+  const subscribers = new Set<() => void>();
+  const listener = () => {
+    subscribers.forEach((subscriber) => {
+      subscriber();
+    });
+  };
+  const subscription = {
+    mediaQueryList,
+    listener,
+    subscribers,
+  } satisfies SkillCardMediaQuerySubscription;
+
+  mediaQueryList.addEventListener('change', listener);
+  skillCardMediaQuerySubscriptions.set(query, subscription);
+
+  return subscription;
+}
+
+function getSkillCardBreakpointSnapshot(breakpointSignature: string) {
+  if (!breakpointSignature || typeof window === 'undefined') {
+    return '';
+  }
+
+  return getSkillCardBreakpointsFromSignature(breakpointSignature)
+    .filter((breakpoint) => window.matchMedia(breakpoint.query).matches)
+    .map(({ key }) => key)
+    .join('|');
+}
+
+function getSkillCardServerSnapshot() {
+  return '';
+}
+
+function getSkillCardBreakpointsFromSignature(breakpointSignature: string) {
+  if (!breakpointSignature) {
+    return [];
+  }
+
+  return breakpointSignature
+    .split('|')
+    .map((breakpointKey) => getSkillCardBreakpoint(breakpointKey))
+    .filter((breakpoint): breakpoint is SkillCardBreakpointConfig =>
+      Boolean(breakpoint),
+    );
+}
+
+function getSkillCardActiveBreakpointKeys(viewportSignature: string) {
+  return new Set(viewportSignature ? viewportSignature.split('|') : []);
+}
+
 function getSkillCardIndicators({
   indicatorIcons,
   showExternalLinkIndicator,
@@ -369,6 +751,7 @@ function SkillCardImage({
   imageObjectPosition,
   imagePlacement,
   isInlineImage,
+  hasCustomImageSize,
   className,
 }: {
   image: ReactNode | string | undefined;
@@ -377,6 +760,7 @@ function SkillCardImage({
   imageObjectPosition: string;
   imagePlacement: SkillCardImagePosition;
   isInlineImage: boolean;
+  hasCustomImageSize: boolean;
   className?: string;
 }) {
   return (
@@ -384,8 +768,16 @@ function SkillCardImage({
       className={cx(
         'min-w-0 shrink-0 overflow-hidden bg-white/[0.025]',
         isInlineImage
-          ? 'h-28 w-full lg:h-auto lg:w-[var(--skill-card-image-size)] lg:max-w-[var(--skill-card-image-max-size)] lg:min-w-[var(--skill-card-image-min-size)]'
+          ? cx(
+              'h-28 lg:h-auto lg:w-[var(--skill-card-image-size)] lg:max-w-[var(--skill-card-image-max-size)] lg:min-w-[var(--skill-card-image-min-size)]',
+              hasCustomImageSize
+                ? 'w-[var(--skill-card-image-size)] max-w-[var(--skill-card-image-max-size)] min-w-[var(--skill-card-image-min-size)]'
+                : 'w-full',
+            )
           : 'h-[var(--skill-card-image-size)] w-full',
+        imagePlacement === 'right' &&
+          hasCustomImageSize &&
+          'self-end lg:self-auto',
         imagePlacement === 'right' && 'lg:order-last',
         className,
       )}

@@ -20,8 +20,8 @@ export function DeveloperToolingSkill({
         <SkillPage label="Page 1" summary="Developer Tooling examples page 1">
           <SkillGrid>
             <SkillCard
-              title="Neovim Config"
               eyebrow="Dev environment"
+              title="Neovim Config"
               description="Comprehensive custom Neovim setup in Lua. LSP, linting, type checking, keymaps, and AI integration from scratch."
               href="https://github.com/lpke/nvim"
               showGithubIndicator
@@ -30,13 +30,13 @@ export function DeveloperToolingSkill({
               imageFit="cover"
             />
             <SkillCard
-              title="Mentoring at Montu"
               eyebrow="Mentoring"
+              title="Mentoring at Montu"
               description="Mentored several junior-mid engineers on React patterns, frontend fundamentals, and code quality."
             />
             <SkillCard
-              title="Internal Tool Documentation"
               eyebrow="Adoption"
+              title="Internal Tool Documentation"
               description="Wrote docs and streamlined a Storybook library to drive adoption of a shared form tool across engineering."
             />
           </SkillGrid>
@@ -44,18 +44,18 @@ export function DeveloperToolingSkill({
         <SkillPage label="Page 2" summary="Developer Tooling examples page 2">
           <SkillGrid>
             <SkillCard
-              title="Senior Code Reviews"
               eyebrow="Code quality"
+              title="Senior Code Reviews"
               description="Provided code reviews and mentorship on a Next.js/React Shopify build as the senior frontend on the project."
             />
             <SkillCard
-              title="Technical Hiring"
               eyebrow="Hiring"
+              title="Technical Hiring"
               description="Conducted technical candidate reviews for Montu's international engineering expansion."
             />
             <SkillCard
-              title="Stack"
               eyebrow="Stack"
+              title="Stack"
               cardSpan="full"
               chips={[
                 'Neovim',

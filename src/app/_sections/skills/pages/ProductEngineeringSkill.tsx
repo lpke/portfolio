@@ -16,12 +16,13 @@ export function ProductEngineeringSkill({
       intro="I build the apps people actually use — SPAs, portals, and interactive experiences shipped at scale. React and TypeScript frontend, with enough backend to own features end-to-end."
       variant={variant}
     >
-      <SkillPager isVisible={isVisible}>
+      <SkillPager isVisible={isVisible} autoTransitionMs={10000}>
         <SkillPage label="Page 1" summary="Product Engineering examples page 1">
           <SkillGrid>
             <SkillCard
-              title="Healthcare Patient Portal"
-              eyebrow="Health tech"
+              eyebrow="Montu"
+              title="Alternaleaf Patient Portal"
+              titleSize="lg"
               description="Sole frontend architect of a greenfield React SPA serving ~1,500 new users daily across AU and NZ."
               image="/images/skills/pre-consultation-portal.png"
               imageAlt="Healthcare patient portal screenshot"
@@ -29,8 +30,9 @@ export function ProductEngineeringSkill({
               imagePosition="right"
             />
             <SkillCard
+              eyebrow="Acidgreen"
               title="Nutricia / Danone"
-              eyebrow="Commerce"
+              titleSize="lg"
               description="SSO, loyalty program, and branded checkout on a headless React/Magento PWA for one of the world's largest food companies."
               href="https://www.nutriciastore.com.au"
               image="/images/skills/nutriciastore.jpg"
@@ -38,8 +40,9 @@ export function ProductEngineeringSkill({
               imageFit="cover"
             />
             <SkillCard
+              eyebrow="Akcelo"
               title="McDonald's Menu Boards"
-              eyebrow="Retail"
+              titleSize="lg"
               description="Built React components deployed to digital screens at 2,000+ McDonald's stores across Australia and New Zealand."
               cardSpan="full"
               image="/images/skills/mcdonalds-digital-menu.jpg"
@@ -52,16 +55,16 @@ export function ProductEngineeringSkill({
         <SkillPage label="Page 2" summary="Product Engineering examples page 2">
           <SkillGrid>
             <SkillCard
-              title="Property Listings Portal"
               eyebrow="Full-stack"
+              title="Property Listings Portal"
               description="Full-stack Next.js/MongoDB app with auth, serverless functions, and a dynamic data grid for real estate launches."
               image="/images/skills/opt-releases.png"
               imageAlt="Property listings portal screenshot"
               imageFit="cover"
             />
             <SkillCard
-              title="Milkrun"
               eyebrow="E-commerce"
+              title="Milkrun"
               description="Senior frontend on a TypeScript/React Shopify site built with Next.js. Code reviews and mentoring."
               href="https://www.milkrun.com"
               image="/images/skills/milkrun.png"
@@ -69,8 +72,8 @@ export function ProductEngineeringSkill({
               imageFit="cover"
             />
             <SkillCard
-              title="Stack"
               eyebrow="Stack"
+              title="Stack"
               cardSpan="full"
               chips={[
                 'React',
