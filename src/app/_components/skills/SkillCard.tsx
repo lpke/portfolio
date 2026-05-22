@@ -418,6 +418,27 @@ export function SkillCardContent({
   className,
   children,
 }: SkillCardContentProps) {
+  const hasLeadingMetadata = Boolean(eyebrow || icon);
+  const hasIndicatorIcons = indicatorIcons.length > 0;
+  const titleClassName = cx(
+    'font-headline min-w-0 font-bold text-white transition-colors duration-200',
+    isLinked && 'group-hover/skill-card:text-[var(--skill-accent)]',
+    SKILL_CARD_TITLE_SIZE_CLASS_NAMES[titleSize],
+  );
+  const renderedIndicatorIcons = hasIndicatorIcons && (
+    <span className="text-on-surface-variant/75 flex shrink-0 items-center gap-1.5">
+      {indicatorIcons.map((indicatorIcon, index) => (
+        <span
+          key={index}
+          className="grid h-4 w-4 place-items-center"
+          aria-hidden="true"
+        >
+          {indicatorIcon}
+        </span>
+      ))}
+    </span>
+  );
+
   return (
     <div
       className={cx(
@@ -430,7 +451,7 @@ export function SkillCardContent({
         className,
       )}
     >
-      {(eyebrow || icon || indicatorIcons.length > 0) && (
+      {hasLeadingMetadata && (
         <div className="mb-3 flex min-w-0 items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-2">
             {icon && <span className="text-[var(--skill-accent)]">{icon}</span>}
@@ -441,32 +462,22 @@ export function SkillCardContent({
             )}
           </div>
 
-          {indicatorIcons.length > 0 && (
-            <span className="text-on-surface-variant/75 flex shrink-0 items-center gap-1.5">
-              {indicatorIcons.map((indicatorIcon, index) => (
-                <span
-                  key={index}
-                  className="grid h-4 w-4 place-items-center"
-                  aria-hidden="true"
-                >
-                  {indicatorIcon}
-                </span>
-              ))}
-            </span>
-          )}
+          {renderedIndicatorIcons}
         </div>
       )}
 
-      {title && (
-        <h4
-          className={cx(
-            'font-headline min-w-0 font-bold text-white transition-colors duration-200',
-            isLinked && 'group-hover/skill-card:text-[var(--skill-accent)]',
-            SKILL_CARD_TITLE_SIZE_CLASS_NAMES[titleSize],
-          )}
-        >
-          {title}
-        </h4>
+      {title &&
+        (hasIndicatorIcons && !hasLeadingMetadata ? (
+          <div className="flex min-w-0 items-start justify-between gap-3">
+            <h4 className={cx(titleClassName, 'flex-1')}>{title}</h4>
+            {renderedIndicatorIcons}
+          </div>
+        ) : (
+          <h4 className={titleClassName}>{title}</h4>
+        ))}
+
+      {!title && hasIndicatorIcons && !hasLeadingMetadata && (
+        <div className="mb-3 flex justify-end">{renderedIndicatorIcons}</div>
       )}
 
       {description && (
