@@ -148,6 +148,8 @@ type SkillCardBaseProps = {
   imageFit?: SkillCardImageFit;
   /** CSS background-position for string image URLs. Example: `center top` or `65% 50%`. Useful with `imageFit="cover"`. */
   imageObjectPosition?: string;
+  /** Visual scale for string image URLs. Example: `1.08` zooms the image in by 8%. Defaults to `1`. */
+  imageObjectScale?: number | string;
   /** Extra class names for the image wrapper. Example: `bg-black/20`. */
   imageClassName?: string;
   /** Extra class names for the root card element. Example: `lg:col-span-2`. */
@@ -184,6 +186,7 @@ const SKILL_CARD_PROP_KEYS = [
   'imageMaxSize',
   'imageMinSize',
   'imageObjectPosition',
+  'imageObjectScale',
   'imagePosition',
   'imageSize',
   'indicatorIcons',
@@ -221,6 +224,7 @@ function SkillCardRoot({
   imageMaxSize,
   imageFit = 'contain',
   imageObjectPosition = 'center',
+  imageObjectScale = 1,
   imageClassName,
   className,
   contentClassName,
@@ -271,6 +275,7 @@ function SkillCardRoot({
           imageAlt={imageAlt}
           imageFit={imageFit}
           imageObjectPosition={imageObjectPosition}
+          imageObjectScale={imageObjectScale}
           imagePlacement={imagePosition}
           isInlineImage={isInlineImage}
           className={imageClassName}
@@ -299,6 +304,7 @@ function SkillCardRoot({
           imageAlt={imageAlt}
           imageFit={imageFit}
           imageObjectPosition={imageObjectPosition}
+          imageObjectScale={imageObjectScale}
           imagePlacement={imagePosition}
           isInlineImage={isInlineImage}
           className={imageClassName}
@@ -763,6 +769,7 @@ function SkillCardImage({
   imageAlt,
   imageFit,
   imageObjectPosition,
+  imageObjectScale,
   imagePlacement,
   isInlineImage,
   className,
@@ -771,6 +778,7 @@ function SkillCardImage({
   imageAlt: string;
   imageFit: SkillCardImageFit;
   imageObjectPosition: string;
+  imageObjectScale: number | string;
   imagePlacement: SkillCardImagePosition;
   isInlineImage: boolean;
   className?: string;
@@ -795,6 +803,8 @@ function SkillCardImage({
             backgroundImage: `url("${image}")`,
             backgroundPosition: imageObjectPosition,
             backgroundSize: SKILL_CARD_IMAGE_BACKGROUND_SIZE[imageFit],
+            transform: `scale(${imageObjectScale})`,
+            transformOrigin: imageObjectPosition,
           }}
         />
       ) : (
