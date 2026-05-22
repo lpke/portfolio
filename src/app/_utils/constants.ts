@@ -81,9 +81,16 @@ export const NAV_LINKS = SECTIONS;
 
 export const LAYOUT_CONFIG = {
   breakpoints: {
+    /** Tailwind `sm` breakpoint: 640px. */
     sm: 640,
+    /** Tailwind `md` breakpoint: 768px. */
     md: 768,
+    /** Tailwind `lg` breakpoint: 1024px. */
     lg: 1024,
+    /** Tailwind `xl` breakpoint: 1280px. */
+    xl: 1280,
+    /** Tailwind `2xl` breakpoint: 1536px. */
+    '2xl': 1536,
   },
   mediaQueries: {
     belowSm: '(max-width: 639px)',
@@ -361,10 +368,10 @@ export const SKILL_PAGER_COPY = {
 } as const;
 
 export type SkillPagerConfig = {
+  autoResumeDelayMs: number;
   autoTransitionMs: number;
   desktopWidthClassName: string;
   indicatorLineClassName: string;
-  scrollPauseMs: number;
   showArrowButtons: boolean;
   swapMs: number;
   swipeMaxOffAxisPx: number;
@@ -372,10 +379,10 @@ export type SkillPagerConfig = {
 };
 
 export const SKILL_PAGER_CONFIG: SkillPagerConfig = {
+  autoResumeDelayMs: 500,
   autoTransitionMs: 8000,
   desktopWidthClassName: 'sm:w-40',
   indicatorLineClassName: 'h-1',
-  scrollPauseMs: 500,
   showArrowButtons: false,
   swapMs: 130,
   swipeMaxOffAxisPx: 56,

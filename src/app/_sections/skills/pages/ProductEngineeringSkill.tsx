@@ -16,7 +16,7 @@ export function ProductEngineeringSkill({
       intro="I build the apps people actually use — SPAs, portals, and interactive experiences shipped at scale. React and TypeScript frontend, with enough backend to own features end-to-end."
       variant={variant}
     >
-      <SkillPager isVisible={isVisible} autoTransitionMs={10000}>
+      <SkillPager isVisible={isVisible} autoTransitionMs={8000}>
         <SkillPage label="Page 1" summary="Product Engineering examples page 1">
           <SkillGrid>
             <SkillCard
@@ -27,7 +27,7 @@ export function ProductEngineeringSkill({
               image="/images/skills/pre-consultation-portal.png"
               imageAlt="Healthcare patient portal screenshot"
               imageFit="cover"
-              imagePosition="right"
+              imagePosition="top"
             />
             <SkillCard
               eyebrow="Acidgreen"
@@ -48,7 +48,16 @@ export function ProductEngineeringSkill({
               image="/images/skills/mcdonalds-digital-menu.jpg"
               imageAlt="McDonald's digital menu board screenshot"
               imageFit="cover"
-              imagePosition="right"
+              imagePosition={{
+                base: 'top',
+                md: 'right',
+              }}
+              imageSize={{
+                base: '10rem',
+                md: '50%',
+                lg: '30%',
+                1250: '40%',
+              }}
             />
           </SkillGrid>
         </SkillPage>

@@ -44,12 +44,24 @@ type SkillCardCustomBreakpoint =
   | `${number}px`
   | `${number}rem`
   | `${number}em`;
+type SkillCardTailwindResponsiveValues<T> = {
+  /** Tailwind `sm` breakpoint: 640px / 40rem. */
+  sm?: T;
+  /** Tailwind `md` breakpoint: 768px / 48rem. */
+  md?: T;
+  /** Tailwind `lg` breakpoint: 1024px / 64rem. */
+  lg?: T;
+  /** Tailwind `xl` breakpoint: 1280px / 80rem. */
+  xl?: T;
+  /** Tailwind `2xl` breakpoint: 1536px / 96rem. */
+  '2xl'?: T;
+};
 type SkillCardResponsiveValues<T> = {
   /** Applies below the first matching breakpoint. */
   base?: T;
   /** Alias for `base`. */
   default?: T;
-} & Partial<Record<SkillCardTailwindBreakpoint, T>> &
+} & SkillCardTailwindResponsiveValues<T> &
   Partial<Record<SkillCardCustomBreakpoint, T>>;
 type SkillCardResponsiveProp<T> = T | SkillCardResponsiveValues<T>;
 
@@ -66,10 +78,15 @@ const SKILL_CARD_TITLE_SIZE_CLASS_NAMES = {
 } as const satisfies Record<SkillCardTitleSize, string>;
 
 const SKILL_CARD_TAILWIND_BREAKPOINTS = {
+  /** Tailwind `sm` breakpoint: 640px / 40rem. */
   sm: { key: 'sm', query: '(min-width: 40rem)', order: 640 },
+  /** Tailwind `md` breakpoint: 768px / 48rem. */
   md: { key: 'md', query: '(min-width: 48rem)', order: 768 },
+  /** Tailwind `lg` breakpoint: 1024px / 64rem. */
   lg: { key: 'lg', query: '(min-width: 64rem)', order: 1024 },
+  /** Tailwind `xl` breakpoint: 1280px / 80rem. */
   xl: { key: 'xl', query: '(min-width: 80rem)', order: 1280 },
+  /** Tailwind `2xl` breakpoint: 1536px / 96rem. */
   '2xl': { key: '2xl', query: '(min-width: 96rem)', order: 1536 },
 } as const satisfies Record<
   SkillCardTailwindBreakpoint,
@@ -218,7 +235,6 @@ function SkillCardRoot({
     showExternalLinkIndicator: showExternalLinkIndicator ?? isLinked,
     showGithubIndicator,
   });
-  const hasCustomImageSize = imageSize !== undefined;
   const resolvedImageSize =
     imageSize ?? SKILL_CARD_IMAGE_DEFAULT_SIZES[imagePosition];
   const isInlineImage = imagePosition === 'left' || imagePosition === 'right';
@@ -257,7 +273,6 @@ function SkillCardRoot({
           imageObjectPosition={imageObjectPosition}
           imagePlacement={imagePosition}
           isInlineImage={isInlineImage}
-          hasCustomImageSize={hasCustomImageSize}
           className={imageClassName}
         />
       )}
@@ -286,7 +301,6 @@ function SkillCardRoot({
           imageObjectPosition={imageObjectPosition}
           imagePlacement={imagePosition}
           isInlineImage={isInlineImage}
-          hasCustomImageSize={hasCustomImageSize}
           className={imageClassName}
         />
       )}
@@ -354,10 +368,10 @@ export function SkillCardContent({
       className={cx(
         'relative min-w-0',
         hasImage && cardPaddingClassName,
-        hasImage && imagePosition === 'top' && 'pt-3 lg:pt-4',
+        hasImage && imagePosition === 'top' && 'pt-4 lg:pt-5',
         hasImage &&
           (imagePosition === 'left' || imagePosition === 'right') &&
-          'lg:flex-1',
+          'flex-1',
         className,
       )}
     >
@@ -751,7 +765,6 @@ function SkillCardImage({
   imageObjectPosition,
   imagePlacement,
   isInlineImage,
-  hasCustomImageSize,
   className,
 }: {
   image: ReactNode | string | undefined;
@@ -760,7 +773,6 @@ function SkillCardImage({
   imageObjectPosition: string;
   imagePlacement: SkillCardImagePosition;
   isInlineImage: boolean;
-  hasCustomImageSize: boolean;
   className?: string;
 }) {
   return (
@@ -768,17 +780,9 @@ function SkillCardImage({
       className={cx(
         'min-w-0 shrink-0 overflow-hidden bg-white/[0.025]',
         isInlineImage
-          ? cx(
-              'h-28 lg:h-auto lg:w-[var(--skill-card-image-size)] lg:max-w-[var(--skill-card-image-max-size)] lg:min-w-[var(--skill-card-image-min-size)]',
-              hasCustomImageSize
-                ? 'w-[var(--skill-card-image-size)] max-w-[var(--skill-card-image-max-size)] min-w-[var(--skill-card-image-min-size)]'
-                : 'w-full',
-            )
+          ? 'h-auto w-[var(--skill-card-image-size)] max-w-[var(--skill-card-image-max-size)] min-w-[var(--skill-card-image-min-size)]'
           : 'h-[var(--skill-card-image-size)] w-full',
-        imagePlacement === 'right' &&
-          hasCustomImageSize &&
-          'self-end lg:self-auto',
-        imagePlacement === 'right' && 'lg:order-last',
+        imagePlacement === 'right' && 'order-last',
         className,
       )}
     >
@@ -802,7 +806,7 @@ function SkillCardImage({
 
 function getImageLayoutClassName(position: SkillCardImagePosition) {
   if (position === 'left' || position === 'right') {
-    return 'flex flex-col lg:flex-row';
+    return 'flex flex-row';
   }
 
   return 'flex flex-col';

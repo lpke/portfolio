@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -74,7 +75,8 @@ function MobileSkillPanel({
 }) {
   const [isSummaryCollapsed, setIsSummaryCollapsed] = useState(isOpen);
   const [isSummaryVisible, setIsSummaryVisible] = useState(!isOpen);
-  const [isContentVisible, setIsContentVisible] = useState(isOpen);
+  const [contentMaxHeight, setContentMaxHeight] = useState('0px');
+  const contentRef = useRef<HTMLDivElement | null>(null);
   const tapStartRef = useRef<{
     pointerId: number;
     startedAt: number;
@@ -88,11 +90,8 @@ function MobileSkillPanel({
 
     if (isOpen) {
       timers.push(setTimeout(() => setIsSummaryVisible(false), 0));
-      timers.push(setTimeout(() => setIsContentVisible(false), 0));
       timers.push(setTimeout(() => setIsSummaryCollapsed(true), 300));
-      timers.push(setTimeout(() => setIsContentVisible(true), 360));
     } else {
-      timers.push(setTimeout(() => setIsContentVisible(false), 0));
       timers.push(setTimeout(() => setIsSummaryCollapsed(false), 0));
       timers.push(setTimeout(() => setIsSummaryVisible(true), 260));
     }
@@ -101,6 +100,61 @@ function MobileSkillPanel({
       timers.forEach(clearTimeout);
     };
   }, [isOpen]);
+
+  const syncContentHeight = useCallback(() => {
+    const content = contentRef.current;
+
+    if (!content) {
+      return;
+    }
+
+    setContentMaxHeight(isOpen ? `${content.scrollHeight}px` : '0px');
+  }, [isOpen]);
+
+  useEffect(() => {
+    const content = contentRef.current;
+
+    if (!content) {
+      return undefined;
+    }
+
+    let frame: number | null = null;
+    const scheduleSync = () => {
+      if (frame !== null) {
+        cancelAnimationFrame(frame);
+      }
+
+      frame = requestAnimationFrame(() => {
+        syncContentHeight();
+        frame = null;
+      });
+    };
+
+    scheduleSync();
+
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', scheduleSync);
+
+      return () => {
+        window.removeEventListener('resize', scheduleSync);
+
+        if (frame !== null) {
+          cancelAnimationFrame(frame);
+        }
+      };
+    }
+
+    const observer = new ResizeObserver(scheduleSync);
+    observer.observe(content);
+
+    return () => {
+      observer.disconnect();
+
+      if (frame !== null) {
+        cancelAnimationFrame(frame);
+      }
+    };
+  }, [syncContentHeight]);
 
   const handlePointerDown = (event: PointerEvent<HTMLElement>) => {
     if (isInteractiveSkillPageTarget(event)) {
@@ -241,22 +295,22 @@ function MobileSkillPanel({
         <div
           id={`skill-panel-${skill.id}`}
           className={cx(
-            'relative grid transition-[grid-template-rows,opacity] duration-500',
-            isOpen
-              ? 'grid-rows-[1fr] opacity-100'
-              : 'grid-rows-[0fr] opacity-0',
+            'relative overflow-hidden transition-[max-height] duration-500 ease-out',
+            !isOpen && 'pointer-events-none',
           )}
+          style={{ maxHeight: contentMaxHeight }}
         >
-          <div className="min-h-0 overflow-hidden">
-            <div
-              data-skill-panel-content="true"
-              className={cx(
-                'px-4 pt-0 pb-5 transition-opacity duration-300',
-                isContentVisible ? 'opacity-100' : 'opacity-0',
-              )}
-            >
-              <Page variant="mobile" isVisible />
-            </div>
+          <div
+            ref={contentRef}
+            data-skill-panel-content="true"
+            className={cx(
+              'px-4 pt-0 pb-5 transition-[opacity,transform] ease-out',
+              isOpen
+                ? 'translate-y-0 opacity-100 delay-300 duration-300'
+                : 'translate-y-1 opacity-0 delay-0 duration-150',
+            )}
+          >
+            <Page variant="mobile" isVisible={isOpen} />
           </div>
         </div>
       </article>

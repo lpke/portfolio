@@ -104,8 +104,21 @@ export function SkillPager({
     useState(false);
   const [isScrollAutoTransitionPaused, setIsScrollAutoTransitionPaused] =
     useState(false);
+  const [isDocumentActive, setIsDocumentActive] = useState(false);
+  const [isPagerInViewport, setIsPagerInViewport] = useState(false);
+  const [
+    isAutoTransitionResumeDelayComplete,
+    setIsAutoTransitionResumeDelayComplete,
+  ] = useState(false);
+  const rootRef = useRef<HTMLDivElement | null>(null);
   const autoTransitionRemainingMsRef = useRef<number | null>(null);
   const autoTransitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const autoTransitionResumeDelayTimeoutRef = useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null);
+  const pointerPauseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
   const scrollPauseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
@@ -124,11 +137,16 @@ export function SkillPager({
       ? (autoTransitionMs ?? SKILL_PAGER_CONFIG.autoTransitionMs)
       : null;
   const hasAutoTransition = Boolean(resolvedAutoTransitionMs);
+  const isPagerAutoTransitionReady =
+    isVisible && isDocumentActive && isPagerInViewport;
+  const isPagerAutoTransitionEligible =
+    isPagerAutoTransitionReady && isAutoTransitionResumeDelayComplete;
   const isAutoTransitionPaused =
     isManualAutoTransitionPaused ||
     isPointerAutoTransitionPaused ||
     isScrollAutoTransitionPaused;
-  const isAutoTransitionVisuallyPaused = isAutoTransitionPaused || !isVisible;
+  const isAutoTransitionVisuallyPaused =
+    isAutoTransitionPaused || !isPagerAutoTransitionEligible;
   const shouldShowProgress = hasAutoTransition && !isManualAutoTransitionPaused;
   const progressStyle: SkillPagerProgressStyle | undefined =
     resolvedAutoTransitionMs
@@ -142,6 +160,24 @@ export function SkillPager({
 
     clearTimeout(autoTransitionTimeoutRef.current);
     autoTransitionTimeoutRef.current = null;
+  }, []);
+
+  const clearAutoTransitionResumeDelay = useCallback(() => {
+    if (!autoTransitionResumeDelayTimeoutRef.current) {
+      return;
+    }
+
+    clearTimeout(autoTransitionResumeDelayTimeoutRef.current);
+    autoTransitionResumeDelayTimeoutRef.current = null;
+  }, []);
+
+  const clearPointerPauseTimer = useCallback(() => {
+    if (!pointerPauseTimeoutRef.current) {
+      return;
+    }
+
+    clearTimeout(pointerPauseTimeoutRef.current);
+    pointerPauseTimeoutRef.current = null;
   }, []);
 
   const cancelPendingPageSwap = useCallback(() => {
@@ -275,25 +311,31 @@ export function SkillPager({
     [selectPageManually],
   );
 
-  const pauseAutoTransition = useCallback(() => {
+  const pausePointerAutoTransition = useCallback(() => {
     if (!hasAutoTransition) {
       return;
     }
+
+    clearPointerPauseTimer();
 
     if (cancelScheduledNavigation()) {
       setPhase('enter');
     }
 
     setIsPointerAutoTransitionPaused(true);
-  }, [cancelScheduledNavigation, hasAutoTransition]);
+  }, [cancelScheduledNavigation, clearPointerPauseTimer, hasAutoTransition]);
 
-  const resumeAutoTransition = useCallback(() => {
+  const resumePointerAutoTransition = useCallback(() => {
     if (!hasAutoTransition) {
       return;
     }
 
-    setIsPointerAutoTransitionPaused(false);
-  }, [hasAutoTransition]);
+    clearPointerPauseTimer();
+    pointerPauseTimeoutRef.current = setTimeout(() => {
+      setIsPointerAutoTransitionPaused(false);
+      pointerPauseTimeoutRef.current = null;
+    }, SKILL_PAGER_CONFIG.autoResumeDelayMs);
+  }, [clearPointerPauseTimer, hasAutoTransition]);
 
   const clearSwipeStart = useCallback(() => {
     swipeStartRef.current = null;
@@ -375,6 +417,14 @@ export function SkillPager({
         clearTimeout(autoTransitionTimeoutRef.current);
       }
 
+      if (autoTransitionResumeDelayTimeoutRef.current) {
+        clearTimeout(autoTransitionResumeDelayTimeoutRef.current);
+      }
+
+      if (pointerPauseTimeoutRef.current) {
+        clearTimeout(pointerPauseTimeoutRef.current);
+      }
+
       if (scrollPauseTimeoutRef.current) {
         clearTimeout(scrollPauseTimeoutRef.current);
       }
@@ -394,11 +444,95 @@ export function SkillPager({
   }, [activeIndex, resolvedAutoTransitionMs]);
 
   useEffect(() => {
+    if (!hasAutoTransition) {
+      return undefined;
+    }
+
+    const pauseAutoTransitionResume = () => {
+      clearAutoTransitionResumeDelay();
+      setIsAutoTransitionResumeDelayComplete(false);
+    };
+
+    const resumeAutoTransitionAfterDelay = () => {
+      clearAutoTransitionResumeDelay();
+      autoTransitionResumeDelayTimeoutRef.current = setTimeout(() => {
+        setIsAutoTransitionResumeDelayComplete(true);
+        autoTransitionResumeDelayTimeoutRef.current = null;
+      }, SKILL_PAGER_CONFIG.autoResumeDelayMs);
+    };
+
+    if (isPagerAutoTransitionReady) {
+      resumeAutoTransitionAfterDelay();
+    } else {
+      pauseAutoTransitionResume();
+    }
+
+    return clearAutoTransitionResumeDelay;
+  }, [
+    clearAutoTransitionResumeDelay,
+    hasAutoTransition,
+    isPagerAutoTransitionReady,
+  ]);
+
+  useEffect(() => {
+    if (!hasAutoTransition) {
+      return undefined;
+    }
+
+    const updateDocumentActive = () => {
+      setIsDocumentActive(isAutoTransitionDocumentActive());
+    };
+
+    updateDocumentActive();
+    document.addEventListener('visibilitychange', updateDocumentActive);
+    window.addEventListener('focus', updateDocumentActive);
+    window.addEventListener('blur', updateDocumentActive);
+
+    return () => {
+      document.removeEventListener('visibilitychange', updateDocumentActive);
+      window.removeEventListener('focus', updateDocumentActive);
+      window.removeEventListener('blur', updateDocumentActive);
+    };
+  }, [hasAutoTransition]);
+
+  useEffect(() => {
+    if (!hasAutoTransition) {
+      return undefined;
+    }
+
+    const root = rootRef.current;
+
+    if (!root) {
+      return undefined;
+    }
+
+    if (typeof IntersectionObserver === 'undefined') {
+      const fallback = setTimeout(() => {
+        setIsPagerInViewport(true);
+      }, 0);
+
+      return () => {
+        clearTimeout(fallback);
+      };
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsPagerInViewport(Boolean(entry?.isIntersecting));
+    });
+
+    observer.observe(root);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasAutoTransition]);
+
+  useEffect(() => {
     if (
       !hasAutoTransition ||
       !resolvedAutoTransitionMs ||
       isAutoTransitionPaused ||
-      !isVisible ||
+      !isPagerAutoTransitionEligible ||
       pageCount <= 1 ||
       phase !== 'enter'
     ) {
@@ -442,7 +576,7 @@ export function SkillPager({
     hasAutoTransition,
     isManualAutoTransitionPaused,
     isAutoTransitionPaused,
-    isVisible,
+    isPagerAutoTransitionEligible,
     pageCount,
     phase,
     resolvedAutoTransitionMs,
@@ -471,7 +605,7 @@ export function SkillPager({
       scrollPauseTimeoutRef.current = setTimeout(() => {
         setIsScrollAutoTransitionPaused(false);
         scrollPauseTimeoutRef.current = null;
-      }, SKILL_PAGER_CONFIG.scrollPauseMs);
+      }, SKILL_PAGER_CONFIG.autoResumeDelayMs);
     };
 
     window.addEventListener('scroll', pauseAfterScroll, { passive: true });
@@ -495,7 +629,7 @@ export function SkillPager({
   }
 
   return (
-    <div>
+    <div ref={rootRef}>
       <nav
         aria-label={SKILL_PAGER_COPY.ariaLabel}
         className="mb-3 flex justify-end sm:mb-2"
@@ -615,8 +749,8 @@ export function SkillPager({
       <div
         className="[touch-action:pan-y]"
         onClick={handleContentClick}
-        onMouseLeave={resumeAutoTransition}
-        onMouseMove={pauseAutoTransition}
+        onMouseLeave={resumePointerAutoTransition}
+        onMouseMove={pausePointerAutoTransition}
         onPointerCancel={clearSwipeStart}
         onPointerDown={handleSwipeStart}
         onPointerUp={handleSwipeEnd}
@@ -646,6 +780,10 @@ function hasActiveTextSelection() {
   const selection = window.getSelection();
 
   return Boolean(selection?.toString().trim());
+}
+
+function isAutoTransitionDocumentActive() {
+  return document.visibilityState === 'visible' && document.hasFocus();
 }
 
 function SkillPagerTimerButton({
