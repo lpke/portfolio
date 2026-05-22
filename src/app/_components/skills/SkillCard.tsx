@@ -186,10 +186,15 @@ type SkillCardBaseProps = {
   children?: ReactNode;
 };
 
-type SkillCardProps = {
+type SkillCardResponsiveProps = {
   [Key in keyof SkillCardBaseProps]: SkillCardResponsiveProp<
     SkillCardBaseProps[Key]
   >;
+};
+
+type SkillCardProps = SkillCardResponsiveProps & {
+  /** Merge responsive values with built-in responsive defaults instead of replacing the whole prop. */
+  mergeResponsiveProps?: boolean;
 };
 
 const SKILL_CARD_PROP_KEYS = [
@@ -222,7 +227,7 @@ const SKILL_CARD_PROP_KEYS = [
   'type',
 ] as const satisfies readonly (keyof SkillCardBaseProps)[];
 
-const SKILL_CARD_RESPONSIVE_PROPS = {
+const SKILL_CARD_RESPONSIVE_PROPS: Partial<SkillCardResponsiveProps> = {
   imagePosition: {
     base: 'top',
     md: 'right',
@@ -235,13 +240,15 @@ const SKILL_CARD_RESPONSIVE_PROPS = {
     lg: '10rem',
     1250: '40%',
   },
-} as const satisfies Partial<SkillCardProps>;
+};
 
-export function SkillCard(props: SkillCardProps) {
-  const resolvedProps = useResolvedSkillCardProps({
-    ...SKILL_CARD_RESPONSIVE_PROPS,
-    ...props,
-  });
+export function SkillCard({
+  mergeResponsiveProps = false,
+  ...props
+}: SkillCardProps) {
+  const resolvedProps = useResolvedSkillCardProps(
+    getSkillCardPropsWithResponsiveDefaults(props, mergeResponsiveProps),
+  );
 
   return <SkillCardRoot {...resolvedProps} />;
 }
@@ -281,7 +288,7 @@ function SkillCardRoot({
   const resolvedIndicatorIcons = getSkillCardIndicators({
     indicatorIcons,
     showExternalLinkIndicator: showExternalLinkIndicator ?? isLinked,
-    showGithubIndicator,
+    showGithubIndicator: showGithubIndicator ?? false,
   });
   const resolvedImagePosition = imagePosition ?? 'top';
   const resolvedImageSize =
@@ -510,7 +517,9 @@ export function SkillCardContent({
   );
 }
 
-function useResolvedSkillCardProps(props: SkillCardProps): SkillCardBaseProps {
+function useResolvedSkillCardProps(
+  props: SkillCardResponsiveProps,
+): SkillCardBaseProps {
   const breakpointSignature = getSkillCardResponsiveBreakpointSignature(props);
   const viewportSignature = useSyncExternalStore(
     useCallback(
@@ -532,8 +541,56 @@ function useResolvedSkillCardProps(props: SkillCardProps): SkillCardBaseProps {
   return resolveSkillCardProps(props, activeBreakpointKeys);
 }
 
+function getSkillCardPropsWithResponsiveDefaults(
+  props: SkillCardResponsiveProps,
+  mergeResponsiveProps: boolean,
+): SkillCardResponsiveProps {
+  const mergedProps: SkillCardResponsiveProps = {
+    ...SKILL_CARD_RESPONSIVE_PROPS,
+    ...props,
+  };
+
+  if (!mergeResponsiveProps) {
+    return mergedProps;
+  }
+
+  SKILL_CARD_PROP_KEYS.forEach((propKey) => {
+    mergeSkillCardResponsiveDefault(propKey, props, mergedProps);
+  });
+
+  return mergedProps;
+}
+
+function mergeSkillCardResponsiveDefault<Key extends keyof SkillCardBaseProps>(
+  propKey: Key,
+  props: SkillCardResponsiveProps,
+  mergedProps: SkillCardResponsiveProps,
+) {
+  const defaultValue = SKILL_CARD_RESPONSIVE_PROPS[propKey];
+  const propValue = props[propKey];
+
+  if (
+    !isSkillCardResponsiveValue(defaultValue) ||
+    !isSkillCardResponsiveValue(propValue)
+  ) {
+    return;
+  }
+
+  const defaultResponsiveValue = defaultValue as SkillCardResponsiveValues<
+    SkillCardBaseProps[Key]
+  >;
+  const propResponsiveValue = propValue as SkillCardResponsiveValues<
+    SkillCardBaseProps[Key]
+  >;
+
+  mergedProps[propKey] = {
+    ...defaultResponsiveValue,
+    ...propResponsiveValue,
+  } as SkillCardResponsiveProps[Key];
+}
+
 function resolveSkillCardProps(
-  props: SkillCardProps,
+  props: SkillCardResponsiveProps,
   activeBreakpointKeys: ReadonlySet<string>,
 ) {
   const resolvedProps: Partial<Record<keyof SkillCardBaseProps, unknown>> = {};
@@ -570,7 +627,9 @@ function resolveSkillCardResponsiveProp<T>(
   );
 }
 
-function getSkillCardResponsiveBreakpointSignature(props: SkillCardProps) {
+function getSkillCardResponsiveBreakpointSignature(
+  props: SkillCardResponsiveProps,
+) {
   const breakpointKeys = new Set<string>();
 
   SKILL_CARD_PROP_KEYS.forEach((propKey) => {
