@@ -144,12 +144,16 @@ type SkillCardBaseProps = {
   imageMinSize?: string;
   /** CSS maximum size for left/right image widths. Example: `22rem`. */
   imageMaxSize?: string;
-  /** Object-fit style for string image URLs. Example: `cover`. Defaults to `contain`. */
+  /** Object-fit style for string image URLs.
+  Options: `contain`, `cover`, `none`, `scale-down`, `stretch`.
+  Defaults to `contain`. */
   imageFit?: SkillCardImageFit;
   /** CSS background-position for string image URLs. Example: `center top` or `65% 50%`. Useful with `imageFit="cover"`. */
   imageObjectPosition?: string;
   /** Visual scale for string image URLs. Example: `1.08` zooms the image in by 8%. Defaults to `1`. */
   imageObjectScale?: number | string;
+  /** Whether to fill contain/none/scale-down letterboxing with a blurred cover copy of the image. Defaults to `true`. */
+  imageBlurBackground?: boolean;
   /** Extra class names for the image wrapper. Example: `bg-black/20`. */
   imageClassName?: string;
   /** Extra class names for the root card element. Example: `lg:col-span-2`. */
@@ -181,6 +185,7 @@ const SKILL_CARD_PROP_KEYS = [
   'icon',
   'image',
   'imageAlt',
+  'imageBlurBackground',
   'imageClassName',
   'imageFit',
   'imageMaxSize',
@@ -225,6 +230,7 @@ function SkillCardRoot({
   imageFit = 'contain',
   imageObjectPosition = 'center',
   imageObjectScale = 1,
+  imageBlurBackground = true,
   imageClassName,
   className,
   contentClassName,
@@ -273,6 +279,7 @@ function SkillCardRoot({
         <SkillCardImage
           image={image}
           imageAlt={imageAlt}
+          imageBlurBackground={imageBlurBackground}
           imageFit={imageFit}
           imageObjectPosition={imageObjectPosition}
           imageObjectScale={imageObjectScale}
@@ -302,6 +309,7 @@ function SkillCardRoot({
         <SkillCardImage
           image={image}
           imageAlt={imageAlt}
+          imageBlurBackground={imageBlurBackground}
           imageFit={imageFit}
           imageObjectPosition={imageObjectPosition}
           imageObjectScale={imageObjectScale}
@@ -767,6 +775,7 @@ function normalizeIndicatorIcons(indicatorIcons?: SkillCardIndicatorIcons) {
 function SkillCardImage({
   image,
   imageAlt,
+  imageBlurBackground,
   imageFit,
   imageObjectPosition,
   imageObjectScale,
@@ -776,6 +785,7 @@ function SkillCardImage({
 }: {
   image: ReactNode | string | undefined;
   imageAlt: string;
+  imageBlurBackground: boolean;
   imageFit: SkillCardImageFit;
   imageObjectPosition: string;
   imageObjectScale: number | string;
@@ -783,10 +793,13 @@ function SkillCardImage({
   isInlineImage: boolean;
   className?: string;
 }) {
+  const shouldRenderBlurBackground =
+    typeof image === 'string' && imageBlurBackground && imageFit !== 'cover';
+
   return (
     <div
       className={cx(
-        'min-w-0 shrink-0 overflow-hidden bg-white/[0.025]',
+        'relative min-w-0 shrink-0 overflow-hidden bg-white/[0.025]',
         isInlineImage
           ? 'h-auto w-[var(--skill-card-image-size)] max-w-[var(--skill-card-image-max-size)] min-w-[var(--skill-card-image-min-size)]'
           : 'h-[var(--skill-card-image-size)] w-full',
@@ -795,18 +808,30 @@ function SkillCardImage({
       )}
     >
       {typeof image === 'string' ? (
-        <span
-          role={imageAlt ? 'img' : undefined}
-          aria-label={imageAlt || undefined}
-          className="block h-full w-full bg-no-repeat"
-          style={{
-            backgroundImage: `url("${image}")`,
-            backgroundPosition: imageObjectPosition,
-            backgroundSize: SKILL_CARD_IMAGE_BACKGROUND_SIZE[imageFit],
-            transform: `scale(${imageObjectScale})`,
-            transformOrigin: imageObjectPosition,
-          }}
-        />
+        <>
+          {shouldRenderBlurBackground && (
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 scale-110 bg-cover bg-no-repeat opacity-70 blur-xl"
+              style={{
+                backgroundImage: `url("${image}")`,
+                backgroundPosition: imageObjectPosition,
+              }}
+            />
+          )}
+          <span
+            role={imageAlt ? 'img' : undefined}
+            aria-label={imageAlt || undefined}
+            className="relative block h-full w-full bg-no-repeat"
+            style={{
+              backgroundImage: `url("${image}")`,
+              backgroundPosition: imageObjectPosition,
+              backgroundSize: SKILL_CARD_IMAGE_BACKGROUND_SIZE[imageFit],
+              transform: `scale(${imageObjectScale})`,
+              transformOrigin: imageObjectPosition,
+            }}
+          />
+        </>
       ) : (
         <div className="h-full w-full">{image}</div>
       )}
