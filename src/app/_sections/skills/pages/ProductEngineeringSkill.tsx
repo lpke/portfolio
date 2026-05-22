@@ -24,6 +24,7 @@ export function ProductEngineeringSkill({
               title="Alternaleaf Patient Portal"
               titleSize="lg"
               description="Sole frontend architect of a greenfield React SPA serving ~1,500 new users daily."
+              cardSpan={4}
               image="/images/skills/pre-consultation-portal.png"
               imageAlt="Healthcare patient portal screenshot"
               imageObjectPosition={{
@@ -35,10 +36,8 @@ export function ProductEngineeringSkill({
                 lg: 'cover',
               }}
               imageObjectScale={{
-                direction: 'down',
-                values: {
-                  md: 2,
-                },
+                base: 2,
+                md: 1,
               }}
             />
             <SkillCard
@@ -47,9 +46,14 @@ export function ProductEngineeringSkill({
               titleSize="lg"
               description="SSO, loyalty program, and branded checkout on a headless React/Magento PWA for one of the world's largest food companies."
               href="https://www.nutriciastore.com.au"
+              cardSpan={2}
               image="/images/skills/nutriciastore.jpg"
               imageAlt="Nutricia Store screenshot"
               imageFit="cover"
+              imagePosition={{
+                md: 'left',
+                lg: 'top',
+              }}
             />
             <SkillCard
               eyebrow="Akcelo"
@@ -57,9 +61,19 @@ export function ProductEngineeringSkill({
               titleSize="lg"
               description="Built React components deployed to digital screens at 2,000+ McDonald's stores across Australia and New Zealand."
               cardSpan="full"
+              cardHeight={{
+                direction: 'up',
+                values: {
+                  lg: '18rem',
+                },
+              }}
               image="/images/skills/mcdonalds-digital-menu.jpg"
               imageAlt="McDonald's digital menu board screenshot"
               imageFit="cover"
+              imageObjectPosition={{
+                base: 'center top',
+                md: 'left top',
+              }}
               imagePosition={{
                 base: 'top',
                 md: 'right',
@@ -68,7 +82,7 @@ export function ProductEngineeringSkill({
                 base: '10rem',
                 md: '50%',
                 lg: '30%',
-                1250: '40%',
+                1250: '50%',
               }}
             />
           </SkillGrid>
