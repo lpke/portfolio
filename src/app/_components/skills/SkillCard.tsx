@@ -259,7 +259,7 @@ function SkillCardRoot({
   };
   const cardPaddingClassName = SKILL_CARD_PADDING_CLASS_NAMES[resolvedType];
   const cardClassName = cx(
-    'group/skill-card relative isolate min-w-0 overflow-hidden rounded-[8px] border transition-[background-color,filter] duration-200',
+    'group/skill-card relative isolate h-full min-w-0 overflow-hidden rounded-[8px] border transition-[background-color,filter] duration-200',
     SKILL_CARD_SPAN_CLASS_NAMES[cardSpan],
     SKILL_CARD_CLASS_NAMES[resolvedType],
     !hasImage && cardPaddingClassName,
@@ -273,6 +273,7 @@ function SkillCardRoot({
         'relative z-10 min-w-0',
         hasImage && getImageLayoutClassName(imagePosition),
         hasImage && getImageGapClassName(imagePosition),
+        hasImage && isInlineImage && 'h-full',
       )}
     >
       {hasImage && shouldRenderImageBeforeContent(imagePosition) && (
@@ -801,7 +802,7 @@ function SkillCardImage({
       className={cx(
         'relative min-w-0 shrink-0 overflow-hidden bg-white/[0.025]',
         isInlineImage
-          ? 'h-auto w-[var(--skill-card-image-size)] max-w-[var(--skill-card-image-max-size)] min-w-[var(--skill-card-image-min-size)]'
+          ? 'w-[var(--skill-card-image-size)] max-w-[var(--skill-card-image-max-size)] min-w-[var(--skill-card-image-min-size)] self-stretch'
           : 'h-[var(--skill-card-image-size)] w-full',
         imagePlacement === 'right' && 'order-last',
         className,
