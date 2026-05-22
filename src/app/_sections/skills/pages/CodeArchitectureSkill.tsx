@@ -23,6 +23,7 @@ export function CodeArchitectureSkill({
               eyebrow="Build"
               title="Custom Multi-Site Build"
               description="Vite build pipeline with AWS CDK infra that replaced a no-code platform's limits. 75% bundle reduction, 70% faster builds."
+              cardSpan="full"
               image="/images/skills/webflow-pre-screening.jpg"
               imageAlt="Custom multi-site build screenshot"
               imageFit="cover"

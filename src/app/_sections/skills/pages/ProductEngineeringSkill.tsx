@@ -24,12 +24,18 @@ export function ProductEngineeringSkill({
               title="Alternaleaf Patient Portal"
               titleSize="lg"
               description="Sole frontend architect of a greenfield React SPA serving ~1,500 new users daily."
-              cardSpan={4}
+              cardSpan="half"
               image="/images/skills/pre-consultation-portal.png"
               imageAlt="Healthcare patient portal screenshot"
               imageObjectPosition={{
                 base: 'center top',
                 lg: '25% top',
+              }}
+              imageSize={{
+                lg: '10rem',
+              }}
+              imagePosition={{
+                lg: 'top',
               }}
               imageFit={{
                 base: 'contain',
@@ -38,6 +44,7 @@ export function ProductEngineeringSkill({
               imageObjectScale={{
                 base: 2,
                 md: 1,
+                lg: 1.25,
               }}
             />
             <SkillCard
@@ -46,13 +53,22 @@ export function ProductEngineeringSkill({
               titleSize="lg"
               description="SSO, loyalty program, and branded checkout on a headless React/Magento PWA for one of the world's largest food companies."
               href="https://www.nutriciastore.com.au"
-              cardSpan={2}
+              cardSpan="half"
               image="/images/skills/nutriciastore.jpg"
               imageAlt="Nutricia Store screenshot"
               imageFit="cover"
               imagePosition={{
                 md: 'left',
                 lg: 'top',
+              }}
+              imageObjectPosition={{
+                lg: 'left top'
+              }}
+              imageSize={{
+                lg: '10rem',
+              }}
+              imageObjectScale={{
+                lg: 1.8,
               }}
             />
             <SkillCard
@@ -61,10 +77,10 @@ export function ProductEngineeringSkill({
               titleSize="lg"
               description="Built React components deployed to digital screens at 2,000+ McDonald's stores across Australia and New Zealand."
               cardSpan="full"
-              cardHeight={{
+              cardMinHeight={{
                 direction: 'up',
                 values: {
-                  lg: '18rem',
+                  lg: '17rem',
                 },
               }}
               image="/images/skills/mcdonalds-digital-menu.jpg"
@@ -81,8 +97,8 @@ export function ProductEngineeringSkill({
               imageSize={{
                 base: '10rem',
                 md: '50%',
-                lg: '30%',
-                1250: '50%',
+                lg: '53%',
+                1250: '58%',
               }}
             />
           </SkillGrid>
