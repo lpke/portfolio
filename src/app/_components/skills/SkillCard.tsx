@@ -202,8 +202,26 @@ const SKILL_CARD_PROP_KEYS = [
   'type',
 ] as const satisfies readonly (keyof SkillCardBaseProps)[];
 
+const SKILL_CARD_RESPONSIVE_PROPS = {
+  imagePosition: {
+    base: 'top',
+    md: 'right',
+    lg: 'top',
+    1250: 'right',
+  },
+  imageSize: {
+    base: '7rem',
+    md: '50%',
+    lg: '10rem',
+    1250: '40%',
+  },
+} as const satisfies Partial<SkillCardProps>;
+
 export function SkillCard(props: SkillCardProps) {
-  const resolvedProps = useResolvedSkillCardProps(props);
+  const resolvedProps = useResolvedSkillCardProps({
+    ...SKILL_CARD_RESPONSIVE_PROPS,
+    ...props,
+  });
 
   return <SkillCardRoot {...resolvedProps} />;
 }
@@ -211,24 +229,24 @@ export function SkillCard(props: SkillCardProps) {
 function SkillCardRoot({
   title,
   titleSize = 'md',
-  eyebrow = 'Proof point',
+  eyebrow,
   description,
   chips,
   icon,
   indicatorIcons,
   showExternalLinkIndicator,
-  showGithubIndicator = false,
+  showGithubIndicator,
   href,
   type,
   cardSpan = 'half',
   image,
   imageAlt = '',
-  imagePosition = 'top',
+  imagePosition,
   imageSize,
   imageMinSize,
   imageMaxSize,
-  imageFit = 'contain',
-  imageObjectPosition = 'center',
+  imageFit = 'cover',
+  imageObjectPosition = 'center top',
   imageObjectScale = 1,
   imageBlurBackground = true,
   imageClassName,
