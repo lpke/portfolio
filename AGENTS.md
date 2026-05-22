@@ -18,3 +18,4 @@ If asked to make changes that require Next.js specific knowledge, the following 
 - Skill body copy and skill card content should be composed directly in the relevant skill content component, not stored in `constants.ts`.
 - NO barrel files. Import modules directly from their source files.
 - All reusable components must live under `src/app/_components/`. Do not hide components in section-local `components/` folders without a very good reason. Pages, layouts, top-level section components, and skill content page components are allowed outside `_components/`.
+- When completing a request, be sure to do a prettier format of all changed files

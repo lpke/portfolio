@@ -297,7 +297,6 @@ export type SkillCardImagePosition = 'top' | 'right' | 'bottom' | 'left';
 export type SkillCardImageFit =
   | 'contain'
   | 'cover'
-  | 'fill'
   | 'none'
   | 'scale-down'
   | 'stretch';
@@ -324,7 +323,7 @@ export const SKILL_CARD_PADDING_CLASS_NAMES = {
   quiet: 'p-0',
 } as const satisfies Record<SkillCardType, string>;
 
-export const SKILL_CARD_IMAGE_DEFAULT_RATIOS = {
+export const SKILL_CARD_IMAGE_DEFAULT_SIZES = {
   top: '7rem',
   right: '34%',
   bottom: '7rem',
@@ -334,7 +333,6 @@ export const SKILL_CARD_IMAGE_DEFAULT_RATIOS = {
 export const SKILL_CARD_IMAGE_BACKGROUND_SIZE = {
   contain: 'contain',
   cover: 'cover',
-  fill: '100% 100%',
   none: 'auto',
   'scale-down': 'contain',
   stretch: '100% 100%',

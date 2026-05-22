@@ -40,7 +40,7 @@ export function AiAutomationSkill({
               imageAlt="aspyn CLI screenshot"
               imageFit="cover"
               imagePosition="right"
-              imageWidth="46%"
+              imageSize="46%"
             />
             <SkillCard
               title="Neovim + CodeCompanion"

@@ -2,7 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import {
   SKILL_CARD_CLASS_NAMES,
   SKILL_CARD_IMAGE_BACKGROUND_SIZE,
-  SKILL_CARD_IMAGE_DEFAULT_RATIOS,
+  SKILL_CARD_IMAGE_DEFAULT_SIZES,
   SKILL_CARD_PADDING_CLASS_NAMES,
   SKILL_CARD_SPAN_CLASS_NAMES,
   type SkillCardImageFit,
@@ -21,43 +21,76 @@ export type {
 };
 
 type SkillCardStyle = CSSProperties & {
-  '--skill-card-image-ratio'?: string;
-  '--skill-card-image-width'?: string;
-  '--skill-card-image-min-width'?: string;
-  '--skill-card-image-max-width'?: string;
+  '--skill-card-image-size'?: string;
+  '--skill-card-image-min-size'?: string;
+  '--skill-card-image-max-size'?: string;
 };
 
 type SkillCardIndicatorIcons = ReactNode | readonly ReactNode[];
+type SkillCardTitleSize = 'sm' | 'md' | 'lg';
+
+const SKILL_CARD_TITLE_SIZE_CLASS_NAMES = {
+  sm: 'text-sm leading-snug lg:text-base',
+  md: 'text-lg leading-tight lg:text-xl',
+  lg: 'text-xl leading-tight lg:text-2xl',
+} as const satisfies Record<SkillCardTitleSize, string>;
 
 type SkillCardProps = {
+  /** Main card heading. */
   title?: ReactNode;
+  /** Responsive title scale. Example: `lg` for a featured project card. Defaults to `md`. */
+  titleSize?: SkillCardTitleSize;
+  /** Small uppercase label rendered above the title. Defaults to `Proof point`. */
   eyebrow?: ReactNode;
+  /** Supporting body copy rendered below the title. */
   description?: ReactNode;
+  /** Short tags rendered in the shared skill chip style. */
   chips?: readonly string[];
+  /** Optional leading icon shown beside the eyebrow. */
   icon?: ReactNode;
+  /** Custom trailing indicators shown in the card header. Example: `<CodeIcon />`. */
   indicatorIcons?: SkillCardIndicatorIcons;
+  /** Whether to show the external-link indicator. Defaults to true when `href` is set. */
   showExternalLinkIndicator?: boolean;
+  /** Whether to show the GitHub indicator. */
   showGithubIndicator?: boolean;
+  /** External URL. Example: `https://github.com/user/repo`. When present, the card renders as a link. */
   href?: string;
+  /** Visual treatment for card padding, background, borders, and description scale. Example: `feature`. */
   type?: SkillCardType;
+  /** Grid span used by the skills page layout. Defaults to `half`. */
   cardSpan?: SkillCardSpan;
+  /** Optional image content or image URL. */
   image?: ReactNode | string;
+  /** Accessible label for string image URLs. Use an empty string for decorative images. */
   imageAlt?: string;
+  /** Image placement relative to the card content. Example: `left`. Defaults to `top`. */
   imagePosition?: SkillCardImagePosition;
-  imageRatio?: string;
-  imageWidth?: string;
-  imageMinWidth?: string;
-  imageMaxWidth?: string;
+  /** CSS size for the image area. Example: `9rem` for top/bottom height or `42%` for left/right width. */
+  imageSize?: string;
+  /** CSS minimum size for left/right image widths. Example: `12rem`. */
+  imageMinSize?: string;
+  /** CSS maximum size for left/right image widths. Example: `22rem`. */
+  imageMaxSize?: string;
+  /** Object-fit style for string image URLs. Example: `cover`. Defaults to `contain`. */
   imageFit?: SkillCardImageFit;
+  /** CSS background-position for string image URLs. Example: `center top` or `65% 50%`. Useful with `imageFit="cover"`. */
+  imageObjectPosition?: string;
+  /** Extra class names for the image wrapper. Example: `bg-black/20`. */
   imageClassName?: string;
+  /** Extra class names for the root card element. Example: `lg:col-span-2`. */
   className?: string;
+  /** Extra class names for the content wrapper. Example: `self-center`. */
   contentClassName?: string;
+  /** Accessible label for the root article or link. */
   ariaLabel?: string;
+  /** Additional content rendered below title, description, and chips. */
   children?: ReactNode;
 };
 
 export function SkillCard({
   title,
+  titleSize = 'md',
   eyebrow = 'Proof point',
   description,
   chips,
@@ -71,11 +104,11 @@ export function SkillCard({
   image,
   imageAlt = '',
   imagePosition = 'top',
-  imageRatio,
-  imageWidth,
-  imageMinWidth,
-  imageMaxWidth,
+  imageSize,
+  imageMinSize,
+  imageMaxSize,
   imageFit = 'contain',
+  imageObjectPosition = 'center',
   imageClassName,
   className,
   contentClassName,
@@ -90,16 +123,15 @@ export function SkillCard({
     showExternalLinkIndicator: showExternalLinkIndicator ?? isLinked,
     showGithubIndicator,
   });
-  const resolvedImageRatio =
-    imageRatio ?? SKILL_CARD_IMAGE_DEFAULT_RATIOS[imagePosition];
+  const resolvedImageSize =
+    imageSize ?? SKILL_CARD_IMAGE_DEFAULT_SIZES[imagePosition];
   const isInlineImage = imagePosition === 'left' || imagePosition === 'right';
   const style: SkillCardStyle = {
-    '--skill-card-image-ratio': resolvedImageRatio,
+    '--skill-card-image-size': resolvedImageSize,
     ...(isInlineImage
       ? {
-          '--skill-card-image-width': imageWidth ?? resolvedImageRatio,
-          '--skill-card-image-min-width': imageMinWidth ?? '0%',
-          '--skill-card-image-max-width': imageMaxWidth ?? '100%',
+          '--skill-card-image-min-size': imageMinSize ?? '0%',
+          '--skill-card-image-max-size': imageMaxSize ?? '100%',
         }
       : {}),
   };
@@ -126,6 +158,7 @@ export function SkillCard({
           image={image}
           imageAlt={imageAlt}
           imageFit={imageFit}
+          imageObjectPosition={imageObjectPosition}
           imagePlacement={imagePosition}
           isInlineImage={isInlineImage}
           className={imageClassName}
@@ -133,6 +166,7 @@ export function SkillCard({
       )}
       <SkillCardContent
         title={title}
+        titleSize={titleSize}
         eyebrow={eyebrow}
         description={description}
         chips={chips}
@@ -152,6 +186,7 @@ export function SkillCard({
           image={image}
           imageAlt={imageAlt}
           imageFit={imageFit}
+          imageObjectPosition={imageObjectPosition}
           imagePlacement={imagePosition}
           isInlineImage={isInlineImage}
           className={imageClassName}
@@ -185,6 +220,7 @@ export function SkillCard({
 
 type SkillCardContentProps = {
   title?: ReactNode;
+  titleSize: SkillCardTitleSize;
   eyebrow?: ReactNode;
   description?: ReactNode;
   chips?: readonly string[];
@@ -201,6 +237,7 @@ type SkillCardContentProps = {
 
 export function SkillCardContent({
   title,
+  titleSize,
   eyebrow,
   description,
   chips,
@@ -229,9 +266,7 @@ export function SkillCardContent({
       {(eyebrow || icon || indicatorIcons.length > 0) && (
         <div className="mb-3 flex min-w-0 items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-2">
-            {icon && (
-              <span className="text-[var(--skill-accent)]">{icon}</span>
-            )}
+            {icon && <span className="text-[var(--skill-accent)]">{icon}</span>}
             {eyebrow && (
               <span className="font-label min-w-0 truncate text-[11px] font-bold tracking-widest text-[color:color-mix(in_srgb,var(--skill-accent)_44%,white)] uppercase">
                 {eyebrow}
@@ -260,9 +295,7 @@ export function SkillCardContent({
           className={cx(
             'font-headline min-w-0 font-bold text-white transition-colors duration-200',
             isLinked && 'group-hover/skill-card:text-[var(--skill-accent)]',
-            type === 'feature'
-              ? 'text-xl leading-tight lg:text-2xl'
-              : 'text-base leading-snug lg:text-lg',
+            SKILL_CARD_TITLE_SIZE_CLASS_NAMES[titleSize],
           )}
         >
           {title}
@@ -333,6 +366,7 @@ function SkillCardImage({
   image,
   imageAlt,
   imageFit,
+  imageObjectPosition,
   imagePlacement,
   isInlineImage,
   className,
@@ -340,6 +374,7 @@ function SkillCardImage({
   image: ReactNode | string | undefined;
   imageAlt: string;
   imageFit: SkillCardImageFit;
+  imageObjectPosition: string;
   imagePlacement: SkillCardImagePosition;
   isInlineImage: boolean;
   className?: string;
@@ -349,8 +384,8 @@ function SkillCardImage({
       className={cx(
         'min-w-0 shrink-0 overflow-hidden bg-white/[0.025]',
         isInlineImage
-          ? 'h-28 w-full lg:h-auto lg:w-[var(--skill-card-image-width)] lg:max-w-[var(--skill-card-image-max-width)] lg:min-w-[var(--skill-card-image-min-width)]'
-          : 'h-[var(--skill-card-image-ratio)] w-full',
+          ? 'h-28 w-full lg:h-auto lg:w-[var(--skill-card-image-size)] lg:max-w-[var(--skill-card-image-max-size)] lg:min-w-[var(--skill-card-image-min-size)]'
+          : 'h-[var(--skill-card-image-size)] w-full',
         imagePlacement === 'right' && 'lg:order-last',
         className,
       )}
@@ -359,9 +394,10 @@ function SkillCardImage({
         <span
           role={imageAlt ? 'img' : undefined}
           aria-label={imageAlt || undefined}
-          className="block h-full w-full bg-center bg-no-repeat"
+          className="block h-full w-full bg-no-repeat"
           style={{
             backgroundImage: `url("${image}")`,
+            backgroundPosition: imageObjectPosition,
             backgroundSize: SKILL_CARD_IMAGE_BACKGROUND_SIZE[imageFit],
           }}
         />

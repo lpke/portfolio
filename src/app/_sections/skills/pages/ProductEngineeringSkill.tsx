@@ -29,6 +29,15 @@ export function ProductEngineeringSkill({
               imagePosition="right"
             />
             <SkillCard
+              title="Nutricia / Danone"
+              eyebrow="Commerce"
+              description="SSO, loyalty program, and branded checkout on a headless React/Magento PWA for one of the world's largest food companies."
+              href="https://www.nutriciastore.com.au"
+              image="/images/skills/nutriciastore.jpg"
+              imageAlt="Nutricia Store screenshot"
+              imageFit="cover"
+            />
+            <SkillCard
               title="McDonald's Menu Boards"
               eyebrow="Retail"
               description="Built React components deployed to digital screens at 2,000+ McDonald's stores across Australia and New Zealand."
@@ -37,15 +46,6 @@ export function ProductEngineeringSkill({
               imageAlt="McDonald's digital menu board screenshot"
               imageFit="cover"
               imagePosition="right"
-            />
-            <SkillCard
-              title="Nutricia / Danone"
-              eyebrow="Commerce"
-              description="SSO, loyalty program, and branded checkout on a headless React/Magento PWA for one of the world's largest food companies."
-              href="https://www.nutriciastore.com.au"
-              image="/images/skills/nutriciastore.jpg"
-              imageAlt="Nutricia Store screenshot"
-              imageFit="cover"
             />
           </SkillGrid>
         </SkillPage>
