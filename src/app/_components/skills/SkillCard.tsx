@@ -63,7 +63,19 @@ type SkillCardResponsiveValues<T> = {
   default?: T;
 } & SkillCardTailwindResponsiveValues<T> &
   Partial<Record<SkillCardCustomBreakpoint, T>>;
-type SkillCardResponsiveProp<T> = T | SkillCardResponsiveValues<T>;
+type SkillCardResponsiveMergeMethod =
+  | 'replace'
+  | 'merge'
+  | 'replace-up'
+  | 'replace-down';
+type SkillCardResponsiveOverride<T> = readonly [
+  mergeMethod: SkillCardResponsiveMergeMethod,
+  values: SkillCardResponsiveValues<T>,
+];
+type SkillCardResponsiveProp<T> =
+  | T
+  | SkillCardResponsiveValues<T>
+  | SkillCardResponsiveOverride<T>;
 
 type SkillCardBreakpointConfig = {
   key: string;
@@ -93,8 +105,16 @@ const SKILL_CARD_TAILWIND_BREAKPOINTS = {
   SkillCardBreakpointConfig
 >;
 
+const SKILL_CARD_BASE_BREAKPOINT_ORDER = Number.NEGATIVE_INFINITY;
 const SKILL_CARD_BASE_BREAKPOINT_KEYS = new Set(['base', 'default']);
 const SKILL_CARD_CUSTOM_BREAKPOINT_PATTERN = /^(\d+(?:\.\d+)?)(px|rem|em)?$/;
+const SKILL_CARD_RESPONSIVE_MERGE_METHODS =
+  new Set<SkillCardResponsiveMergeMethod>([
+    'replace',
+    'merge',
+    'replace-up',
+    'replace-down',
+  ]);
 
 type SkillCardMediaQuerySubscription = {
   mediaQueryList: MediaQueryList;
@@ -165,7 +185,7 @@ type SkillCardBaseProps = {
   /**
    * Object-fit style for string image URLs.
    * Options: `contain`, `cover`, `none`, `scale-down`, `stretch`.
-   * Default: `contain`.
+   * Default: `cover`.
    */
   imageFit?: SkillCardImageFit;
   /** CSS background-position for string image URLs. Example: `center top` or `65% 50%`. Useful with `imageFit="cover"`. */
@@ -191,11 +211,11 @@ type SkillCardResponsiveProps = {
     SkillCardBaseProps[Key]
   >;
 };
+type SkillCardResponsivePropMap = Partial<
+  Record<keyof SkillCardBaseProps, SkillCardResponsiveProp<unknown> | undefined>
+>;
 
-type SkillCardProps = SkillCardResponsiveProps & {
-  /** Merge responsive values with built-in responsive defaults instead of replacing the whole prop. */
-  mergeResponsiveProps?: boolean;
-};
+type SkillCardProps = SkillCardResponsiveProps;
 
 const SKILL_CARD_PROP_KEYS = [
   'ariaLabel',
@@ -227,7 +247,18 @@ const SKILL_CARD_PROP_KEYS = [
   'type',
 ] as const satisfies readonly (keyof SkillCardBaseProps)[];
 
-const SKILL_CARD_RESPONSIVE_PROPS: Partial<SkillCardResponsiveProps> = {
+const SKILL_CARD_STATIC_DEFAULT_PROPS = {
+  cardSpan: 'half',
+  imageAlt: '',
+  imageBlurBackground: true,
+  imageFit: 'cover',
+  imageObjectPosition: 'center top',
+  imageObjectScale: 1,
+  showGithubIndicator: false,
+  titleSize: 'md',
+} as const satisfies Partial<SkillCardBaseProps>;
+
+const SKILL_CARD_RESPONSIVE_DEFAULT_PROPS = {
   imagePosition: {
     base: 'top',
     md: 'right',
@@ -240,14 +271,16 @@ const SKILL_CARD_RESPONSIVE_PROPS: Partial<SkillCardResponsiveProps> = {
     lg: '10rem',
     1250: '40%',
   },
+} as const satisfies Partial<SkillCardResponsiveProps>;
+
+const SKILL_CARD_DEFAULT_PROPS: Partial<SkillCardResponsiveProps> = {
+  ...SKILL_CARD_STATIC_DEFAULT_PROPS,
+  ...SKILL_CARD_RESPONSIVE_DEFAULT_PROPS,
 };
 
-export function SkillCard({
-  mergeResponsiveProps = false,
-  ...props
-}: SkillCardProps) {
+export function SkillCard(props: SkillCardProps) {
   const resolvedProps = useResolvedSkillCardProps(
-    getSkillCardPropsWithResponsiveDefaults(props, mergeResponsiveProps),
+    getSkillCardPropsWithDefaults(props),
   );
 
   return <SkillCardRoot {...resolvedProps} />;
@@ -255,27 +288,27 @@ export function SkillCard({
 
 function SkillCardRoot({
   title,
-  titleSize = 'md',
+  titleSize = SKILL_CARD_STATIC_DEFAULT_PROPS.titleSize,
   eyebrow,
   description,
   chips,
   icon,
   indicatorIcons,
   showExternalLinkIndicator,
-  showGithubIndicator,
+  showGithubIndicator = SKILL_CARD_STATIC_DEFAULT_PROPS.showGithubIndicator,
   href,
   type,
-  cardSpan = 'half',
+  cardSpan = SKILL_CARD_STATIC_DEFAULT_PROPS.cardSpan,
   image,
-  imageAlt = '',
+  imageAlt = SKILL_CARD_STATIC_DEFAULT_PROPS.imageAlt,
   imagePosition,
   imageSize,
   imageMinSize,
   imageMaxSize,
-  imageFit = 'cover',
-  imageObjectPosition = 'center top',
-  imageObjectScale = 1,
-  imageBlurBackground = true,
+  imageFit = SKILL_CARD_STATIC_DEFAULT_PROPS.imageFit,
+  imageObjectPosition = SKILL_CARD_STATIC_DEFAULT_PROPS.imageObjectPosition,
+  imageObjectScale = SKILL_CARD_STATIC_DEFAULT_PROPS.imageObjectScale,
+  imageBlurBackground = SKILL_CARD_STATIC_DEFAULT_PROPS.imageBlurBackground,
   imageClassName,
   className,
   contentClassName,
@@ -290,7 +323,8 @@ function SkillCardRoot({
     showExternalLinkIndicator: showExternalLinkIndicator ?? isLinked,
     showGithubIndicator: showGithubIndicator ?? false,
   });
-  const resolvedImagePosition = imagePosition ?? 'top';
+  const resolvedImagePosition =
+    imagePosition ?? SKILL_CARD_RESPONSIVE_DEFAULT_PROPS.imagePosition.base;
   const resolvedImageSize =
     imageSize ?? SKILL_CARD_IMAGE_DEFAULT_SIZES[resolvedImagePosition];
   const isInlineImage =
@@ -541,52 +575,243 @@ function useResolvedSkillCardProps(
   return resolveSkillCardProps(props, activeBreakpointKeys);
 }
 
-function getSkillCardPropsWithResponsiveDefaults(
+function getSkillCardPropsWithDefaults(
   props: SkillCardResponsiveProps,
-  mergeResponsiveProps: boolean,
 ): SkillCardResponsiveProps {
-  const mergedProps: SkillCardResponsiveProps = {
-    ...SKILL_CARD_RESPONSIVE_PROPS,
-    ...props,
-  };
-
-  if (!mergeResponsiveProps) {
-    return mergedProps;
-  }
+  const propsWithDefaults: SkillCardResponsivePropMap = {};
 
   SKILL_CARD_PROP_KEYS.forEach((propKey) => {
-    mergeSkillCardResponsiveDefault(propKey, props, mergedProps);
+    setSkillCardPropWithDefault(propKey, props, propsWithDefaults);
   });
 
-  return mergedProps;
+  return propsWithDefaults as SkillCardResponsiveProps;
 }
 
-function mergeSkillCardResponsiveDefault<Key extends keyof SkillCardBaseProps>(
-  propKey: Key,
+function setSkillCardPropWithDefault(
+  propKey: keyof SkillCardBaseProps,
   props: SkillCardResponsiveProps,
-  mergedProps: SkillCardResponsiveProps,
+  propsWithDefaults: SkillCardResponsivePropMap,
 ) {
-  const defaultValue = SKILL_CARD_RESPONSIVE_PROPS[propKey];
-  const propValue = props[propKey];
+  const propValues = props as SkillCardResponsivePropMap;
 
-  if (
-    !isSkillCardResponsiveValue(defaultValue) ||
-    !isSkillCardResponsiveValue(propValue)
-  ) {
-    return;
+  propsWithDefaults[propKey] = getSkillCardPropWithDefault(
+    SKILL_CARD_DEFAULT_PROPS[propKey] as
+      | SkillCardResponsiveProp<unknown>
+      | undefined,
+    propValues[propKey],
+  );
+}
+
+function getSkillCardPropWithDefault<T>(
+  defaultValue: SkillCardResponsiveProp<T> | undefined,
+  propValue: SkillCardResponsiveProp<T> | undefined,
+): SkillCardResponsiveProp<T> | undefined {
+  if (propValue === undefined) {
+    return defaultValue;
   }
 
-  const defaultResponsiveValue = defaultValue as SkillCardResponsiveValues<
-    SkillCardBaseProps[Key]
-  >;
-  const propResponsiveValue = propValue as SkillCardResponsiveValues<
-    SkillCardBaseProps[Key]
-  >;
+  const responsiveOverride = getSkillCardResponsiveOverride(propValue);
 
-  mergedProps[propKey] = {
-    ...defaultResponsiveValue,
-    ...propResponsiveValue,
-  } as SkillCardResponsiveProps[Key];
+  if (!responsiveOverride) {
+    return propValue;
+  }
+
+  return mergeSkillCardResponsiveDefault(
+    defaultValue,
+    responsiveOverride.values,
+    responsiveOverride.mergeMethod,
+  );
+}
+
+function mergeSkillCardResponsiveDefault<T>(
+  defaultValue: SkillCardResponsiveProp<T> | undefined,
+  propValue: SkillCardResponsiveValues<T>,
+  mergeMethod: SkillCardResponsiveMergeMethod,
+): SkillCardResponsiveValues<T> {
+  if (mergeMethod === 'replace') {
+    return propValue;
+  }
+
+  const defaultResponsiveValue =
+    getSkillCardDefaultResponsiveValue(defaultValue);
+
+  if (!defaultResponsiveValue) {
+    return propValue;
+  }
+
+  if (mergeMethod === 'merge') {
+    return {
+      ...defaultResponsiveValue,
+      ...propValue,
+    };
+  }
+
+  if (mergeMethod === 'replace-up') {
+    return mergeSkillCardResponsiveRange(defaultResponsiveValue, propValue, {
+      boundary: 'lowest',
+      keepDefault: (defaultOrder, boundaryOrder) =>
+        defaultOrder < boundaryOrder,
+    });
+  }
+
+  return mergeSkillCardResponsiveRange(
+    defaultResponsiveValue,
+    getSkillCardReplaceDownResponsiveValue(propValue),
+    {
+      boundary: 'highest',
+      keepDefault: (defaultOrder, boundaryOrder) =>
+        defaultOrder > boundaryOrder,
+    },
+  );
+}
+
+function mergeSkillCardResponsiveRange<T>(
+  defaultValue: SkillCardResponsiveValues<T>,
+  propValue: SkillCardResponsiveValues<T>,
+  {
+    boundary,
+    keepDefault,
+  }: {
+    boundary: 'lowest' | 'highest';
+    keepDefault: (defaultOrder: number, boundaryOrder: number) => boolean;
+  },
+): SkillCardResponsiveValues<T> {
+  const boundaryOrder = getSkillCardResponsiveBoundaryOrder(
+    propValue,
+    boundary,
+  );
+
+  if (boundaryOrder === null) {
+    return propValue;
+  }
+
+  return {
+    ...filterSkillCardResponsiveValues(defaultValue, (defaultOrder) =>
+      keepDefault(defaultOrder, boundaryOrder),
+    ),
+    ...propValue,
+  };
+}
+
+function getSkillCardDefaultResponsiveValue<T>(
+  defaultValue: SkillCardResponsiveProp<T> | undefined,
+): SkillCardResponsiveValues<T> | null {
+  if (defaultValue === undefined) {
+    return null;
+  }
+
+  const responsiveOverride = getSkillCardResponsiveOverride(defaultValue);
+
+  if (responsiveOverride) {
+    return responsiveOverride.values;
+  }
+
+  return { base: defaultValue as T };
+}
+
+function getSkillCardResponsiveOverride<T>(value: SkillCardResponsiveProp<T>): {
+  mergeMethod: SkillCardResponsiveMergeMethod;
+  values: SkillCardResponsiveValues<T>;
+} | null {
+  if (isSkillCardResponsiveOverride(value)) {
+    const [mergeMethod, values] = value;
+
+    return {
+      mergeMethod,
+      values: normalizeSkillCardResponsiveValues(values),
+    };
+  }
+
+  if (isSkillCardResponsiveValue(value)) {
+    return {
+      mergeMethod: 'replace',
+      values: normalizeSkillCardResponsiveValues(value),
+    };
+  }
+
+  return null;
+}
+
+function normalizeSkillCardResponsiveValues<T>(
+  responsiveValue: SkillCardResponsiveValues<T>,
+): SkillCardResponsiveValues<T> {
+  const normalizedValue = {
+    ...responsiveValue,
+  } as SkillCardResponsiveValues<T>;
+
+  if (
+    !Object.hasOwn(normalizedValue, 'base') &&
+    Object.hasOwn(normalizedValue, 'default')
+  ) {
+    normalizedValue.base = normalizedValue.default;
+  }
+
+  delete normalizedValue.default;
+
+  return normalizedValue;
+}
+
+function getSkillCardReplaceDownResponsiveValue<T>(
+  responsiveValue: SkillCardResponsiveValues<T>,
+): SkillCardResponsiveValues<T> {
+  if (Object.hasOwn(responsiveValue, 'base')) {
+    return responsiveValue;
+  }
+
+  const [firstEntry] = getSkillCardResponsiveEntries(responsiveValue);
+
+  if (!firstEntry) {
+    return responsiveValue;
+  }
+
+  return {
+    base: firstEntry.value,
+    ...responsiveValue,
+  };
+}
+
+function getSkillCardResponsiveBoundaryOrder<T>(
+  responsiveValue: SkillCardResponsiveValues<T>,
+  boundary: 'lowest' | 'highest',
+) {
+  const orders = [
+    ...(Object.hasOwn(responsiveValue, 'base')
+      ? [SKILL_CARD_BASE_BREAKPOINT_ORDER]
+      : []),
+    ...getSkillCardResponsiveEntries(responsiveValue).map(
+      ({ breakpoint }) => breakpoint.order,
+    ),
+  ];
+
+  if (orders.length === 0) {
+    return null;
+  }
+
+  return boundary === 'lowest' ? Math.min(...orders) : Math.max(...orders);
+}
+
+function filterSkillCardResponsiveValues<T>(
+  responsiveValue: SkillCardResponsiveValues<T>,
+  shouldKeep: (order: number) => boolean,
+): SkillCardResponsiveValues<T> {
+  const filteredValue: Record<string, T> = {};
+
+  if (
+    Object.hasOwn(responsiveValue, 'base') &&
+    shouldKeep(SKILL_CARD_BASE_BREAKPOINT_ORDER)
+  ) {
+    filteredValue.base = responsiveValue.base as T;
+  }
+
+  getSkillCardResponsiveEntries(responsiveValue).forEach(
+    ({ breakpoint, value }) => {
+      if (shouldKeep(breakpoint.order)) {
+        filteredValue[breakpoint.key] = value;
+      }
+    },
+  );
+
+  return filteredValue as SkillCardResponsiveValues<T>;
 }
 
 function resolveSkillCardProps(
@@ -609,11 +834,14 @@ function resolveSkillCardResponsiveProp<T>(
   value: SkillCardResponsiveProp<T> | undefined,
   activeBreakpointKeys: ReadonlySet<string>,
 ): T | undefined {
-  if (!isSkillCardResponsiveValue(value)) {
-    return value;
+  const responsiveOverride =
+    value === undefined ? null : getSkillCardResponsiveOverride(value);
+
+  if (!responsiveOverride) {
+    return value as T | undefined;
   }
 
-  const responsiveValue = value as SkillCardResponsiveValues<T>;
+  const { values: responsiveValue } = responsiveOverride;
   const baseValue = Object.hasOwn(responsiveValue, 'base')
     ? responsiveValue.base
     : responsiveValue.default;
@@ -634,14 +862,20 @@ function getSkillCardResponsiveBreakpointSignature(
 
   SKILL_CARD_PROP_KEYS.forEach((propKey) => {
     const propValue = props[propKey];
+    const responsiveOverride =
+      propValue === undefined
+        ? null
+        : getSkillCardResponsiveOverride(propValue);
 
-    if (!isSkillCardResponsiveValue(propValue)) {
+    if (!responsiveOverride) {
       return;
     }
 
-    getSkillCardResponsiveEntries(propValue).forEach(({ breakpoint }) => {
-      breakpointKeys.add(breakpoint.key);
-    });
+    getSkillCardResponsiveEntries(responsiveOverride.values).forEach(
+      ({ breakpoint }) => {
+        breakpointKeys.add(breakpoint.key);
+      },
+    );
   });
 
   return Array.from(breakpointKeys)
@@ -731,6 +965,28 @@ function isSkillCardTailwindBreakpoint(
   breakpointKey: string,
 ): breakpointKey is SkillCardTailwindBreakpoint {
   return breakpointKey in SKILL_CARD_TAILWIND_BREAKPOINTS;
+}
+
+function isSkillCardResponsiveOverride(
+  value: unknown,
+): value is SkillCardResponsiveOverride<unknown> {
+  return (
+    Array.isArray(value) &&
+    value.length === 2 &&
+    isSkillCardResponsiveMergeMethod(value[0]) &&
+    isSkillCardResponsiveValue(value[1])
+  );
+}
+
+function isSkillCardResponsiveMergeMethod(
+  value: unknown,
+): value is SkillCardResponsiveMergeMethod {
+  return (
+    typeof value === 'string' &&
+    SKILL_CARD_RESPONSIVE_MERGE_METHODS.has(
+      value as SkillCardResponsiveMergeMethod,
+    )
+  );
 }
 
 function isSkillCardResponsiveValue(
