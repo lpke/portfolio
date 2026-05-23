@@ -20,23 +20,19 @@ export function DeveloperToolingSkill({
         <SkillPage label="Page 1" summary="Developer Tooling examples page 1">
           <SkillGrid>
             <SkillCard
-              eyebrow="Daily driver"
-              title="Neovim Workbench"
+              title="How I Work"
               titleSize="lg"
-              description="Lua config that makes the editor a repeatable workflow: LSP, diagnostics, formatter paths, Copilot, Codex ACP, and CodeCompanion."
+              description="I'm a strong believer of knowing your tools. I've built a custom development environment on top of Neovim focusing on system/agent integration, Git workflows, and session management."
               cardSpan={4}
               href="https://github.com/lpke/nvim"
               showGithubIndicator
               image="/images/skills/nvim-codecompanion.png"
               imageAlt="Neovim agentic coding workflow screenshot"
               imageFit="cover"
-              imagePosition={{
-                base: 'top',
-                md: 'bottom',
-              }}
+              imagePosition="bottom"
               imageSize={{
                 base: '8rem',
-                md: '10rem',
+                md: '9rem',
               }}
               imageObjectPosition="60% top"
               imageObjectScale={{
@@ -45,41 +41,47 @@ export function DeveloperToolingSkill({
               }}
             />
             <SkillCard
-              eyebrow="Tooling stack"
-              title="Editor & Team Enablement"
+              title={{
+                base: undefined,
+                1250: 'My Development Environment',
+              }}
               cardSpan={2}
               chips={[
+                'Linux',
+                'NixOS',
+                'KDE Plasma',
+                'Zsh',
+                'Alacritty',
+                'Chezmoi',
+                'Tmux',
                 'Neovim',
-                'Lua',
-                'Bash',
-                'Storybook',
-                'Playwright',
-                'GitHub Actions',
+                'Codex CLI',
+                'Node',
               ]}
             />
             <SkillCard
-              eyebrow="Internal enablement"
-              title="Form Tool Adoption"
-              description="Stabilised a reusable patient-form tool with Storybook examples, implementation notes, and E2E coverage so teams could adopt it confidently."
-              cardSpan={3}
-            />
-            <SkillCard
-              eyebrow="Acidgreen"
-              title="Milkrun Mentoring"
-              description="Senior frontend on a Next.js/React Shopify build. Reviewed implementation decisions and helped teammates work cleanly within the project patterns."
-              cardSpan={3}
+              title="How I Help Others Work"
+              titleSize="lg"
+              description="On Milkrun's Next.js/React Shopify build, I helped a team newer to React ship confidently: explaining component patterns, reviewing state and data-flow decisions, and pairing through tricky UI work."
+              cardSpan={4}
               href="https://www.milkrun.com"
               image="/images/skills/milkrun.png"
               imageAlt="Milkrun website screenshot"
-              imageFit="cover"
-              imagePosition={{
-                base: 'top',
-                md: 'right',
+              imageFit="contain"
+              imageObjectScale={{
+                base: 5,
+                md: 6,
               }}
+              imagePosition="bottom"
               imageSize={{
-                base: '7rem',
-                md: '42%',
+                base: '8rem',
+                md: '9rem',
               }}
+            />
+            <SkillCard
+              title="Technical Hiring"
+              description="Conducted technical candidate reviews for Montu's international engineering expansion."
+              cardSpan={2}
             />
           </SkillGrid>
         </SkillPage>
@@ -91,9 +93,9 @@ export function DeveloperToolingSkill({
               description="Provided code reviews and mentorship on a Next.js/React Shopify build as the senior frontend on the project."
             />
             <SkillCard
-              eyebrow="Hiring"
-              title="Technical Hiring"
-              description="Conducted technical candidate reviews for Montu's international engineering expansion."
+              eyebrow="Internal enablement"
+              title="Form Tool Adoption"
+              description="Stabilised a reusable patient-form tool with Storybook examples, implementation notes, and E2E coverage so teams could adopt it confidently."
             />
             <SkillCard
               eyebrow="Stack"

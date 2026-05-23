@@ -68,7 +68,7 @@ export function ShippingTestingSkill({
               eyebrow="Regression safety"
               title="Patient Flow QA Harness"
               description="Paired Vitest coverage with state-controlled GUI checks so complex healthcare flows could be exercised quickly before release."
-              cardSpan={3}
+              cardSpan={4}
               image="/images/skills/pre-consultation-portal.png"
               imageAlt="Healthcare app QA screenshot"
               imageFit="cover"
@@ -85,7 +85,7 @@ export function ShippingTestingSkill({
               eyebrow="Experiment shipping"
               title="A/B Campaigns With Analytics"
               description="Shipped VWO experiments with custom variant UIs, client-side branching, and GA4 events so product decisions had measurable signal."
-              cardSpan={3}
+              cardSpan={2}
             >
               <div className="grid grid-cols-2 gap-2 text-xs text-white/72">
                 <span className="rounded-[6px] border border-white/10 px-2 py-1.5">

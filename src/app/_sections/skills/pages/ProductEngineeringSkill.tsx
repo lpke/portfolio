@@ -29,7 +29,6 @@ export function ProductEngineeringSkill({
               modal={{
                 title: 'Heads Up!',
                 titleSize: 'lg',
-                hideCloseButton: true,
                 children: (
                   <div>
                     <p className="mt-2">
