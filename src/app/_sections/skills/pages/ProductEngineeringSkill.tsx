@@ -63,11 +63,9 @@ export function ProductEngineeringSkill({
               image="/images/skills/alternaleaf-logo-square-dark.png"
               imageAlt="Healthcare patient portal screenshot"
               imageColor="#2F0431"
-              imageObjectPosition={{
-                base: 'center 54%',
-                md: 'center',
-              }}
+              imageObjectPosition="center"
               imageSize={{
+                base: '9rem',
                 md: '45%',
                 lg: '10rem',
               }}
@@ -80,7 +78,7 @@ export function ProductEngineeringSkill({
               }}
               imageBlurBackground={false}
               imageObjectScale={{
-                base: 4,
+                base: 3.3,
                 md: 1.3,
               }}
             />
@@ -102,6 +100,7 @@ export function ProductEngineeringSkill({
                 lg: 'left top',
               }}
               imageSize={{
+                base: '9rem',
                 md: '45%',
                 lg: '10rem',
               }}
@@ -133,7 +132,7 @@ export function ProductEngineeringSkill({
                 md: 'right',
               }}
               imageSize={{
-                base: '10rem',
+                base: '9rem',
                 md: '50%',
                 lg: '53%',
                 1250: '58%',
@@ -154,6 +153,7 @@ export function ProductEngineeringSkill({
               imageAlt="Milkrun website screenshot"
               imageFit="cover"
               imageSize={{
+                base: '9rem',
                 lg: '10rem',
               }}
             />
@@ -169,6 +169,7 @@ export function ProductEngineeringSkill({
               imageObjectScale={1.2}
               imageObjectPosition="left top"
               imageSize={{
+                base: '9rem',
                 lg: '10rem',
               }}
             />

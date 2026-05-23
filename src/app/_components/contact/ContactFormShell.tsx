@@ -4,9 +4,7 @@ import type { ReactNode } from 'react';
 import { SurfaceOverlay } from '@/components/SurfaceOverlay';
 
 export function ContactFormShell({ children }: { children: ReactNode }) {
-  const handlePointerDown = (
-    event: React.PointerEvent<HTMLDivElement>,
-  ) => {
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     const target = event.target;
 
     if (!(target instanceof Element)) {
@@ -24,7 +22,7 @@ export function ContactFormShell({ children }: { children: ReactNode }) {
     <div
       tabIndex={-1}
       onPointerDown={handlePointerDown}
-      className="group/contact-form bg-surface-container/92 focus-within:bg-surface-container/96 relative overflow-hidden rounded-lg border border-white/20 p-5 shadow-[0_22px_72px_rgba(0,0,0,0.36)] transition-[background-color,box-shadow] duration-800 outline-none focus-within:shadow-[0_34px_96px_rgba(0,0,0,0.54)] sm:p-6 lg:p-7"
+      className="group/contact-form bg-surface-container/95 md:bg-surface-container/92 md:focus-within:bg-surface-container/96 relative overflow-hidden rounded-lg border border-white/20 p-5 shadow-[0_30px_86px_rgba(0,0,0,0.48)] transition-[background-color,box-shadow] duration-800 outline-none sm:p-6 md:shadow-[0_22px_72px_rgba(0,0,0,0.36)] md:focus-within:shadow-[0_34px_96px_rgba(0,0,0,0.54)] lg:p-7"
     >
       {/* Decorative glow - static radial gradient instead of blur filter */}
       <div
@@ -35,7 +33,7 @@ export function ContactFormShell({ children }: { children: ReactNode }) {
         }}
       />
       <SurfaceOverlay
-        className="opacity-0 transition-opacity duration-800 group-focus-within/contact-form:opacity-100"
+        className="opacity-80 transition-opacity duration-800 md:opacity-0 md:group-focus-within/contact-form:opacity-100"
         style={{
           background:
             'radial-gradient(circle at 82% 0%, rgba(92,196,255,0.098), rgba(32,232,204,0.049) 28%, transparent 50%), radial-gradient(circle at 0% 100%, rgba(255,184,108,0.085), rgba(255,124,148,0.043) 30%, transparent 52%)',

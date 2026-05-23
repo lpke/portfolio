@@ -8,7 +8,12 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from 'react';
-import { MOBILE_OPEN_ACCORDION_INSET_REM } from '@/utils/constants';
+import {
+  LAYOUT_CONFIG,
+  MOBILE_OPEN_ACCORDION_INSET_REM,
+  MOBILE_SKILL_HEADER_EVENT,
+  type MobileSkillHeaderDetail,
+} from '@/utils/constants';
 import {
   SKILL_PAGES,
   type SkillPageDefinition,
@@ -17,8 +22,11 @@ import { getSkillIcon } from './SkillIcons';
 import { SkillsShell } from './SkillsShell';
 import { ChevronIcon, SkillsHeading, cx, getSkillStyle } from './shared';
 
+const MOBILE_SKILL_HEADER_FALLBACK_HEIGHT_PX = 56;
+
 export function MobileSkills({ withShell = true }: { withShell?: boolean }) {
   const [openIds, setOpenIds] = useState<Set<string>>(() => new Set());
+  const lastHeaderSkillIdRef = useRef<string | null>(null);
 
   const toggleSkill = (id: string) => {
     setOpenIds((current) => {
@@ -34,9 +42,110 @@ export function MobileSkills({ withShell = true }: { withShell?: boolean }) {
     });
   };
 
+  useEffect(() => {
+    const desktopQuery = window.matchMedia(
+      LAYOUT_CONFIG.mediaQueries.desktopSkills,
+    );
+    let frame: number | null = null;
+
+    const setHeaderSkill = (skill: SkillPageDefinition | null) => {
+      const nextId = skill?.id ?? null;
+
+      if (lastHeaderSkillIdRef.current === nextId) {
+        return;
+      }
+
+      lastHeaderSkillIdRef.current = nextId;
+      dispatchMobileSkillHeaderChange(skill);
+    };
+
+    const updateHeaderSkill = () => {
+      frame = null;
+
+      if (desktopQuery.matches || openIds.size === 0) {
+        setHeaderSkill(null);
+        return;
+      }
+
+      const headerPrimary = document.querySelector(
+        '[data-site-header-primary="true"]',
+      );
+      const triggerBottom = headerPrimary?.getBoundingClientRect().bottom ?? 0;
+      const titleMenuHeight = getMobileSkillHeaderMenuHeight();
+      const requiredVisiblePanelHeight = titleMenuHeight * 2;
+      let activeSkill: SkillPageDefinition | null = null;
+
+      SKILL_PAGES.forEach((skill) => {
+        if (!openIds.has(skill.id)) {
+          return;
+        }
+
+        const heading = document.querySelector(
+          `[data-mobile-skill-heading="${skill.id}"]`,
+        );
+        const panel = document.querySelector(
+          `[data-mobile-skill-panel="${skill.id}"]`,
+        );
+
+        if (
+          !(heading instanceof HTMLElement) ||
+          !(panel instanceof HTMLElement)
+        ) {
+          return;
+        }
+
+        const headingRect = heading.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        const isInHeaderRange =
+          headingRect.bottom <= triggerBottom &&
+          panelRect.bottom > triggerBottom;
+        const visiblePanelHeightPastHeader = panelRect.bottom - triggerBottom;
+        const hasEnoughVisiblePanel =
+          visiblePanelHeightPastHeader >= requiredVisiblePanelHeight;
+
+        if (isInHeaderRange && hasEnoughVisiblePanel) {
+          activeSkill = skill;
+        }
+      });
+
+      setHeaderSkill(activeSkill);
+    };
+
+    const scheduleHeaderSkillUpdate = () => {
+      if (frame !== null) {
+        return;
+      }
+
+      frame = window.requestAnimationFrame(updateHeaderSkill);
+    };
+
+    updateHeaderSkill();
+    desktopQuery.addEventListener('change', scheduleHeaderSkillUpdate);
+    window.addEventListener('scroll', scheduleHeaderSkillUpdate, {
+      passive: true,
+    });
+    window.addEventListener('resize', scheduleHeaderSkillUpdate);
+
+    return () => {
+      if (frame !== null) {
+        window.cancelAnimationFrame(frame);
+      }
+
+      desktopQuery.removeEventListener('change', scheduleHeaderSkillUpdate);
+      window.removeEventListener('scroll', scheduleHeaderSkillUpdate);
+      window.removeEventListener('resize', scheduleHeaderSkillUpdate);
+    };
+  }, [openIds]);
+
+  useEffect(() => {
+    return () => {
+      dispatchMobileSkillHeaderChange(null);
+    };
+  }, []);
+
   const content = (
     <div className="ghost-border bg-skill-stage relative overflow-hidden">
-      <div className="relative mx-auto max-w-7xl px-5 pt-14 pb-8 md:px-8 md:pt-20">
+      <div className="relative mx-auto max-w-7xl px-5 pt-20 pb-8 md:px-8 md:pt-24">
         <SkillsHeading />
       </div>
 
@@ -157,7 +266,7 @@ function MobileSkillPanel({
   }, [syncContentHeight]);
 
   const handlePointerDown = (event: PointerEvent<HTMLElement>) => {
-    if (isInteractiveSkillPageTarget(event)) {
+    if (isSkillPanelNonToggleTarget(event)) {
       tapStartRef.current = null;
       return;
     }
@@ -192,7 +301,11 @@ function MobileSkillPanel({
     const start = tapStartRef.current;
     tapStartRef.current = null;
 
-    if (!start || start.pointerId !== event.pointerId) {
+    if (
+      !start ||
+      start.pointerId !== event.pointerId ||
+      isSkillPanelNonToggleTarget(event)
+    ) {
       return;
     }
 
@@ -222,7 +335,7 @@ function MobileSkillPanel({
   const Page = skill.Page;
 
   return (
-    <div className="relative">
+    <div className="relative" data-mobile-skill-panel={skill.id}>
       <div
         className={cx(
           'pointer-events-none absolute inset-y-0 z-0 rounded-lg transition-[box-shadow,left,right] duration-500 ease-out',
@@ -258,6 +371,7 @@ function MobileSkillPanel({
         />
 
         <button
+          data-mobile-skill-heading={skill.id}
           type="button"
           aria-expanded={isOpen}
           aria-controls={`skill-panel-${skill.id}`}
@@ -318,7 +432,22 @@ function MobileSkillPanel({
   );
 }
 
-function isInteractiveSkillPageTarget(event: PointerEvent<HTMLElement>) {
+function getMobileSkillHeaderMenuHeight() {
+  const titleMenu = document.querySelector(
+    '[data-mobile-skill-header-menu="true"]',
+  );
+
+  if (!(titleMenu instanceof HTMLElement)) {
+    return MOBILE_SKILL_HEADER_FALLBACK_HEIGHT_PX;
+  }
+
+  return (
+    titleMenu.getBoundingClientRect().height ||
+    MOBILE_SKILL_HEADER_FALLBACK_HEIGHT_PX
+  );
+}
+
+function isSkillPanelNonToggleTarget(event: PointerEvent<HTMLElement>) {
   const target = event.target;
 
   if (!(target instanceof Element)) {
@@ -331,10 +460,28 @@ function isInteractiveSkillPageTarget(event: PointerEvent<HTMLElement>) {
     return false;
   }
 
-  return Boolean(
-    target.closest(
-      'a,button,input,select,textarea,[role="button"],[data-accordion-interactive="true"]',
-    ),
+  const intro = target.closest('[data-skill-page-intro="true"]');
+
+  return !intro || !event.currentTarget.contains(intro);
+}
+
+function dispatchMobileSkillHeaderChange(skill: SkillPageDefinition | null) {
+  const detail: MobileSkillHeaderDetail = {
+    skill: skill
+      ? {
+          id: skill.id,
+          title: skill.title,
+          iconKey: skill.iconKey,
+          accent: skill.accent,
+          accentSoft: skill.accentSoft,
+        }
+      : null,
+  };
+
+  window.dispatchEvent(
+    new CustomEvent<MobileSkillHeaderDetail>(MOBILE_SKILL_HEADER_EVENT, {
+      detail,
+    }),
   );
 }
 

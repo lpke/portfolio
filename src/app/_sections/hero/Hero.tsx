@@ -74,7 +74,7 @@ export function Hero() {
           >
             <SectionLink
               to={SECTION_IDS.contact}
-              scrollTargetId={SCROLL_TARGETS.contactCardFirst}
+              mobileScrollTargetId={SCROLL_TARGETS.contactCardFirst}
               buttonVariant="primary"
               className="!min-h-0 !px-8 !py-4"
             >

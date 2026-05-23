@@ -42,7 +42,7 @@ const BUTTON_VARIANT_CLASS_NAMES = {
     'border border-primary/45 text-primary hover:border-primary/70 hover:bg-primary/8 focus-visible:ring-primary/35',
 } as const satisfies Record<ButtonVariant, string>;
 const BUTTON_SIZE_CLASS_NAMES = {
-  sm: 'min-h-10 px-6 py-2 text-sm',
+  sm: 'px-6 py-2 text-sm',
   md: 'min-h-12 px-7 py-3 text-base',
 } as const satisfies Record<ButtonSize, string>;
 

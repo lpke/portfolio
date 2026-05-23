@@ -5,12 +5,14 @@ import {
   useEffect,
   useRef,
   useState,
+  useSyncExternalStore,
   type CSSProperties,
   type ReactElement,
   type ReactNode,
   type PointerEvent as ReactPointerEvent,
 } from 'react';
 import {
+  LAYOUT_CONFIG,
   SKILL_PAGE_SHELL_CONFIG,
   SKILL_PAGER_CONFIG,
   SKILL_PAGER_COPY,
@@ -42,7 +44,15 @@ type SkillPagerProps = {
   autoTransitionMs?: number | null;
   children: ReactNode;
   isVisible?: boolean;
+  pageOnMobile?: boolean;
   showArrowButtons?: typeof SKILL_PAGER_CONFIG.showArrowButtons;
+};
+
+type PaginatedSkillPagerProps = Omit<
+  SkillPagerProps,
+  'children' | 'pageOnMobile'
+> & {
+  pages: readonly ReactElement<SkillPagerPageProps>[];
 };
 
 export function SkillPageShell({
@@ -57,11 +67,12 @@ export function SkillPageShell({
   return (
     <>
       <p
+        data-skill-page-intro="true"
         className={cx(
           'max-w-3xl leading-relaxed text-white/90',
           variant === 'desktop'
             ? 'text-[1.18rem] lg:text-[1.25rem]'
-            : 'text-base font-medium',
+            : 'cursor-pointer text-base font-medium',
         )}
       >
         {intro}
@@ -92,9 +103,42 @@ export function SkillPager({
   autoTransitionMs,
   children,
   isVisible = true,
+  pageOnMobile = false,
   showArrowButtons = SKILL_PAGER_CONFIG.showArrowButtons,
 }: SkillPagerProps) {
   const pages = getSkillPages(children);
+  const shouldUsePagination = useSkillPagerPagination(pageOnMobile);
+
+  if (pages.length === 0) {
+    return null;
+  }
+
+  if (pages.length === 1) {
+    return <>{pages[0]?.props.children}</>;
+  }
+
+  if (!shouldUsePagination) {
+    return <SkillPagerStack pages={pages} />;
+  }
+
+  return (
+    <PaginatedSkillPager
+      autoTransition={autoTransition}
+      autoTransitionMs={autoTransitionMs}
+      isVisible={isVisible}
+      pages={pages}
+      showArrowButtons={showArrowButtons}
+    />
+  );
+}
+
+function PaginatedSkillPager({
+  autoTransition = false,
+  autoTransitionMs,
+  isVisible = true,
+  pages,
+  showArrowButtons = SKILL_PAGER_CONFIG.showArrowButtons,
+}: PaginatedSkillPagerProps) {
   const [requestedIndex, setRequestedIndex] = useState(0);
   const [direction, setDirection] = useState<SkillPagerDirection>('next');
   const [phase, setPhase] = useState<SkillPagerPhase>('enter');
@@ -624,10 +668,6 @@ export function SkillPager({
     return null;
   }
 
-  if (pageCount === 1) {
-    return <>{activePage.props.children}</>;
-  }
-
   return (
     <div ref={rootRef}>
       <nav
@@ -768,6 +808,20 @@ export function SkillPager({
   );
 }
 
+function SkillPagerStack({
+  pages,
+}: {
+  pages: readonly ReactElement<SkillPagerPageProps>[];
+}) {
+  return (
+    <div className="grid gap-3 pt-2">
+      {pages.map((page) => (
+        <div key={page.props.label}>{page.props.children}</div>
+      ))}
+    </div>
+  );
+}
+
 function getPageButtonLabel(
   page: ReactElement<SkillPagerPageProps>,
   index: number,
@@ -784,6 +838,33 @@ function hasActiveTextSelection() {
 
 function isAutoTransitionDocumentActive() {
   return document.visibilityState === 'visible' && document.hasFocus();
+}
+
+function useSkillPagerPagination(pageOnMobile: boolean) {
+  const isDesktop = useSyncExternalStore(
+    subscribeSkillPagerViewport,
+    getSkillPagerViewportSnapshot,
+    getSkillPagerServerSnapshot,
+  );
+
+  return pageOnMobile || isDesktop;
+}
+
+function subscribeSkillPagerViewport(onStoreChange: () => void) {
+  const query = window.matchMedia(LAYOUT_CONFIG.mediaQueries.desktopSkills);
+  query.addEventListener('change', onStoreChange);
+
+  return () => {
+    query.removeEventListener('change', onStoreChange);
+  };
+}
+
+function getSkillPagerViewportSnapshot() {
+  return window.matchMedia(LAYOUT_CONFIG.mediaQueries.desktopSkills).matches;
+}
+
+function getSkillPagerServerSnapshot() {
+  return true;
 }
 
 function SkillPagerTimerButton({

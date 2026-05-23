@@ -228,6 +228,15 @@ export type SkillProfile = {
   railTextExtraRem?: number;
 };
 
+export const MOBILE_SKILL_HEADER_EVENT = 'portfolio:mobile-skill-header';
+
+export type MobileSkillHeaderDetail = {
+  skill: Pick<
+    SkillProfile,
+    'id' | 'title' | 'iconKey' | 'accent' | 'accentSoft'
+  > | null;
+};
+
 const SKILL_THEME_TOKENS = {
   product: { accent: '#7bd0ff', accentSoft: 'rgba(123, 208, 255, 0.16)' },
   ai: { accent: '#c7a5ff', accentSoft: 'rgba(199, 165, 255, 0.16)' },

@@ -1,23 +1,36 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/Button';
+import { getSkillIcon } from '@/components/skills/SkillIcons';
 import {
   HEADER_CONTENT,
   LAYOUT_CONFIG,
+  MOBILE_SKILL_HEADER_EVENT,
   NAV_LINKS,
   SCROLL_TARGETS,
   SECTION_IDS,
   SITE,
+  type MobileSkillHeaderDetail,
 } from '@/utils/constants';
 import { useSectionNav } from '@/hooks/SectionRouterProvider';
 
 const MOBILE_QUERY = LAYOUT_CONFIG.mediaQueries.belowMd;
+const SKILL_HEADER_EXIT_MS = 300;
+
+type MobileSkillHeaderStyle = CSSProperties & {
+  '--mobile-skill-accent': string;
+  '--mobile-skill-accent-soft': string;
+};
 
 export function Header() {
   const { activeId, navigateTo } = useSectionNav();
   const [isConcealedForHero, setIsConcealedForHero] = useState(true);
+  const [mobileSkillHeader, setMobileSkillHeader] =
+    useState<MobileSkillHeaderDetail['skill']>(null);
+  const [renderedMobileSkillHeader, setRenderedMobileSkillHeader] =
+    useState<MobileSkillHeaderDetail['skill']>(null);
 
   useEffect(() => {
     const mobileQuery = window.matchMedia(MOBILE_QUERY);
@@ -61,6 +74,37 @@ export function Header() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleMobileSkillHeader = (event: Event) => {
+      const { detail } = event as CustomEvent<MobileSkillHeaderDetail>;
+      setMobileSkillHeader(detail.skill);
+    };
+
+    window.addEventListener(MOBILE_SKILL_HEADER_EVENT, handleMobileSkillHeader);
+
+    return () => {
+      window.removeEventListener(
+        MOBILE_SKILL_HEADER_EVENT,
+        handleMobileSkillHeader,
+      );
+    };
+  }, []);
+
+  useEffect(() => {
+    if (mobileSkillHeader) {
+      setRenderedMobileSkillHeader(mobileSkillHeader);
+      return undefined;
+    }
+
+    const timeout = setTimeout(() => {
+      setRenderedMobileSkillHeader(null);
+    }, SKILL_HEADER_EXIT_MS);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [mobileSkillHeader]);
+
   const handleNavigate =
     (sectionId: string, scrollTargetId?: string) =>
     (e: { preventDefault: () => void }) => {
@@ -68,8 +112,57 @@ export function Header() {
       navigateTo(sectionId, scrollTargetId);
     };
 
+  const handleContactNavigate = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    navigateTo(
+      SECTION_IDS.contact,
+      window.matchMedia(MOBILE_QUERY).matches
+        ? SCROLL_TARGETS.contactCardFirst
+        : undefined,
+    );
+  };
+
+  const handleMobileSkillHeaderClick = () => {
+    if (!renderedMobileSkillHeader) {
+      return;
+    }
+
+    const panel = document.querySelector(
+      `[data-mobile-skill-panel="${renderedMobileSkillHeader.id}"]`,
+    );
+
+    if (!(panel instanceof HTMLElement)) {
+      return;
+    }
+
+    const headerPrimary = document.querySelector(
+      '[data-site-header-primary="true"]',
+    );
+    const headerOffset =
+      (headerPrimary instanceof HTMLElement
+        ? headerPrimary.getBoundingClientRect().bottom
+        : 0) + 8;
+    const panelTop =
+      window.scrollY + panel.getBoundingClientRect().top - headerOffset;
+
+    window.scrollTo({
+      top: Math.max(0, panelTop),
+      behavior: 'smooth',
+    });
+  };
+
+  const isSkillHeaderVisible = Boolean(mobileSkillHeader);
+  const skillHeaderStyle: MobileSkillHeaderStyle | undefined =
+    renderedMobileSkillHeader
+      ? {
+          '--mobile-skill-accent': renderedMobileSkillHeader.accent,
+          '--mobile-skill-accent-soft': renderedMobileSkillHeader.accentSoft,
+        }
+      : undefined;
+
   return (
     <header
+      data-site-header="true"
       className={`glass-nav ambient-shadow fixed top-0 z-50 w-full transition-opacity duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-[opacity] motion-reduce:transition-none md:opacity-100 ${
         isConcealedForHero
           ? 'pointer-events-none opacity-0 md:pointer-events-auto'
@@ -77,8 +170,10 @@ export function Header() {
       }`}
       style={{ paddingRight: 'var(--scrollbar-gutter, 0px)' }}
     >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-8">
-        {/* Logo */}
+      <nav
+        data-site-header-primary="true"
+        className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2.5 md:px-8 md:py-4"
+      >
         <Link
           href="/"
           onNavigate={handleNavigate(SECTION_IDS.home)}
@@ -110,17 +205,51 @@ export function Header() {
         </div>
 
         {/* CTA Button */}
-        <Button
-          href="/contact"
-          onClick={handleNavigate(
-            SECTION_IDS.contact,
-            SCROLL_TARGETS.contactCardFirst,
-          )}
-          size="sm"
-        >
+        <Button href="/contact" onClick={handleContactNavigate} size="sm">
           {HEADER_CONTENT.ctaLabel}
         </Button>
       </nav>
+
+      <div
+        aria-hidden={!isSkillHeaderVisible}
+        className={`grid overflow-hidden transition-[grid-template-rows,opacity,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden ${
+          isSkillHeaderVisible
+            ? 'grid-rows-[1fr] border-t border-white/[0.08] opacity-100'
+            : 'grid-rows-[0fr] border-t border-transparent opacity-0'
+        }`}
+        style={skillHeaderStyle}
+      >
+        <div className="min-h-0">
+          <div
+            data-mobile-skill-header-menu="true"
+            className="mx-auto max-w-7xl px-6 py-2 md:px-8"
+          >
+            <button
+              type="button"
+              aria-label={
+                renderedMobileSkillHeader
+                  ? `Scroll to ${renderedMobileSkillHeader.title} accordion`
+                  : undefined
+              }
+              tabIndex={isSkillHeaderVisible ? 0 : -1}
+              onClick={handleMobileSkillHeaderClick}
+              className="grid h-10 w-full cursor-pointer grid-cols-[1.75rem_minmax(0,1fr)] items-center gap-3 rounded-md text-left text-[var(--mobile-skill-accent)] transition-[background-color,filter] duration-200 hover:bg-white/[0.045] hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--mobile-skill-accent)]"
+            >
+              <span
+                aria-hidden="true"
+                className="grid h-7 w-7 place-items-center"
+              >
+                {renderedMobileSkillHeader
+                  ? getSkillIcon(renderedMobileSkillHeader.iconKey)
+                  : null}
+              </span>
+              <span className="font-headline block min-w-0 truncate text-[1.15rem] leading-tight font-bold tracking-tight">
+                {renderedMobileSkillHeader?.title}
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
     </header>
   );
 }

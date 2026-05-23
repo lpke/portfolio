@@ -32,9 +32,11 @@ export function AiAutomationSkill({
               image="/images/skills/notion-ai.png"
               imagePosition="right"
               imageSize={{
-                direction: 'down',
                 values: {
-                  md: '6rem',
+                  base: '6rem',
+                  md: '45%',
+                  lg: '40%',
+                  1250: '45%',
                 },
               }}
               imageObjectPosition="center"
@@ -57,16 +59,21 @@ export function AiAutomationSkill({
               image="/images/skills/nvim-codecompanion.png"
               imagePosition="left"
               imageSize={{
-                base: '9rem',
+                base: '7rem',
+                md: '45%',
                 lg: '40%',
-                1250: '46%',
+                1250: '45%',
               }}
-              imageObjectPosition="60% top"
+              imageObjectPosition={{
+                base: '55% top',
+                lg: '60% top',
+              }}
               imageAlt="Neovim CodeCompanion screenshot"
               imageFit="cover"
               imageObjectScale={{
-                base: 2,
-                md: 1.5,
+                base: 2.5,
+                md: 2,
+                1250: 1.5,
               }}
             />
             <SkillCard
@@ -85,8 +92,9 @@ export function AiAutomationSkill({
               imagePosition="right"
               imageSize={{
                 base: '6.5rem',
+                md: '45%',
                 lg: '40%',
-                1250: '50%',
+                1250: '45%',
               }}
               imageObjectPosition={{
                 base: '18% top',

@@ -4,7 +4,7 @@ import { type ReactNode } from 'react';
 import { Button } from '@/components/Button';
 import type { ButtonSize, ButtonVariant } from '@/components/Button';
 import { useSectionNav } from '@/hooks/SectionRouterProvider';
-import { SECTIONS } from '@/utils/constants';
+import { LAYOUT_CONFIG, SECTIONS } from '@/utils/constants';
 
 /** Map sectionId → clean path */
 const ID_TO_PATH: Record<string, string> = Object.fromEntries(
@@ -16,6 +16,8 @@ type SectionLinkProps = {
   to: string;
   /** Optional DOM id to scroll to while keeping the URL/active section tied to `to`. */
   scrollTargetId?: string;
+  /** Optional DOM id to scroll to only below the md breakpoint. */
+  mobileScrollTargetId?: string;
   children: ReactNode;
   className?: string;
   buttonVariant?: ButtonVariant;
@@ -30,6 +32,7 @@ type SectionLinkProps = {
 export function SectionLink({
   to,
   scrollTargetId,
+  mobileScrollTargetId,
   children,
   className,
   buttonVariant,
@@ -40,7 +43,13 @@ export function SectionLink({
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    navigateTo(to, scrollTargetId);
+    const targetId =
+      mobileScrollTargetId &&
+      window.matchMedia(LAYOUT_CONFIG.mediaQueries.belowMd).matches
+        ? mobileScrollTargetId
+        : scrollTargetId;
+
+    navigateTo(to, targetId);
   };
 
   if (buttonVariant) {
