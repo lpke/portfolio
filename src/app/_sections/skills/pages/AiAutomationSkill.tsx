@@ -105,23 +105,7 @@ export function AiAutomationSkill({
                 md: 2,
               }}
             />
-          </SkillGrid>
-        </SkillPage>
-        <SkillPage label="Page 2" summary="AI & Automation examples page 2">
-          <SkillGrid>
             <SkillCard
-              eyebrow="Production"
-              title="AI in Production Teams"
-              description="Used agentic coding tools daily for feature development, debugging, and iteration across a 100+ engineer codebase."
-            />
-            <SkillCard
-              eyebrow="Local AI"
-              title="Local LLM Automation"
-              description="Ollama-powered local models for lightweight tasks like web page parsing and text processing."
-            />
-            <SkillCard
-              eyebrow="Stack"
-              title="Stack"
               cardSpan="full"
               chips={[
                 'GitHub Copilot',

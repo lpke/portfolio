@@ -89,11 +89,16 @@ export function ProductEngineeringSkill({
               description="Lead Frontend Engineer on a Shopify site built with Next.js. Provided code reviews, training, and mentoring."
               href="https://www.milkrun.com"
               image="/images/skills/milkrun.jpg"
-              imagePosition="top"
+              imagePosition={{
+                base: 'top',
+                md: 'left',
+                lg: 'top',
+              }}
               imageAlt="Milkrun website screenshot"
               imageFit="cover"
               imageSize={{
                 base: '9rem',
+                md: '45%',
                 lg: '10rem',
               }}
               imageObjectPosition="top left"
@@ -106,10 +111,7 @@ export function ProductEngineeringSkill({
               description="Built React components deployed to digital screens at 2,000+ McDonald's stores across Australia and New Zealand."
               cardSpan="full"
               cardMinHeight={{
-                direction: 'up',
-                values: {
-                  lg: '17rem',
-                },
+                lg: '17rem',
               }}
               image="/images/skills/mcdonalds-digital-menu.jpg"
               imageAlt="McDonald's digital menu board screenshot"
@@ -124,7 +126,7 @@ export function ProductEngineeringSkill({
               }}
               imageSize={{
                 base: '9rem',
-                md: '50%',
+                md: '45%',
                 lg: '53%',
                 1250: '58%',
               }}
@@ -166,12 +168,17 @@ export function ProductEngineeringSkill({
               description="Full-stack Next.js/MongoDB app with auth, serverless functions, and a dynamic data grid for capturing EOI data."
               image="/images/skills/opt-releases.png"
               imageAlt="Property releases portal screenshot"
-              imagePosition="top"
               imageFit="cover"
               imageObjectScale={1.2}
               imageObjectPosition="left top"
+              imagePosition={{
+                base: 'top',
+                md: 'right',
+                lg: 'top',
+              }}
               imageSize={{
                 base: '9rem',
+                md: '45%',
                 lg: '10rem',
               }}
             />
