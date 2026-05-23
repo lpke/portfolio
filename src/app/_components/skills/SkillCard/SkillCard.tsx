@@ -253,7 +253,7 @@ function getImageLayoutClassName(position: SkillCardImagePosition) {
 }
 
 function getImageGapClassName(position: SkillCardImagePosition) {
-  if (position === 'top') {
+  if (position === 'top' || position === 'bottom') {
     return 'gap-0';
   }
 
