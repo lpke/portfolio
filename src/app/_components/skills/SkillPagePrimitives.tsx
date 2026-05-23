@@ -114,7 +114,15 @@ export function SkillPager({
   }
 
   if (pages.length === 1) {
-    return <>{pages[0]?.props.children}</>;
+    return (
+      <div
+        className={
+          SKILL_PAGE_SHELL_CONFIG.singlePageDesktopContentOffsetClassName
+        }
+      >
+        {pages[0]?.props.children}
+      </div>
+    );
   }
 
   if (!shouldUsePagination) {
@@ -814,7 +822,7 @@ function SkillPagerStack({
   pages: readonly ReactElement<SkillPagerPageProps>[];
 }) {
   return (
-    <div className="grid gap-3 pt-2">
+    <div className="grid gap-3">
       {pages.map((page) => (
         <div key={page.props.label}>{page.props.children}</div>
       ))}

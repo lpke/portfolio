@@ -361,13 +361,15 @@ export type SkillPageShellConfig = {
     desktop: string;
     mobile: string;
   };
+  singlePageDesktopContentOffsetClassName: string;
 };
 
 export const SKILL_PAGE_SHELL_CONFIG: SkillPageShellConfig = {
   contentGapClassNames: {
     desktop: 'mt-4',
-    mobile: 'mt-3',
+    mobile: 'mt-4',
   },
+  singlePageDesktopContentOffsetClassName: 'lg:pt-2',
 };
 
 export const SKILL_PAGER_COPY = {
