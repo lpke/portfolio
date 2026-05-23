@@ -80,7 +80,7 @@ export function TechnicalStrategySkill({
             />
             <SkillCard
               eyebrow="Client strategy"
-              title="Danone Stakeholder Decisions"
+              title="Danone Stakeholder Decision"
               description="Explained implementation choices directly to senior Nutricia/Danone stakeholders while shipping integrations like Yotpo reviews."
               cardSpan={3}
             >
