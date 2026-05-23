@@ -25,7 +25,7 @@ export function SkillsHeading() {
         className="font-headline text-5xl leading-none font-black tracking-tighter text-white sm:text-6xl md:text-7xl lg:text-8xl"
       >
         {SKILLS_SECTION_COPY.heading.lead}{' '}
-        <span className="text-primary italic">
+        <span className="text-primary">
           {SKILLS_SECTION_COPY.heading.accent}
         </span>
       </h1>

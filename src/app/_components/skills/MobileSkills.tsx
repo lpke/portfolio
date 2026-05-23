@@ -149,7 +149,7 @@ export function MobileSkills({ withShell = true }: { withShell?: boolean }) {
         <SkillsHeading />
       </div>
 
-      <div className="relative mx-auto grid w-full max-w-7xl gap-3 px-5 pb-6 md:px-8">
+      <div className="relative mx-auto grid w-full max-w-7xl gap-3 px-5 pb-16 md:px-8 md:pb-6">
         {SKILL_PAGES.map((skill) => {
           const isOpen = openIds.has(skill.id);
 

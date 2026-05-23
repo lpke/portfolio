@@ -93,7 +93,7 @@ export function DesktopSkills({ withShell = true }: { withShell?: boolean }) {
       <SurfaceOverlay className="bg-[linear-gradient(120deg,rgba(255,255,255,0.055),transparent_36%,rgba(255,255,255,0.025))]" />
       <SurfaceOverlay className="bg-[radial-gradient(circle_at_78%_18%,var(--skill-accent-soft),transparent_32%)] opacity-75" />
 
-      <div className="relative z-10 mx-auto min-h-[42rem] max-w-7xl px-4 py-16 sm:px-6 sm:py-24 md:px-8 lg:grid lg:h-full lg:min-h-0 lg:grid-rows-[auto_minmax(0,1fr)] lg:pt-28 lg:pb-16">
+      <div className="relative z-10 mx-auto min-h-[42rem] max-w-7xl px-4 py-16 sm:px-6 sm:py-24 md:px-8 lg:grid lg:h-full lg:min-h-0 lg:grid-rows-[auto_minmax(0,1fr)] lg:pt-36 lg:pb-16">
         <div className="mb-10">
           <SkillsHeading />
         </div>

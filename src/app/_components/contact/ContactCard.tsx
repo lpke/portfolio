@@ -81,10 +81,7 @@ export function ContactCard({
     if (!copyContent) return;
     navigator.clipboard.writeText(copyContent).then(() => {
       setCopied(true);
-      setTimeout(
-        () => setCopied(false),
-        LAYOUT_CONFIG.motion.contactCopyMs,
-      );
+      setTimeout(() => setCopied(false), LAYOUT_CONFIG.motion.contactCopyMs);
     });
   }, [copyContent]);
 
@@ -116,7 +113,7 @@ export function ContactCard({
   return (
     <div
       id={id}
-      className="group/contact-card bg-surface-container-high/75 text-on-surface-variant relative scroll-mt-24 overflow-hidden rounded-lg border border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.28)] transition-[background-color,border-color,color,box-shadow] duration-300 hover:border-white/32 hover:bg-white/[0.11] hover:text-white hover:shadow-[0_6px_16px_rgba(0,0,0,0.18),0_14px_30px_rgba(0,0,0,0.12)] md:scroll-mt-28"
+      className="group/contact-card bg-surface-container-high/75 text-on-surface-variant relative scroll-mt-19 overflow-hidden rounded-lg border border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.28)] transition-[background-color,border-color,color,box-shadow] duration-300 hover:border-white/32 hover:bg-white/[0.11] hover:text-white hover:shadow-[0_6px_16px_rgba(0,0,0,0.18),0_14px_30px_rgba(0,0,0,0.12)] md:scroll-mt-28"
     >
       <SurfaceOverlay className="bg-white/[0.08] opacity-0 transition-opacity duration-200 group-hover/contact-card:opacity-100" />
       {href ? (
