@@ -65,7 +65,7 @@ export function DeveloperToolingSkill({
               description="On Milkrun's Next.js/React Shopify build, I helped a team newer to React ship confidently: explaining component patterns, reviewing state and data-flow decisions, and pairing through tricky UI work."
               cardSpan={4}
               href="https://www.milkrun.com"
-              image="/images/skills/milkrun.png"
+              image="/images/skills/milkrun.jpg"
               imageAlt="Milkrun website screenshot"
               imageFit="contain"
               imageObjectScale={{

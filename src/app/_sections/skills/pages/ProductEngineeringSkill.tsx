@@ -17,7 +17,7 @@ export function ProductEngineeringSkill({
       intro="I build web apps that serve thousands of users daily. Interactive SPAs, dashboards, portals, marketing sites, and integrations across the stack."
       variant={variant}
     >
-      <SkillPager isVisible={isVisible}>
+      <SkillPager isVisible={isVisible} autoTransitionMs={8000}>
         <SkillPage label="Page 1" summary="Product Engineering examples page 1">
           <SkillGrid>
             <SkillCard
@@ -84,29 +84,20 @@ export function ProductEngineeringSkill({
             />
             <SkillCard
               eyebrow="Acidgreen"
-              title="Nutricia / Danone"
+              title="Milkrun"
               titleSize="lg"
-              description="SSO, loyalty program, and branded checkout on a headless React/Magento PWA for one of the world's largest food companies."
-              href="https://www.nutriciastore.com.au"
-              cardSpan="half"
-              image="/images/skills/nutriciastore.jpg"
-              imageAlt="Nutricia Store screenshot"
+              description="Lead Frontend Engineer on a Shopify site built with Next.js. Provided code reviews, training, and mentoring."
+              href="https://www.milkrun.com"
+              image="/images/skills/milkrun.jpg"
+              imagePosition="top"
+              imageAlt="Milkrun website screenshot"
               imageFit="cover"
-              imagePosition={{
-                md: 'left',
-                lg: 'top',
-              }}
-              imageObjectPosition={{
-                lg: 'left top',
-              }}
               imageSize={{
                 base: '9rem',
-                md: '45%',
                 lg: '10rem',
               }}
-              imageObjectScale={{
-                lg: 1.8,
-              }}
+              imageObjectPosition="top left"
+              imageObjectScale={1.8}
             />
             <SkillCard
               eyebrow="Akcelo"
@@ -144,17 +135,28 @@ export function ProductEngineeringSkill({
           <SkillGrid>
             <SkillCard
               eyebrow="Acidgreen"
-              title="Milkrun"
+              title="Nutricia / Danone"
               titleSize="lg"
-              description="Lead Frontend Engineer on a Shopify site built with Next.js. Provided code reviews, training, and mentoring."
-              href="https://www.milkrun.com"
-              image="/images/skills/milkrun.png"
-              imagePosition="top"
-              imageAlt="Milkrun website screenshot"
+              description="SSO, loyalty program, and branded checkout on a headless React/Magento PWA for one of the world's largest food companies."
+              href="https://www.nutriciastore.com.au"
+              cardSpan="half"
+              image="/images/skills/nutriciastore.jpg"
+              imageAlt="Nutricia Store screenshot"
               imageFit="cover"
+              imagePosition={{
+                md: 'left',
+                lg: 'top',
+              }}
+              imageObjectPosition={{
+                lg: 'left top',
+              }}
               imageSize={{
                 base: '9rem',
+                md: '45%',
                 lg: '10rem',
+              }}
+              imageObjectScale={{
+                lg: 1.8,
               }}
             />
             <SkillCard
