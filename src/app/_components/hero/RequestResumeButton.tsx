@@ -9,7 +9,11 @@ import {
   useSyncExternalStore,
 } from 'react';
 import { createPortal, flushSync } from 'react-dom';
-import { LAYOUT_CONFIG, RESUME_REQUEST_CONTENT } from '@/utils/constants';
+import {
+  EMAIL_CONFIG,
+  LAYOUT_CONFIG,
+  RESUME_REQUEST_CONTENT,
+} from '@/utils/constants';
 
 const ANIM_MS = LAYOUT_CONFIG.motion.resumePanelMs;
 const MOBILE_BREAKPOINT = LAYOUT_CONFIG.breakpoints.sm; // Tailwind `sm`
@@ -17,6 +21,7 @@ const MOBILE_BREAKPOINT = LAYOUT_CONFIG.breakpoints.sm; // Tailwind `sm`
 const mobileQuery = `(max-width: ${MOBILE_BREAKPOINT - 1}px)`;
 
 type FocusableFormField = HTMLInputElement | HTMLTextAreaElement;
+type SubmitStatus = 'idle' | 'submitting' | 'sent' | 'error';
 
 function isCompleteEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
@@ -54,7 +59,7 @@ function PanelForm({
   setMessage,
   showMessage,
   setShowMessage,
-  submitted,
+  submitStatus,
   handleSubmit,
   emailInputRef,
   messageInputRef,
@@ -68,8 +73,8 @@ function PanelForm({
   setMessage: (v: string) => void;
   showMessage: boolean;
   setShowMessage: (v: boolean) => void;
-  submitted: boolean;
-  handleSubmit: () => void;
+  submitStatus: SubmitStatus;
+  handleSubmit: () => void | Promise<void>;
   emailInputRef: React.RefObject<HTMLInputElement | null>;
   messageInputRef: React.RefObject<HTMLTextAreaElement | null>;
   isEmailValid: boolean;
@@ -79,6 +84,9 @@ function PanelForm({
   ) => void;
   mobile?: boolean;
 }) {
+  const isSubmitting = submitStatus === 'submitting';
+  const submitted = submitStatus === 'sent';
+
   const handleMobileFieldPointerDown = (
     e: React.PointerEvent<FocusableFormField>,
   ) => {
@@ -185,17 +193,28 @@ function PanelForm({
         <button
           type="button"
           onClick={handleSubmit}
-          disabled={!isEmailValid || submitted}
+          disabled={!isEmailValid || isSubmitting || submitted}
           className="signature-gradient text-on-primary rounded-full px-6 py-2 text-base font-bold transition-all hover:shadow-[0_0_12px_rgba(123,208,255,0.4)] disabled:opacity-40"
           style={{
-            cursor: !isEmailValid || submitted ? 'default' : 'pointer',
+            cursor:
+              !isEmailValid || isSubmitting || submitted
+                ? 'default'
+                : 'pointer',
           }}
         >
-          {submitted
-            ? RESUME_REQUEST_CONTENT.submittedLabel
-            : RESUME_REQUEST_CONTENT.triggerLabel}
+          {isSubmitting
+            ? RESUME_REQUEST_CONTENT.pendingLabel
+            : submitted
+              ? RESUME_REQUEST_CONTENT.submittedLabel
+              : RESUME_REQUEST_CONTENT.triggerLabel}
         </button>
       </div>
+
+      {submitStatus === 'error' && (
+        <p className="text-error bg-surface-container px-4 pb-3 text-sm">
+          {RESUME_REQUEST_CONTENT.feedback.error}
+        </p>
+      )}
     </>
   );
 }
@@ -346,7 +365,7 @@ export function RequestResumeButton() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle');
 
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -354,12 +373,21 @@ export function RequestResumeButton() {
   const panelContentRef = useRef<HTMLDivElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [btnRect, setBtnRect] = useState<DOMRect | null>(null);
   const [morphHeight, setMorphHeight] = useState<number | null>(null);
 
   const isVisible = phase !== 'closed';
   const isEmailValid = isCompleteEmail(email);
+
+  useEffect(() => {
+    return () => {
+      if (resetTimerRef.current) {
+        clearTimeout(resetTimerRef.current);
+      }
+    };
+  }, []);
 
   const focusFieldWithoutScroll = useCallback(
     (field: FocusableFormField, options: { select?: boolean } = {}) => {
@@ -500,31 +528,89 @@ export function RequestResumeButton() {
     };
   }, [isMobile, isVisible, updateBtnRect]);
 
-  const handleSubmit = () => {
+  const updateEmail = useCallback(
+    (value: string) => {
+      setEmail(value);
+      if (submitStatus === 'error') setSubmitStatus('idle');
+    },
+    [submitStatus],
+  );
+
+  const updateMessage = useCallback(
+    (value: string) => {
+      setMessage(value);
+      if (submitStatus === 'error') setSubmitStatus('idle');
+    },
+    [submitStatus],
+  );
+
+  const handleSubmit = useCallback(async () => {
+    if (submitStatus === 'submitting' || submitStatus === 'sent') return;
+
     if (!isEmailValid) {
       focusEmailInput();
       return;
     }
 
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      close();
-      setEmail('');
-      setMessage('');
-      setShowMessage(false);
-    }, LAYOUT_CONFIG.motion.resumeResetMs);
-  };
+    setSubmitStatus('submitting');
+
+    try {
+      const response = await fetch(EMAIL_CONFIG.apiPath, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'resume',
+          email: email.trim(),
+          message: message.trim(),
+        }),
+      });
+
+      if (!response.ok) throw new Error('Resume request failed');
+
+      setSubmitStatus('sent');
+
+      if (resetTimerRef.current) {
+        clearTimeout(resetTimerRef.current);
+      }
+
+      resetTimerRef.current = setTimeout(() => {
+        setSubmitStatus('idle');
+        close();
+        setEmail('');
+        setMessage('');
+        setShowMessage(false);
+      }, LAYOUT_CONFIG.motion.resumeResetMs);
+    } catch {
+      setSubmitStatus('error');
+    }
+  }, [close, email, focusEmailInput, isEmailValid, message, submitStatus]);
+
+  const resetPanelState = useCallback(() => {
+    setSubmitStatus('idle');
+    if (resetTimerRef.current) {
+      clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = null;
+    }
+    setEmail('');
+    setMessage('');
+    setShowMessage(false);
+  }, []);
+
+  useEffect(() => {
+    if (phase !== 'closed') return;
+    if (submitStatus === 'submitting' || submitStatus === 'sent') return;
+    resetPanelState();
+  }, [phase, resetPanelState, submitStatus]);
 
   // ── Form props shared by both layouts ──
   const formProps = {
     email,
-    setEmail,
+    setEmail: updateEmail,
     message,
-    setMessage,
+    setMessage: updateMessage,
     showMessage,
     setShowMessage,
-    submitted,
+    submitStatus,
     handleSubmit,
     emailInputRef,
     messageInputRef,

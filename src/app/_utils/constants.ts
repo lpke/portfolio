@@ -35,6 +35,12 @@ export const SITE_METADATA = {
   },
 } as const;
 
+export const EMAIL_CONFIG = {
+  apiPath: '/api/email',
+  defaultFromEmail: `Portfolio <onboarding@resend.dev>`,
+  subjectPrefix: 'Portfolio',
+} as const;
+
 export const PAGE_METADATA = {
   skills: {
     title: 'Skills',
@@ -186,6 +192,7 @@ export const HERO_CONTENT = {
 
 export const RESUME_REQUEST_CONTENT = {
   triggerLabel: 'Download CV',
+  pendingLabel: 'Sending...',
   submittedLabel: '✓ Sent',
   dialogTitle: 'Download CV',
   dialogAriaLabel: 'Download CV',
@@ -193,6 +200,9 @@ export const RESUME_REQUEST_CONTENT = {
   emailPlaceholder: 'your@email.com',
   messagePlaceholder: 'Include an optional message...',
   noteToggleLabel: 'Add note',
+  feedback: {
+    error: 'Could not send. Please try again or email me directly.',
+  },
 } as const;
 
 export const UI_TEXT = {
@@ -465,6 +475,8 @@ export const CONTACT_FORM_CONTENT = {
   },
   feedback: {
     missingFields: 'Please fill in all fields.',
+    error:
+      'Could not send your message. Please try again or email me directly.',
     success: "Message sent! I'll be in touch soon.",
   },
 } as const;

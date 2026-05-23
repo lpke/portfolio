@@ -1,8 +1,8 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect, useRef } from 'react';
 import { Button } from '@/components/Button';
-import { CONTACT_FORM_CONTENT } from '@/utils/constants';
+import { CONTACT_FORM_CONTENT, EMAIL_CONFIG } from '@/utils/constants';
 
 type FormState = {
   message: string;
@@ -13,10 +13,9 @@ async function submitContact(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
-  // TODO: Wire up to a real endpoint (e.g. API route, Resend, etc.)
-  const name = formData.get('name') as string;
-  const email = formData.get('email') as string;
-  const details = formData.get('details') as string;
+  const name = formData.get('name')?.toString().trim() ?? '';
+  const email = formData.get('email')?.toString().trim() ?? '';
+  const details = formData.get('details')?.toString().trim() ?? '';
 
   if (!name || !email || !details) {
     return {
@@ -25,25 +24,53 @@ async function submitContact(
     };
   }
 
-  // Placeholder — replace with actual submission logic
-  return { message: CONTACT_FORM_CONTENT.feedback.success, success: true };
+  try {
+    const response = await fetch(EMAIL_CONFIG.apiPath, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'contact', name, email, details }),
+    });
+
+    if (!response.ok) {
+      return {
+        message: CONTACT_FORM_CONTENT.feedback.error,
+        success: false,
+      };
+    }
+
+    return { message: CONTACT_FORM_CONTENT.feedback.success, success: true };
+  } catch {
+    return {
+      message: CONTACT_FORM_CONTENT.feedback.error,
+      success: false,
+    };
+  }
 }
 
 const INITIAL_STATE: FormState = { message: '', success: false };
 
 export function ContactForm() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction, isPending] = useActionState(
     submitContact,
     INITIAL_STATE,
   );
 
+  useEffect(() => {
+    if (!state.success) return;
+    formRef.current?.reset();
+  }, [state.success]);
+
   const inputClassName =
     'bg-surface-container-lowest/70 text-on-surface placeholder:text-on-surface-variant/35 focus:border-primary/45 focus:bg-surface-container-lowest focus:shadow-[0_8px_18px_rgba(0,0,0,0.18)] w-full rounded-md border border-white/10 px-4 py-3 text-base transition-[background-color,border-color,box-shadow] outline-none';
   const labelClassName =
     'font-label text-on-surface-variant/82 text-xs tracking-widest uppercase';
+  const feedbackClassName = state.success
+    ? 'border-tertiary/25 bg-tertiary/10 text-tertiary shadow-[0_0_20px_rgba(158,228,147,0.08)]'
+    : 'border-error/25 bg-error/10 text-error shadow-[0_0_20px_rgba(255,180,171,0.08)]';
 
   return (
-    <form action={formAction} className="relative z-10 space-y-5">
+    <form ref={formRef} action={formAction} className="relative z-10 space-y-5">
       <div className="grid gap-5 sm:grid-cols-2">
         {/* Full Name */}
         <div className="space-y-2">
@@ -101,11 +128,21 @@ export function ContactForm() {
 
         {/* Feedback */}
         {state.message && (
-          <p
-            className={`text-base ${state.success ? 'text-tertiary' : 'text-error'}`}
+          <div
+            role={state.success ? 'status' : 'alert'}
+            aria-live="polite"
+            className={`flex min-h-11 items-center gap-2.5 rounded-md border px-3.5 py-2.5 text-sm leading-snug ${feedbackClassName}`}
           >
-            {state.message}
-          </p>
+            {state.success && (
+              <span
+                aria-hidden="true"
+                className="bg-tertiary/18 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+              >
+                ✓
+              </span>
+            )}
+            <span>{state.message}</span>
+          </div>
         )}
       </div>
     </form>
