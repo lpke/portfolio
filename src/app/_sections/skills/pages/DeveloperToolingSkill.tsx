@@ -41,6 +41,9 @@ export function DeveloperToolingSkill({
               }}
             />
             <SkillCard
+              cardless={{
+                lg: true,
+              }}
               title={{
                 base: undefined,
                 1250: 'My Development Environment',
@@ -63,25 +66,26 @@ export function DeveloperToolingSkill({
               title="How I Help Others Work"
               titleSize="lg"
               description="On Milkrun's Next.js/React Shopify build, I helped a team newer to React ship confidently: explaining component patterns, reviewing state and data-flow decisions, and pairing through tricky UI work."
-              cardSpan={4}
+              cardSpan="full"
               href="https://www.milkrun.com"
+              cardMinHeight={{
+                lg: '16rem',
+              }}
               image="/images/skills/milkrun.jpg"
               imageAlt="Milkrun website screenshot"
-              imageFit="contain"
               imageObjectScale={{
                 base: 5,
                 md: 6,
+                lg: 1,
               }}
-              imagePosition="bottom"
+              imagePosition={{
+                lg: 'right',
+              }}
               imageSize={{
                 base: '8rem',
                 md: '9rem',
+                lg: '40%'
               }}
-            />
-            <SkillCard
-              title="Technical Hiring"
-              description="Conducted technical candidate reviews for Montu's international engineering expansion."
-              cardSpan={2}
             />
           </SkillGrid>
         </SkillPage>

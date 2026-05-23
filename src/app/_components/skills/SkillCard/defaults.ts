@@ -13,6 +13,7 @@ export const SKILL_CARD_TITLE_SIZE_CLASS_NAMES = {
 export const SKILL_CARD_DEFAULT_PROP_CONFIG = {
   ariaLabel: { values: { base: undefined } },
   cardHeight: { values: { base: undefined } },
+  cardless: { values: { base: false } },
   cardMaxHeight: { values: { base: undefined } },
   cardMinHeight: { values: { base: undefined } },
   cardSpan: { values: { base: 'half' } },

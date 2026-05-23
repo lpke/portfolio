@@ -50,6 +50,7 @@ function SkillCardRoot({
   eyebrow,
   description,
   chips,
+  cardless,
   icon,
   indicatorIcons,
   showExternalLinkIndicator,
@@ -108,11 +109,15 @@ function SkillCardRoot({
         }
       : {}),
   };
-  const cardPaddingClassName = SKILL_CARD_PADDING_CLASS_NAMES[resolvedType];
+  const stripCardPadding = cardless === 'strip-padding';
+  const cardPaddingClassName = stripCardPadding
+    ? ''
+    : SKILL_CARD_PADDING_CLASS_NAMES[resolvedType];
   const cardClassName = cx(
-    'group/skill-card relative isolate h-full min-w-0 overflow-hidden rounded-[8px] border transition-[background-color,filter] duration-200',
+    'group/skill-card relative isolate h-full min-w-0 transition-[background-color,filter] duration-200',
+    !cardless && 'overflow-hidden rounded-[8px] border',
     SKILL_CARD_SPAN_CLASS_NAMES[cardSpan],
-    SKILL_CARD_CLASS_NAMES[resolvedType],
+    !cardless && SKILL_CARD_CLASS_NAMES[resolvedType],
     !hasImage && cardPaddingClassName,
     isInteractive && 'block cursor-pointer hover:brightness-105',
     className,
@@ -181,7 +186,9 @@ function SkillCardRoot({
       <Modal
         trigger={
           <>
-            <SurfaceOverlay className="bg-[color:color-mix(in_srgb,var(--skill-accent)_7%,rgba(255,255,255,0.045))] opacity-0 transition-opacity duration-200 group-hover/skill-card:opacity-100" />
+            {!cardless && (
+              <SurfaceOverlay className="bg-[color:color-mix(in_srgb,var(--skill-accent)_7%,rgba(255,255,255,0.045))] opacity-0 transition-opacity duration-200 group-hover/skill-card:opacity-100" />
+            )}
             {body}
           </>
         }
@@ -222,7 +229,9 @@ function SkillCardRoot({
         className={cardClassName}
         style={style}
       >
-        <SurfaceOverlay className="bg-[color:color-mix(in_srgb,var(--skill-accent)_7%,rgba(255,255,255,0.045))] opacity-0 transition-opacity duration-200 group-hover/skill-card:opacity-100" />
+        {!cardless && (
+          <SurfaceOverlay className="bg-[color:color-mix(in_srgb,var(--skill-accent)_7%,rgba(255,255,255,0.045))] opacity-0 transition-opacity duration-200 group-hover/skill-card:opacity-100" />
+        )}
         {body}
       </a>
     );

@@ -183,6 +183,9 @@ export function ProductEngineeringSkill({
               }}
             />
             <SkillCard
+              cardless={{
+                lg: true,
+              }}
               title="Frontend Tech"
               cardSpan="half"
               chips={[
@@ -199,6 +202,9 @@ export function ProductEngineeringSkill({
               ]}
             />
             <SkillCard
+              cardless={{
+                lg: true,
+              }}
               title="Backend Tech"
               cardSpan="half"
               chips={[

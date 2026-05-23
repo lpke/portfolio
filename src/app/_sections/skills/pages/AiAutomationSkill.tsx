@@ -106,15 +106,18 @@ export function AiAutomationSkill({
               }}
             />
             <SkillCard
+              cardless="strip-padding"
               cardSpan="full"
+              className="mt-2"
               chips={[
-                'GitHub Copilot',
                 'Codex',
+                'GitHub Copilot',
                 'Claude',
                 'Ollama',
-                'Neovim',
-                'Lua',
                 'Bash',
+                'Lua',
+                'Node',
+                'Notion',
               ]}
             />
           </SkillGrid>

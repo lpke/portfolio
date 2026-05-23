@@ -87,6 +87,8 @@ export type SkillCardBaseProps = {
   description?: ReactNode;
   /** Short tags rendered in the shared skill chip style. */
   chips?: readonly string[];
+  /** Whether to remove the card backdrop. Use `strip-padding` to also remove padding. */
+  cardless?: boolean | 'strip-padding';
   /** Optional leading icon shown beside the eyebrow. */
   icon?: ReactNode;
   /** Custom trailing indicators shown in the card header. Example: `<CodeIcon />`. */

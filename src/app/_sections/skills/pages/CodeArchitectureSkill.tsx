@@ -45,6 +45,9 @@ export function CodeArchitectureSkill({
               }}
             />
             <SkillCard
+              cardless={{
+                lg: true,
+              }}
               title="Codebase Architecture"
               description="I define codebase and package boundaries, build paths, release workflows, and infrastructure for teams shipping at scale."
               chips={[
@@ -57,6 +60,9 @@ export function CodeArchitectureSkill({
               ]}
             />
             <SkillCard
+              cardless={{
+                lg: true,
+              }}
               title="Component Management"
               description="I turn shared UI patterns into dependable component APIs with docs, visual checks, and test coverage."
               chips={[
@@ -66,37 +72,6 @@ export function CodeArchitectureSkill({
                 'Storybook',
                 'Playwright',
                 'Chromatic',
-              ]}
-            />
-          </SkillGrid>
-        </SkillPage>
-        <SkillPage label="Page 2" summary="Code Architecture examples page 2">
-          <SkillGrid>
-            <SkillCard
-              eyebrow="Design system"
-              title="Design System Rollout"
-              description="Key contributor to design system adoption across multiple patient-facing apps at Montu."
-            />
-            <SkillCard
-              eyebrow="Architecture"
-              title="Headless PWA (Nutricia)"
-              description="Frontend architecture for a headless React/Magento PWA with component reuse across checkout, SSO, and loyalty flows."
-              image="/images/skills/nutriciastore.jpg"
-              imageAlt="Nutricia headless PWA screenshot"
-              imageFit="cover"
-            />
-            <SkillCard
-              eyebrow="Stack"
-              title="Stack"
-              cardSpan="full"
-              chips={[
-                'Nx',
-                'Vite',
-                'Storybook',
-                'Chromatic',
-                'TypeScript',
-                'AWS CDK',
-                'GitHub Actions',
               ]}
             />
           </SkillGrid>
