@@ -85,7 +85,7 @@ export function DesktopSkills({ withShell = true }: { withShell?: boolean }) {
   const content = (
     <div
       className={cx(
-        'ghost-border relative min-h-[42rem] overflow-hidden transition-colors duration-300 lg:min-h-[100svh]',
+        'relative min-h-[42rem] overflow-hidden border-y border-white/[0.075] transition-colors duration-300 lg:min-h-[100svh]',
         layout.panelClassName,
       )}
       style={getSkillStyle(selectedSkill)}

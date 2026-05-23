@@ -144,7 +144,7 @@ export function MobileSkills({ withShell = true }: { withShell?: boolean }) {
   }, []);
 
   const content = (
-    <div className="ghost-border bg-skill-stage relative overflow-hidden">
+    <div className="bg-skill-stage relative overflow-hidden border-y border-white/[0.075]">
       <div className="relative mx-auto max-w-7xl px-5 pt-20 pb-8 md:px-8 md:pt-24">
         <SkillsHeading />
       </div>

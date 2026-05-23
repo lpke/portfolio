@@ -78,7 +78,7 @@ function SkillsVariantFallback() {
   return (
     <div
       aria-hidden
-      className="ghost-border bg-skill-stage min-h-[42rem] lg:min-h-screen"
+      className="bg-skill-stage min-h-[42rem] border-y border-white/[0.075] lg:min-h-screen"
     />
   );
 }
