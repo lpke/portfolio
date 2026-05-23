@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 
-interface SectionProps {
+type SectionProps = {
   children: ReactNode;
   className?: string;
   /** Surface level for tonal hierarchy: 0 = base, 1 = low, 2 = container */
   level?: 0 | 1 | 2;
   id?: string;
-}
+};
 
 const LEVEL_BG = {
   0: 'bg-surface',
@@ -23,7 +23,7 @@ export function Section({
 }: SectionProps) {
   return (
     <section className={`${LEVEL_BG[level]} ${className}`} id={id}>
-      <div className="mx-auto max-w-7xl px-6 md:px-8">{children}</div>
+      <div className="mx-auto max-w-7xl px-5 md:px-8">{children}</div>
     </section>
   );
 }

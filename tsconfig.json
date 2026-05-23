@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "checkJs": true,
     "noUncheckedIndexedAccess": true,
@@ -25,27 +21,14 @@
       }
     ],
     "paths": {
-      "@/components/*": [
-        "./src/app/_components/*"
-      ],
-      "@/hooks/*": [
-        "./src/app/_hooks/*"
-      ],
-      "@/routes/*": [
-        "./src/app/(routes)/*"
-      ],
-      "@/styles/*": [
-        "./src/app/_styles/*"
-      ],
-      "@/types/*": [
-        "./src/app/_types/*"
-      ],
-      "@/utils/*": [
-        "./src/app/_utils/*"
-      ],
-      "@/*": [
-        "./src/app/*"
-      ]
+      "@/components/*": ["./src/app/_components/*"],
+      "@/hooks/*": ["./src/app/_hooks/*"],
+      "@/routes/*": ["./src/app/(routes)/*"],
+      "@/styles/*": ["./src/app/_styles/*"],
+      "@/types/*": ["./src/app/_types/*"],
+      "@/utils/*": ["./src/app/_utils/*"],
+      "@/sections/*": ["./src/app/_sections/*"],
+      "@/*": ["./src/app/*"]
     }
   },
   "include": [
@@ -56,7 +39,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

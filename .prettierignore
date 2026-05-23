@@ -1,0 +1,34 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.*
+.yarn
+
+# Build output
+.next
+out
+dist
+build
+
+# Test output
+coverage
+
+# Generated files
+*.tsbuildinfo
+next-env.d.ts
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+bun.lock
+bun.lockb
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Local/env files
+.env*
+.vercel
+.DS_Store

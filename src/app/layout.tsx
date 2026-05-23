@@ -4,6 +4,7 @@ import { Space_Grotesk, Inter, JetBrains_Mono } from 'next/font/google';
 import Providers from './Providers';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { SITE_METADATA } from '@/utils/constants';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -25,15 +26,11 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Luke Perich | Senior Software Engineer',
-    template: '%s | lpdev',
+    default: SITE_METADATA.defaultTitle,
+    template: SITE_METADATA.titleTemplate,
   },
-  description:
-    'Senior Front-End Developer focused on building great products and the systems that ship them. Specialising in TypeScript, React, monorepo architecture, CI/CD, and build tooling.',
-  robots: {
-    index: false,
-    follow: false,
-  },
+  description: SITE_METADATA.description,
+  robots: SITE_METADATA.robots,
 };
 
 export default function RootLayout({
@@ -44,7 +41,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} scroll-smooth`}
     >
       <body className="bg-surface font-body text-on-surface">
         <Providers>

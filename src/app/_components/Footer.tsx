@@ -1,20 +1,11 @@
 import Link from 'next/link';
-import { SITE } from '@/utils/constants';
-
-const FOOTER_LINKS = [
-  { label: 'luke@lpdev.io', href: `mailto:${SITE.email}` },
-  { label: 'GitHub', href: SITE.github },
-  { label: 'LinkedIn', href: SITE.linkedin },
-] as const;
+import { FOOTER_CONTENT, FOOTER_LINKS, SITE } from '@/utils/constants';
 
 export function Footer() {
   return (
-    <footer className="mt-10 w-full border-t border-white/5 bg-surface-container-low py-12">
+    <footer className="bg-surface-container-low w-full border-t border-white/5 py-12">
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-8 md:flex-row md:justify-between">
-        <Link
-          href="/"
-          className="font-headline text-lg font-bold text-white"
-        >
+        <Link href="/" className="font-headline text-lg font-bold text-white">
           {SITE.name}
         </Link>
 
@@ -24,16 +15,19 @@ export function Footer() {
               key={label}
               href={href}
               target={href.startsWith('mailto') ? undefined : '_blank'}
-              rel={href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
-              className="font-body text-sm text-on-surface-variant/50 transition-all duration-200 hover:-translate-y-0.5 hover:text-primary"
+              rel={
+                href.startsWith('mailto') ? undefined : 'noopener noreferrer'
+              }
+              className="font-body text-on-surface-variant/50 hover:text-primary text-sm transition-all duration-200 hover:-translate-y-0.5"
             >
               {label}
             </a>
           ))}
         </div>
 
-        <p className="font-body text-sm text-on-surface-variant/50">
-          © {new Date().getFullYear()} {SITE.name}.
+        <p className="font-body text-on-surface-variant/50 text-sm">
+          {FOOTER_CONTENT.copyrightSymbol} {new Date().getFullYear()}{' '}
+          {SITE.name}. {FOOTER_CONTENT.copyrightSuffix}
         </p>
       </div>
     </footer>

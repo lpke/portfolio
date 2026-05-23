@@ -1,25 +1,12 @@
+import { Layout } from '@/sections/Layout';
+import { PAGE_METADATA, SECTION_IDS } from '@/utils/constants';
 import type { Metadata } from 'next';
-import { PageHero } from '@/components/PageHero';
-import { SkillsGrid } from './_sections/SkillsGrid';
 
 export const metadata: Metadata = {
-  title: 'Skills',
-  description:
-    'A specialized toolkit focused on building resilient architecture and fluid user experiences.',
+  title: PAGE_METADATA.skills.title,
+  description: PAGE_METADATA.skills.description,
 };
 
 export default function SkillsPage() {
-  return (
-    <main className="mx-auto max-w-7xl px-6 pt-32 pb-24 md:px-8">
-      <PageHero
-        title={
-          <>
-            Expertise <span className="text-primary">&amp;</span> Tools
-          </>
-        }
-        subtitle="A specialized toolkit focused on building resilient architecture and fluid user experiences."
-      />
-      <SkillsGrid />
-    </main>
-  );
+  return <Layout scrollToId={SECTION_IDS.skills} />;
 }

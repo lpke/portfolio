@@ -1,12 +1,5 @@
-import { HeroSection } from './_sections/HeroSection';
-import { WipSection } from './_sections/WipSection';
+import { Layout } from '@/sections/Layout';
 
 export default function HomePage() {
-  return (
-    <main>
-      <HeroSection />
-      <WipSection />
-    </main>
-  );
+  return <Layout />;
 }
-

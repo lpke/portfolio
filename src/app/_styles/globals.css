@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /*
  * Design System: "The Kinetic Engineer" / Midnight Syntax
@@ -49,6 +49,12 @@
   --color-on-tertiary-fixed: #00201c;
   --color-on-tertiary-fixed-variant: #005047;
 
+  /* ── Skill / Hero Accent Ramps ── */
+  --color-accent-purple: #c7a5ff;
+  --color-accent-green: #9ee493;
+  --color-accent-amber: #f7d774;
+  --color-skill-stage: #0b1322;
+
   /* ── Error ── */
   --color-error: #ffb4ab;
   --color-error-container: #93000a;
@@ -66,10 +72,10 @@
   --color-inverse-on-surface: #283044;
 
   /* ── Typography ── */
-  --font-headline: "Space Grotesk", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, sans-serif;
-  --font-label: "Space Grotesk", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  --font-headline: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-label: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
 
   /* ── Border Radius ── */
   --radius-DEFAULT: 0.5rem;
@@ -83,12 +89,17 @@
 
 /* Signature gradient for primary CTAs */
 .signature-gradient {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-on-primary-container) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-on-primary-container) 100%
+  );
 }
 
 /* Ghost border — subtle boundary per DESIGN.md */
 .ghost-border {
-  border: 1px solid color-mix(in oklch, var(--color-outline-variant) 20%, transparent);
+  border: 1px solid
+    color-mix(in oklch, var(--color-outline-variant) 20%, transparent);
 }
 
 /* Glass header — glassmorphism nav */
@@ -99,43 +110,533 @@
 
 /* Hero wave background — responsive visibility */
 .hero-waves {
-  background-image: url('/images/layered_waves.svg');
+  --hero-waves-art-position: right center;
+  --hero-waves-art-size: auto 100%;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(11, 19, 38, 0.98) 0%,
+      rgba(11, 19, 38, 0.86) 48%,
+      rgba(11, 19, 38, 0.72) 100%
+    ),
+    url('/images/layered_waves.svg');
+  background-repeat: no-repeat, no-repeat;
+  background-position: center, var(--hero-waves-art-position);
+  background-size: cover, var(--hero-waves-art-size);
+}
+
+.hero-shell {
+  height: 100vh;
+  height: var(--hero-stable-height, 100svh);
+  isolation: isolate;
+}
+
+.hero-shell::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 9rem;
+  pointer-events: none;
+  content: '';
+  background: linear-gradient(to bottom, transparent, var(--color-surface));
+}
+
+.hero-grid {
+  --hero-grid-size: 72px;
+  z-index: -2;
+  opacity: 0.55;
+  background-image:
+    linear-gradient(rgba(123, 208, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(60, 221, 199, 0.06) 1px, transparent 1px);
+  background-size: var(--hero-grid-size) var(--hero-grid-size);
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 12%,
+    black 78%,
+    transparent
+  );
+}
+
+.hero-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: heroReveal 720ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.hero-delay-1 {
+  animation-delay: 100ms;
+}
+
+.hero-delay-2 {
+  animation-delay: 180ms;
+}
+
+.hero-delay-3 {
+  animation-delay: 260ms;
+}
+
+.hero-delay-4 {
+  animation-delay: 340ms;
+}
+
+.hero-delay-5 {
+  animation-delay: 420ms;
+}
+
+.hero-delay-6 {
+  animation-delay: 520ms;
+}
+
+.hero-name-lockup {
+  --hero-name-size: 2.5rem;
+  --hero-name-line: 0.9;
+  --hero-name-italic-start-offset: 0.16em;
+  /* Manual trim: lower this if the portrait extends past LUKE/PERICH. */
+  --hero-portrait-scale: 0.9;
+  --hero-name-block: calc(var(--hero-name-size) * var(--hero-name-line) * 2);
+  gap: 0.75rem;
+}
+
+.hero-name {
+  font-size: var(--hero-name-size);
+  line-height: var(--hero-name-line);
+}
+
+.hero-name > span:first-child {
+  transform: translateX(var(--hero-name-italic-start-offset));
+}
+
+.hero-title-accent {
+  color: transparent;
+  background: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-accent-purple),
+    var(--color-tertiary),
+    var(--color-accent-green),
+    var(--color-accent-amber),
+    var(--color-error),
+    var(--color-primary-fixed),
+    var(--color-primary)
+  );
+  background-size: 360% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.hero-type-text {
+  display: inline-block;
+  margin-top: -0.02em;
+  padding-right: 0.15em;
+  clip-path: inset(0 100% 0 0);
+  will-change: clip-path;
+  animation:
+    heroTypeIn 1500ms cubic-bezier(0.16, 1, 0.3, 1) 680ms forwards,
+    heroAccentShift 8s ease-in-out infinite;
+}
+
+.hero-portrait {
+  position: relative;
+  width: calc(var(--hero-name-block) * var(--hero-portrait-scale));
+  height: calc(var(--hero-name-block) * var(--hero-portrait-scale));
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 50%;
+  background-image: linear-gradient(
+    135deg,
+    var(--color-surface-container-high),
+    var(--color-primary-container)
+  );
   background-repeat: no-repeat;
-  background-position: right center;
-  background-size: auto 100%;
+  background-position: center;
+  background-size: cover;
+  clip-path: circle(50% at 50% 50%);
+  mask-image: radial-gradient(circle at center, black 70.2%, transparent 70.9%);
+  -webkit-mask-image: radial-gradient(
+    circle at center,
+    black 70.2%,
+    transparent 70.9%
+  );
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.24),
+    0 0 32px rgba(123, 208, 255, 0.18);
+}
+
+.hero-portrait-image {
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-portrait::before {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  content: '';
+  background: linear-gradient(
+    135deg,
+    rgba(123, 208, 255, 0.08),
+    rgba(6, 14, 32, 0.06)
+  );
+}
+
+.hero-portrait::after {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  pointer-events: none;
+  content: '';
+  box-shadow: inset 0 0 0 1px rgba(123, 208, 255, 0.36);
+}
+
+.section-scroll-line {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 2.75rem;
+  overflow: hidden;
+  background: rgba(198, 198, 205, 0.16);
+}
+
+.section-scroll-indicator {
+  transition:
+    opacity 300ms ease,
+    visibility 300ms ease;
+}
+
+.section-scroll-line::after {
+  position: absolute;
+  top: -45%;
+  left: 0;
+  width: 1px;
+  height: 45%;
+  content: '';
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(123, 208, 255, 0.92)
+  );
+  animation: sectionScrollLine 1.8s ease-in-out infinite;
+}
+
+.skill-page-panel {
+  will-change: opacity, transform;
+}
+
+.skill-page-panel[data-skill-page-direction='next'][data-skill-page-phase='enter'] {
+  animation: skillPageEnterNext 190ms ease-out both;
+}
+
+.skill-page-panel[data-skill-page-direction='next'][data-skill-page-phase='exit'] {
+  animation: skillPageExitNext 130ms ease-in both;
+}
+
+.skill-page-panel[data-skill-page-direction='previous'][data-skill-page-phase='enter'] {
+  animation: skillPageEnterPrevious 190ms ease-out both;
+}
+
+.skill-page-panel[data-skill-page-direction='previous'][data-skill-page-phase='exit'] {
+  animation: skillPageExitPrevious 130ms ease-in both;
+}
+
+.skill-pager-progress-bar {
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: skillPagerProgress var(--skill-pager-auto-ms) linear forwards;
+  will-change: transform;
+}
+
+.skill-pager-progress-bar[data-skill-pager-paused='true'] {
+  animation-play-state: paused;
+}
+
+@keyframes heroReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroAccentShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes heroTypeIn {
+  to {
+    clip-path: inset(0 -0.64em 0 0);
+  }
+}
+
+@keyframes sectionScrollLine {
+  0% {
+    transform: translateY(0);
+  }
+  70%,
+  100% {
+    transform: translateY(320%);
+  }
+}
+
+@keyframes skillPageEnterNext {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes skillPageExitNext {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+}
+
+@keyframes skillPageEnterPrevious {
+  from {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes skillPageExitPrevious {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+}
+
+@keyframes skillPagerProgress {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (max-height: 999px) {
+  .section-scroll-indicator {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-shell *,
+  .hero-shell::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .hero-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero-type-text {
+    clip-path: inset(0 -0.64em 0 0) !important;
+  }
+
+  .section-scroll-line::after {
+    animation: none !important;
+  }
+
+  .skill-page-panel {
+    animation: none !important;
+  }
+
+  .skill-pager-progress-bar {
+    animation: none !important;
+    transform: scaleX(1);
+  }
+}
+
+@media (min-width: 360px) {
+  .hero-name-lockup {
+    --hero-name-size: 3.5rem;
+  }
+}
+
+@media (min-width: 420px) {
+  .hero-name-lockup {
+    --hero-name-size: 4.7rem;
+    gap: 0.5rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .hero-name-lockup {
+    --hero-name-size: 5.5rem;
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-name-lockup {
+    --hero-name-size: 7rem;
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-name-lockup {
+    --hero-name-size: 8rem;
+  }
 }
 
 @media (max-width: 1299px) and (min-width: 1125px) {
   .hero-waves {
-    background-position: calc(100% + 15vw) center;
+    --hero-waves-art-position: calc(100% + 15vw) center;
   }
 }
 
 @media (max-width: 1124px) and (min-width: 950px) {
   .hero-waves {
-    background-position: calc(100% + 30vw) center;
+    --hero-waves-art-position: calc(100% + 30vw) center;
   }
 }
 
 @media (max-width: 949px) and (min-width: 820px) {
   .hero-waves {
-    background-position: calc(100% + 50vw) center;
+    --hero-waves-art-position: calc(100% + 50vw) center;
   }
 }
 
 @media (max-width: 819px) {
   .hero-waves {
-    background-image: none;
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(11, 19, 38, 0.9) 0%,
+        rgba(11, 19, 38, 0.76) 48%,
+        rgba(11, 19, 38, 0.94) 100%
+      ),
+      url('/images/layered_waves.svg');
+    --hero-waves-art-position: 58% center;
+    --hero-waves-art-size: auto 118%;
   }
 }
 
 /* Ambient shadow with surface-tint */
 .ambient-shadow {
-  box-shadow: 0 20px 50px color-mix(in oklch, var(--color-surface-tint) 8%, transparent);
+  box-shadow: 0 20px 50px
+    color-mix(in oklch, var(--color-surface-tint) 8%, transparent);
 }
 
 /* Selection styling */
 ::selection {
   background-color: color-mix(in oklch, var(--color-primary) 30%, transparent);
   color: var(--color-primary);
+}
+
+/* Fade-slide animation for floating panels */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Modal animations — overlay */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Modal animations — mobile (slide up / down) */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+/* Modal animations — desktop (grow in / out) */
+@keyframes growIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes growOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
 }
