@@ -21,9 +21,9 @@ export function CodeArchitectureSkill({
           <SkillGrid>
             <SkillCard
               eyebrow="Case study @ Montu"
-              title="React Microfrontend in Webflow"
+              title="Unblocking Alternaleaf with a React Microfrontend"
               titleSize="lg"
-              description="Vite build pipeline with AWS CDK infra that replaced a no-code platform's limits. 75% bundle reduction, 70% faster builds."
+              description="When Alternaleaf hit a Webflow limit in 2025, I built a Vite-powered React microfrontend deployed with AWS CDK. It replaced legacy JS on Montu's key B2C site, delivered a 4x performance improvement, and unblocked multiple teams."
               href="https://www.alternaleaf.com.au"
               cardSpan="full"
               cardMinHeight={{
@@ -34,14 +34,14 @@ export function CodeArchitectureSkill({
               imageFit="cover"
               imageSize={{
                 base: '8rem',
-                md: '45%',
+                md: '40%',
               }}
               imageObjectPosition={{
                 base: 'center 15%',
                 md: 'center 5%',
               }}
               imageObjectScale={{
-                md: 1.25,
+                md: 1.3,
               }}
             />
             <SkillCard

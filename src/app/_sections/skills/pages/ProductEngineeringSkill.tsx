@@ -144,38 +144,64 @@ export function ProductEngineeringSkill({
         <SkillPage label="Page 2" summary="Product Engineering examples page 2">
           <SkillGrid>
             <SkillCard
+              eyebrow="Acidgreen"
+              title="Milkrun"
+              titleSize="lg"
+              description="Lead Frontend Engineer on a Shopify site built with Next.js. Provided code reviews, training, and mentoring."
+              href="https://www.milkrun.com"
+              image="/images/skills/milkrun.png"
+              imagePosition="top"
+              imageAlt="Milkrun website screenshot"
+              imageFit="cover"
+              imageSize={{
+                lg: '10rem',
+              }}
+            />
+            <SkillCard
+              eyebrow="Greenfields DC"
               title="Property Releases Portal"
+              titleSize="lg"
               description="Full-stack Next.js/MongoDB app with auth, serverless functions, and a dynamic data grid for capturing EOI data."
               image="/images/skills/opt-releases.png"
               imageAlt="Property releases portal screenshot"
+              imagePosition="top"
               imageFit="cover"
               imageObjectScale={1.2}
               imageObjectPosition="left top"
+              imageSize={{
+                lg: '10rem',
+              }}
             />
             <SkillCard
-              eyebrow="Acidgreen"
-              title="Milkrun"
-              description="Senior engineer on a Shopify site built with Next.js. Provided code reviews and mentoring."
-              href="https://www.milkrun.com"
-              image="/images/skills/milkrun.png"
-              imageAlt="Milkrun website screenshot"
-              imageFit="cover"
-            />
-            <SkillCard
-              eyebrow="Stack"
-              title="Stack"
-              cardSpan="full"
+              title="Frontend Tech"
+              cardSpan="half"
               chips={[
-                'React',
+                'HTML/CSS',
+                'JavaScript',
                 'TypeScript',
+                'React',
                 'Next.js',
                 'Vite',
-                'Node.js',
-                'GraphQL',
-                'MongoDB',
                 'Tailwind',
-                'Vercel',
+                'Material UI',
+                'Headless CMS',
                 'Shopify',
+              ]}
+            />
+            <SkillCard
+              title="Backend Tech"
+              cardSpan="half"
+              chips={[
+                'Node.js',
+                'REST',
+                'GraphQL',
+                'TanStack',
+                'Zod',
+                'Serverless',
+                'Vercel',
+                'MongoDB',
+                'GitHub Actions',
+                'AWS CDK',
               ]}
             />
           </SkillGrid>
