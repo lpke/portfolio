@@ -20,24 +20,66 @@ export function DeveloperToolingSkill({
         <SkillPage label="Page 1" summary="Developer Tooling examples page 1">
           <SkillGrid>
             <SkillCard
-              eyebrow="Dev environment"
-              title="Neovim Config"
-              description="Comprehensive custom Neovim setup in Lua. LSP, linting, type checking, keymaps, and AI integration from scratch."
+              eyebrow="Daily driver"
+              title="Neovim Workbench"
+              titleSize="lg"
+              description="Lua config that makes the editor a repeatable workflow: LSP, diagnostics, formatter paths, Copilot, Codex ACP, and CodeCompanion."
+              cardSpan={4}
               href="https://github.com/lpke/nvim"
               showGithubIndicator
               image="/images/skills/nvim-codecompanion.png"
-              imageAlt="Neovim config screenshot"
+              imageAlt="Neovim agentic coding workflow screenshot"
               imageFit="cover"
+              imagePosition={{
+                base: 'top',
+                md: 'bottom',
+              }}
+              imageSize={{
+                base: '8rem',
+                md: '10rem',
+              }}
+              imageObjectPosition="60% top"
+              imageObjectScale={{
+                base: 2,
+                md: 1.5,
+              }}
             />
             <SkillCard
-              eyebrow="Mentoring"
-              title="Mentoring at Montu"
-              description="Mentored several junior-mid engineers on React patterns, frontend fundamentals, and code quality."
+              eyebrow="Tooling stack"
+              title="Editor & Team Enablement"
+              cardSpan={2}
+              chips={[
+                'Neovim',
+                'Lua',
+                'Bash',
+                'Storybook',
+                'Playwright',
+                'GitHub Actions',
+              ]}
             />
             <SkillCard
-              eyebrow="Adoption"
-              title="Internal Tool Documentation"
-              description="Wrote docs and streamlined a Storybook library to drive adoption of a shared form tool across engineering."
+              eyebrow="Internal enablement"
+              title="Form Tool Adoption"
+              description="Stabilised a reusable patient-form tool with Storybook examples, implementation notes, and E2E coverage so teams could adopt it confidently."
+              cardSpan={3}
+            />
+            <SkillCard
+              eyebrow="Acidgreen"
+              title="Milkrun Mentoring"
+              description="Senior frontend on a Next.js/React Shopify build. Reviewed implementation decisions and helped teammates work cleanly within the project patterns."
+              cardSpan={3}
+              href="https://www.milkrun.com"
+              image="/images/skills/milkrun.png"
+              imageAlt="Milkrun website screenshot"
+              imageFit="cover"
+              imagePosition={{
+                base: 'top',
+                md: 'right',
+              }}
+              imageSize={{
+                base: '7rem',
+                md: '42%',
+              }}
             />
           </SkillGrid>
         </SkillPage>
