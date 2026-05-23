@@ -1,10 +1,6 @@
 import type { ReactNode } from 'react';
 import { SKILL_CARD_TITLE_SIZE_CLASS_NAMES } from './defaults';
-import type {
-  SkillCardImagePosition,
-  SkillCardTitleSize,
-  SkillCardType,
-} from './types';
+import type { SkillCardImagePosition, SkillCardTitleSize } from './types';
 import { SkillChips, cx } from '../shared';
 
 type SkillCardContentProps = {
@@ -15,8 +11,7 @@ type SkillCardContentProps = {
   chips?: readonly string[];
   icon?: ReactNode;
   indicatorIcons: ReactNode[];
-  isLinked: boolean;
-  type: SkillCardType;
+  isInteractive: boolean;
   hasImage: boolean;
   imagePosition: SkillCardImagePosition;
   cardPaddingClassName: string;
@@ -32,8 +27,7 @@ export function SkillCardContent({
   chips,
   icon,
   indicatorIcons,
-  isLinked,
-  type,
+  isInteractive,
   hasImage,
   imagePosition,
   cardPaddingClassName,
@@ -44,7 +38,7 @@ export function SkillCardContent({
   const hasIndicatorIcons = indicatorIcons.length > 0;
   const titleClassName = cx(
     'font-headline min-w-0 font-bold text-white transition-colors duration-200',
-    isLinked && 'group-hover/skill-card:text-[var(--skill-accent)]',
+    isInteractive && 'group-hover/skill-card:text-[var(--skill-accent)]',
     SKILL_CARD_TITLE_SIZE_CLASS_NAMES[titleSize],
   );
   const renderedIndicatorIcons = hasIndicatorIcons && (
@@ -107,9 +101,7 @@ export function SkillCardContent({
           className={cx(
             'text-on-surface-variant leading-relaxed',
             title ? 'mt-2' : '',
-            type === 'feature'
-              ? 'text-sm lg:text-[15px]'
-              : 'text-xs lg:text-sm',
+            'text-sm lg:text-[15px]',
           )}
         >
           {description}

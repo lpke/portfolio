@@ -75,7 +75,8 @@ export function Hero() {
             <SectionLink
               to={SECTION_IDS.contact}
               scrollTargetId={SCROLL_TARGETS.contactCardFirst}
-              className="signature-gradient font-headline text-on-primary rounded-full px-8 py-4 font-bold transition-all hover:shadow-[0_0_20px_rgba(123,208,255,0.4)] active:scale-95"
+              buttonVariant="primary"
+              className="!min-h-0 !px-8 !py-4"
             >
               {HERO_CONTENT.ctaLabel}
             </SectionLink>

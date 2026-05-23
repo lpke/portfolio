@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
+import type { ModalContentProps } from '@/components/Modal';
 import type {
   SkillCardImageFit,
   SkillCardImagePosition,
@@ -18,6 +19,7 @@ export type {
 };
 
 export type SkillCardIndicatorIcons = ReactNode | readonly ReactNode[];
+export type SkillCardModal = ReactNode | ModalContentProps;
 export type SkillCardTitleSize = 'sm' | 'md' | 'lg';
 export type SkillCardTailwindBreakpoint = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 export type SkillCardCustomBreakpoint =
@@ -95,6 +97,8 @@ export type SkillCardBaseProps = {
   showGithubIndicator?: boolean;
   /** External URL. Example: `https://github.com/user/repo`. When present, the card renders as a link. */
   href?: string;
+  /** Optional modal content or modal config opened by clicking the card. Overrides `href` when both are provided. */
+  modal?: SkillCardModal;
   /**
    * Visual treatment for card padding, background, borders, and description scale.
    * Options: `default`, `feature`, `chips`, `compact`, `metric`, `quiet`.
@@ -143,6 +147,8 @@ export type SkillCardBaseProps = {
   imageObjectScale?: number | string;
   /** Whether to fill contain/none/scale-down letterboxing with a blurred cover copy of the image. Default: `true`. */
   imageBlurBackground?: boolean;
+  /** Optional background color for the image area. Used behind loading, failed, or non-cover images. */
+  imageColor?: CSSProperties['backgroundColor'];
   /** Extra class names for the image wrapper. Example: `bg-black/20`. */
   imageClassName?: string;
   /** Extra class names for the root card element. Example: `lg:col-span-2`. */

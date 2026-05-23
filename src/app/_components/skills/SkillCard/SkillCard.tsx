@@ -1,12 +1,14 @@
 'use client';
 
-import type { CSSProperties } from 'react';
+import { isValidElement, type CSSProperties } from 'react';
 import {
   SKILL_CARD_CLASS_NAMES,
   SKILL_CARD_IMAGE_DEFAULT_SIZES,
   SKILL_CARD_PADDING_CLASS_NAMES,
   SKILL_CARD_SPAN_CLASS_NAMES,
 } from '@/utils/constants';
+import { Modal } from '@/components/Modal';
+import type { ModalContentProps } from '@/components/Modal';
 import { SurfaceOverlay } from '@/components/SurfaceOverlay';
 import type { SkillCardResolvedBaseProps } from './defaults';
 import { getSkillCardIndicators } from './icons';
@@ -53,6 +55,7 @@ function SkillCardRoot({
   showExternalLinkIndicator,
   showGithubIndicator,
   href,
+  modal,
   type,
   cardSpan,
   cardHeight,
@@ -68,13 +71,17 @@ function SkillCardRoot({
   imageObjectPosition,
   imageObjectScale,
   imageBlurBackground,
+  imageColor,
   imageClassName,
   className,
   contentClassName,
   ariaLabel,
   children,
 }: SkillCardResolvedBaseProps) {
-  const isLinked = Boolean(href);
+  const hasModal = Boolean(modal);
+  const effectiveHref = hasModal ? undefined : href;
+  const isLinked = Boolean(effectiveHref);
+  const isInteractive = isLinked || hasModal;
   const hasImage = Boolean(image);
   const resolvedType = type ?? (hasImage ? 'feature' : 'default');
   const resolvedIndicatorIcons = getSkillCardIndicators({
@@ -107,14 +114,14 @@ function SkillCardRoot({
     SKILL_CARD_SPAN_CLASS_NAMES[cardSpan],
     SKILL_CARD_CLASS_NAMES[resolvedType],
     !hasImage && cardPaddingClassName,
-    isLinked && 'block cursor-pointer hover:brightness-105',
+    isInteractive && 'block cursor-pointer hover:brightness-105',
     className,
   );
 
   const body = (
     <div
       className={cx(
-        'relative z-10 min-w-0',
+        'relative z-10 h-full min-w-0',
         hasImage && getImageLayoutClassName(resolvedImagePosition),
         hasImage && getImageGapClassName(resolvedImagePosition),
         hasImage && isInlineImage && 'h-full',
@@ -129,6 +136,7 @@ function SkillCardRoot({
           imageObjectPosition={imageObjectPosition}
           imageObjectScale={imageObjectScale}
           imagePlacement={resolvedImagePosition}
+          imageColor={imageColor}
           isInlineImage={isInlineImage}
           className={imageClassName}
         />
@@ -141,8 +149,7 @@ function SkillCardRoot({
         chips={chips}
         icon={icon}
         indicatorIcons={resolvedIndicatorIcons}
-        isLinked={isLinked}
-        type={resolvedType}
+        isInteractive={isInteractive}
         hasImage={hasImage}
         imagePosition={resolvedImagePosition}
         cardPaddingClassName={cardPaddingClassName}
@@ -159,6 +166,7 @@ function SkillCardRoot({
           imageObjectPosition={imageObjectPosition}
           imageObjectScale={imageObjectScale}
           imagePlacement={resolvedImagePosition}
+          imageColor={imageColor}
           isInlineImage={isInlineImage}
           className={imageClassName}
         />
@@ -166,10 +174,48 @@ function SkillCardRoot({
     </div>
   );
 
-  if (href) {
+  if (hasModal) {
+    const modalProps = getModalProps(modal);
+
+    return (
+      <Modal
+        trigger={
+          <>
+            <SurfaceOverlay className="bg-[color:color-mix(in_srgb,var(--skill-accent)_7%,rgba(255,255,255,0.045))] opacity-0 transition-opacity duration-200 group-hover/skill-card:opacity-100" />
+            {body}
+          </>
+        }
+        triggerClassName={cx(
+          cardClassName,
+          'w-full appearance-none p-0 text-left leading-normal font-[inherit]',
+        )}
+        triggerStyle={style}
+        triggerAriaLabel={
+          ariaLabel ?? (typeof title === 'string' ? title : 'Open skill card')
+        }
+        modalAriaLabel={
+          modalProps.modalAriaLabel ??
+          (typeof title === 'string'
+            ? `${title} details`
+            : 'Skill card details')
+        }
+        title={modalProps.title}
+        titleSize={modalProps.titleSize}
+        hideCloseButton={modalProps.hideCloseButton}
+        className={modalProps.className}
+        classNameFloating={modalProps.classNameFloating}
+        classNameSheet={modalProps.classNameSheet}
+        padding={modalProps.padding}
+      >
+        {modalProps.children}
+      </Modal>
+    );
+  }
+
+  if (effectiveHref) {
     return (
       <a
-        href={href}
+        href={effectiveHref}
         target="_blank"
         rel="noreferrer"
         aria-label={ariaLabel}
@@ -233,4 +279,28 @@ function isStackedImagePosition(position: SkillCardImagePosition) {
 
 function isPercentageImageSize(imageSize: string) {
   return imageSize.includes('%');
+}
+
+function getModalProps(
+  modal: SkillCardResolvedBaseProps['modal'],
+): ModalContentProps {
+  if (isModalContentProps(modal)) {
+    return modal;
+  }
+
+  return {
+    children: modal,
+  };
+}
+
+function isModalContentProps(
+  modal: SkillCardResolvedBaseProps['modal'],
+): modal is ModalContentProps {
+  return (
+    typeof modal === 'object' &&
+    modal !== null &&
+    !Array.isArray(modal) &&
+    !isValidElement(modal) &&
+    'children' in modal
+  );
 }

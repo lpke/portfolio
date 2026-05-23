@@ -1,6 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
+import { Button } from '@/components/Button';
 import { CONTACT_FORM_CONTENT } from '@/utils/constants';
 
 type FormState = {
@@ -92,15 +93,11 @@ export function ContactForm() {
 
       {/* Submit */}
       <div className="flex flex-col items-start gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="signature-gradient font-headline text-on-primary inline-flex min-h-12 cursor-pointer items-center justify-center rounded-full px-7 text-base font-bold transition-all hover:shadow-[0_0_18px_rgba(123,208,255,0.28)] disabled:cursor-default disabled:opacity-50"
-        >
+        <Button type="submit" disabled={isPending}>
           {isPending
             ? CONTACT_FORM_CONTENT.submit.pending
             : CONTACT_FORM_CONTENT.submit.idle}
-        </button>
+        </Button>
 
         {/* Feedback */}
         {state.message && (

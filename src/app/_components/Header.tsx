@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Button } from '@/components/Button';
 import {
   HEADER_CONTENT,
   LAYOUT_CONFIG,
@@ -21,9 +22,7 @@ export function Header() {
   useEffect(() => {
     const mobileQuery = window.matchMedia(MOBILE_QUERY);
     let frame = 0;
-    let actions: Element | null = document.querySelector(
-      '[data-hero-actions]',
-    );
+    let actions: Element | null = document.querySelector('[data-hero-actions]');
 
     const setConcealed = (nextValue: boolean) => {
       setIsConcealedForHero((current) =>
@@ -40,9 +39,7 @@ export function Header() {
       }
 
       actions ??= document.querySelector('[data-hero-actions]');
-      setConcealed(
-        actions ? actions.getBoundingClientRect().top > 0 : false,
-      );
+      setConcealed(actions ? actions.getBoundingClientRect().top > 0 : false);
     };
 
     const requestUpdate = () => {
@@ -113,16 +110,16 @@ export function Header() {
         </div>
 
         {/* CTA Button */}
-        <Link
+        <Button
           href="/contact"
-          onNavigate={handleNavigate(
+          onClick={handleNavigate(
             SECTION_IDS.contact,
             SCROLL_TARGETS.contactCardFirst,
           )}
-          className="signature-gradient font-headline text-on-primary rounded-full px-6 py-2 text-sm font-bold transition-all hover:shadow-[0_0_20px_rgba(123,208,255,0.4)] active:scale-95"
+          size="sm"
         >
           {HEADER_CONTENT.ctaLabel}
-        </Link>
+        </Button>
       </nav>
     </header>
   );

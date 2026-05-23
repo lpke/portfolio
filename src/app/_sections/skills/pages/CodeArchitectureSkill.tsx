@@ -20,23 +20,53 @@ export function CodeArchitectureSkill({
         <SkillPage label="Page 1" summary="Code Architecture examples page 1">
           <SkillGrid>
             <SkillCard
-              eyebrow="Build"
-              title="Custom Multi-Site Build"
+              eyebrow="Case study @ Montu"
+              title="React Microfrontend in Webflow"
+              titleSize="lg"
               description="Vite build pipeline with AWS CDK infra that replaced a no-code platform's limits. 75% bundle reduction, 70% faster builds."
+              href="https://www.alternaleaf.com.au"
               cardSpan="full"
+              cardMinHeight={{
+                md: '18rem',
+              }}
               image="/images/skills/webflow-pre-screening.jpg"
               imageAlt="Custom multi-site build screenshot"
               imageFit="cover"
+              imageSize={{
+                base: '8rem',
+                md: '45%',
+              }}
+              imageObjectPosition={{
+                base: 'center 15%',
+                md: 'center 5%',
+              }}
+              imageObjectScale={{
+                md: 1.25,
+              }}
             />
             <SkillCard
-              eyebrow="Monorepo"
-              title="100+ Engineer Monorepo"
-              description="Implemented new apps and packages in a large-scale Nx monorepo, including full CI/CD and IaC for new projects."
+              title="Codebase Architecture"
+              description="I define codebase and package boundaries, build paths, release workflows, and infrastructure for teams shipping at scale."
+              chips={[
+                'Nx',
+                'Monorepos',
+                'Microfrontends',
+                'CI/CD',
+                'AWS CDK',
+                'GitHub Actions',
+              ]}
             />
             <SkillCard
-              eyebrow="Components"
-              title="Shared Component Library"
-              description="Migrated an internal React form tool into a standalone shared package in an Nx monorepo. Owned the Storybook library and E2E coverage."
+              title="Component Management"
+              description="I turn shared UI patterns into dependable component APIs with docs, visual checks, and test coverage."
+              chips={[
+                'React',
+                'Jest',
+                'Vitest',
+                'Storybook',
+                'Playwright',
+                'Chromatic',
+              ]}
             />
           </SkillGrid>
         </SkillPage>

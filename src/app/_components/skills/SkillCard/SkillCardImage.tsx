@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { SKILL_CARD_IMAGE_BACKGROUND_SIZE } from '@/utils/constants';
 import type { SkillCardImageFit, SkillCardImagePosition } from './types';
 import { cx } from '../shared';
@@ -11,6 +11,7 @@ type SkillCardImageProps = {
   imageObjectPosition: string;
   imageObjectScale: number | string;
   imagePlacement: SkillCardImagePosition;
+  imageColor?: CSSProperties['backgroundColor'];
   isInlineImage: boolean;
   className?: string;
 };
@@ -23,6 +24,7 @@ export function SkillCardImage({
   imageObjectPosition,
   imageObjectScale,
   imagePlacement,
+  imageColor,
   isInlineImage,
   className,
 }: SkillCardImageProps) {
@@ -39,6 +41,7 @@ export function SkillCardImage({
         imagePlacement === 'right' && 'order-last',
         className,
       )}
+      style={imageColor ? { backgroundColor: imageColor } : undefined}
     >
       {typeof image === 'string' ? (
         <>

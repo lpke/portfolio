@@ -1,6 +1,8 @@
 'use client';
 
 import { type ReactNode } from 'react';
+import { Button } from '@/components/Button';
+import type { ButtonSize, ButtonVariant } from '@/components/Button';
 import { useSectionNav } from '@/hooks/SectionRouterProvider';
 import { SECTIONS } from '@/utils/constants';
 
@@ -16,6 +18,8 @@ type SectionLinkProps = {
   scrollTargetId?: string;
   children: ReactNode;
   className?: string;
+  buttonVariant?: ButtonVariant;
+  buttonSize?: ButtonSize;
 };
 
 /**
@@ -28,20 +32,33 @@ export function SectionLink({
   scrollTargetId,
   children,
   className,
+  buttonVariant,
+  buttonSize,
 }: SectionLinkProps) {
   const { navigateTo } = useSectionNav();
+  const href = ID_TO_PATH[to] ?? `/#${to}`;
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     navigateTo(to, scrollTargetId);
   };
 
+  if (buttonVariant) {
+    return (
+      <Button
+        href={href}
+        onClick={handleClick}
+        variant={buttonVariant}
+        size={buttonSize}
+        className={className}
+      >
+        {children}
+      </Button>
+    );
+  }
+
   return (
-    <a
-      href={ID_TO_PATH[to] ?? `/#${to}`}
-      onClick={handleClick}
-      className={className}
-    >
+    <a href={href} onClick={handleClick} className={className}>
       {children}
     </a>
   );

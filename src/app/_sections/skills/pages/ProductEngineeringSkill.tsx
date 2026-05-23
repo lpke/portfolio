@@ -1,3 +1,4 @@
+import { Button } from '@/components/Button';
 import { SkillCard } from '@/components/skills/SkillCard/SkillCard';
 import {
   SkillGrid,
@@ -24,14 +25,51 @@ export function ProductEngineeringSkill({
               title="Alternaleaf Patient Portal"
               titleSize="lg"
               description="Sole frontend architect of a greenfield React SPA serving ~1,500 new users daily."
+              showExternalLinkIndicator
+              modal={{
+                title: 'Heads Up!',
+                titleSize: 'lg',
+                hideCloseButton: true,
+                children: (
+                  <div>
+                    <p className="mt-2">
+                      This opens the live patient portal, but without a token
+                      for authentication, expect to see an error.
+                    </p>
+                    <p className="mt-2 mb-8">
+                      To see the portal, you need to go through the
+                      pre-screening process on the main Alternaleaf website.
+                    </p>
+                    <Button
+                      href="https://my.alternaleaf.com.au/pre-consult"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mr-2"
+                    >
+                      Go to Portal
+                    </Button>
+                    <Button
+                      href="https://www.alternaleaf.com.au"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mr-2"
+                      variant="secondary"
+                    >
+                      Go to Alternaleaf
+                    </Button>
+                  </div>
+                ),
+              }}
               cardSpan="half"
-              image="/images/skills/pre-consultation-portal.png"
+              image="/images/skills/alternaleaf-logo-square-dark.png"
               imageAlt="Healthcare patient portal screenshot"
+              imageColor="#2F0431"
               imageObjectPosition={{
-                base: 'center top',
-                lg: '25% top',
+                base: 'center 54%',
+                md: 'center',
               }}
               imageSize={{
+                md: '45%',
                 lg: '10rem',
               }}
               imagePosition={{
@@ -39,12 +77,12 @@ export function ProductEngineeringSkill({
               }}
               imageFit={{
                 base: 'contain',
-                lg: 'cover',
+                md: 'cover',
               }}
+              imageBlurBackground={false}
               imageObjectScale={{
-                base: 2,
-                md: 1,
-                lg: 1.25,
+                base: 4,
+                md: 1.3,
               }}
             />
             <SkillCard
@@ -62,9 +100,10 @@ export function ProductEngineeringSkill({
                 lg: 'top',
               }}
               imageObjectPosition={{
-                lg: 'left top'
+                lg: 'left top',
               }}
               imageSize={{
+                md: '45%',
                 lg: '10rem',
               }}
               imageObjectScale={{
