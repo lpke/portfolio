@@ -13,7 +13,7 @@ export function AiAutomationSkill({
 }: SkillPageProps) {
   return (
     <SkillPageShell
-      intro="AI is part of how I build every day. I leverage multi-model agentic workflows, supercharged with my own scripts and tools, to help me learn, build, and deliver faster."
+      intro="AI is part of how I build every day. I leverage multi-model agentic workflows, supercharged with my own scripts and tools, to help myself and my team to learn, build, and deliver faster."
       variant={variant}
     >
       <SkillPager isVisible={isVisible}>

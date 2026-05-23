@@ -13,7 +13,7 @@ export function CodeArchitectureSkill({
 }: SkillPageProps) {
   return (
     <SkillPageShell
-      intro="I care about how code is organised, not just that it works. Component libraries, monorepo architecture with clean boundaries, and custom build pipelines that cut bundle sizes dramatically."
+      intro="I care about how code is organised, not just that it works. I build component libraries, design monorepo architecture, and deploy with performant build pipelines."
       variant={variant}
     >
       <SkillPager isVisible={isVisible}>

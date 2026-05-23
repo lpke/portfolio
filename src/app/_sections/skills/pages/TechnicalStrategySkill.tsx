@@ -13,7 +13,7 @@ export function TechnicalStrategySkill({
 }: SkillPageProps) {
   return (
     <SkillPageShell
-      intro="Commerce graduate turned engineer. I evaluate trade-offs, build business cases for technical decisions, and communicate architecture to non-technical stakeholders. Business thinking built in, not bolted on."
+      intro="I’m a Commerce graduate who turned to the nerd side, but strategy will always be my roots. I evaluate trade-offs, build business cases for technical decisions, and clearly communicate architecture to non-technical stakeholders."
       variant={variant}
     >
       <SkillPager isVisible={isVisible}>

@@ -13,7 +13,7 @@ export function ShippingTestingSkill({
 }: SkillPageProps) {
   return (
     <SkillPageShell
-      intro="I write the tests, build the pipelines, and make sure what ships is solid. Playwright suites, GitHub Actions CI/CD with AWS IaC, accessibility audits, and A/B experimentation."
+      intro="It’s not a product without production. I write the tests, build the pipelines, and make sure what ships is solid."
       variant={variant}
     >
       <SkillPager isVisible={isVisible}>

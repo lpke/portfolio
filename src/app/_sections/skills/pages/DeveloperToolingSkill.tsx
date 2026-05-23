@@ -13,7 +13,7 @@ export function DeveloperToolingSkill({
 }: SkillPageProps) {
   return (
     <SkillPageShell
-      intro="I build the things that make the team faster — internal tools, streamlined workflows, and mentoring that turns juniors into confident contributors. The layer that multiplies everyone's output."
+      intro="I do things that make other people faster: building internal tools, streamlining workflows, and providing mentorship that turns juniors into confident contributors."
       variant={variant}
     >
       <SkillPager isVisible={isVisible}>
