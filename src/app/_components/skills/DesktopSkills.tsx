@@ -85,7 +85,7 @@ export function DesktopSkills({ withShell = true }: { withShell?: boolean }) {
   const content = (
     <div
       className={cx(
-        'ghost-border relative min-h-[42rem] overflow-hidden transition-colors duration-300 lg:h-[100svh]',
+        'ghost-border relative min-h-[42rem] overflow-hidden transition-colors duration-300 lg:min-h-[100svh]',
         layout.panelClassName,
       )}
       style={getSkillStyle(selectedSkill)}
@@ -93,7 +93,7 @@ export function DesktopSkills({ withShell = true }: { withShell?: boolean }) {
       <SurfaceOverlay className="bg-[linear-gradient(120deg,rgba(255,255,255,0.055),transparent_36%,rgba(255,255,255,0.025))]" />
       <SurfaceOverlay className="bg-[radial-gradient(circle_at_78%_18%,var(--skill-accent-soft),transparent_32%)] opacity-75" />
 
-      <div className="relative z-10 mx-auto min-h-[42rem] max-w-7xl px-4 py-16 sm:px-6 sm:py-24 md:px-8 lg:grid lg:h-full lg:min-h-0 lg:grid-rows-[auto_minmax(0,1fr)] lg:pt-36 lg:pb-16">
+      <div className="relative z-10 mx-auto min-h-[42rem] max-w-7xl px-4 py-16 sm:px-6 sm:py-24 md:px-8 lg:grid lg:min-h-[100svh] lg:grid-rows-[auto_minmax(0,1fr)] lg:pt-36 lg:pb-16">
         <div className="mb-10">
           <SkillsHeading />
         </div>
@@ -101,7 +101,7 @@ export function DesktopSkills({ withShell = true }: { withShell?: boolean }) {
         <div className="relative min-h-[38rem] lg:min-h-0">
           <div
             className={cx(
-              'lg:absolute lg:top-0 lg:left-0',
+              'lg:absolute lg:top-0 lg:left-0 lg:z-10',
               layout.railWidthClassName,
             )}
           >
@@ -115,7 +115,7 @@ export function DesktopSkills({ withShell = true }: { withShell?: boolean }) {
 
           <div
             className={cx(
-              'mt-5 grid lg:mt-0 lg:min-h-0 lg:justify-items-end',
+              'relative mt-5 grid lg:mt-0 lg:min-h-0 lg:justify-items-end',
               layout.contentAlignClassName,
             )}
           >
@@ -134,7 +134,7 @@ export function DesktopSkills({ withShell = true }: { withShell?: boolean }) {
                     'col-start-1 row-start-1 w-full py-4 transition-[opacity,visibility] duration-250 ease-out lg:pt-0 lg:pb-4',
                     isSelected
                       ? 'visible opacity-100'
-                      : 'pointer-events-none invisible opacity-0',
+                      : 'pointer-events-none invisible absolute top-0 left-0 opacity-0',
                     layout.contentMaxClassName,
                   )}
                   style={getSkillStyle(skill)}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LAYOUT_CONFIG, UI_TEXT } from '@/utils/constants';
 
 const { mediaQueries } = LAYOUT_CONFIG;
@@ -14,8 +14,10 @@ export function SectionScrollIndicator({
   nextSectionId,
   className = '',
 }: SectionScrollIndicatorProps) {
+  const indicatorRef = useRef<HTMLDivElement>(null);
   const [isNextHeadingEncountered, setIsNextHeadingEncountered] =
     useState(false);
+  const [isCurrentSectionLong, setIsCurrentSectionLong] = useState(false);
 
   useEffect(() => {
     const indicatorQuery = window.matchMedia(
@@ -38,6 +40,9 @@ export function SectionScrollIndicator({
       const nextSection = document.getElementById(nextSectionId);
       if (!nextSection) return;
 
+      const getCurrentSection = () =>
+        indicatorRef.current?.closest<HTMLElement>('section') ?? null;
+
       const getTarget = () => {
         const headings = Array.from(
           nextSection.querySelectorAll<HTMLElement>(
@@ -50,23 +55,34 @@ export function SectionScrollIndicator({
         );
       };
 
-      const updateVisibility = (isVisible: boolean) => {
+      const updateNextHeadingVisibility = (isVisible: boolean) => {
         setIsNextHeadingEncountered((current) =>
           current === isVisible ? current : isVisible,
         );
       };
 
+      const updateSectionLength = (isLong: boolean) => {
+        setIsCurrentSectionLong((current) =>
+          current === isLong ? current : isLong,
+        );
+      };
+
       const updateFromRect = () => {
+        const currentSection = getCurrentSection();
+        const currentSectionHeight =
+          currentSection?.getBoundingClientRect().height ?? 0;
         const target = getTarget();
 
+        updateSectionLength(currentSectionHeight > window.innerHeight + 1);
+
         if (!target) {
-          updateVisibility(false);
+          updateNextHeadingVisibility(false);
           return;
         }
 
         const { top } = target.getBoundingClientRect();
 
-        updateVisibility(top <= window.innerHeight);
+        updateNextHeadingVisibility(top <= window.innerHeight);
       };
 
       let frame = 0;
@@ -85,6 +101,7 @@ export function SectionScrollIndicator({
       const mutationObserver = new MutationObserver(requestUpdate);
       const resizeObserver =
         'ResizeObserver' in window ? new ResizeObserver(requestUpdate) : null;
+      const currentSection = getCurrentSection();
 
       updateFromRect();
 
@@ -94,6 +111,9 @@ export function SectionScrollIndicator({
         subtree: true,
       });
       resizeObserver?.observe(nextSection);
+      if (currentSection) {
+        resizeObserver?.observe(currentSection);
+      }
       window.addEventListener('scroll', requestUpdate, { passive: true });
       window.addEventListener('resize', requestUpdate);
 
@@ -120,10 +140,11 @@ export function SectionScrollIndicator({
 
   return (
     <div
+      ref={indicatorRef}
       aria-hidden
       className={[
         'section-scroll-indicator pointer-events-none absolute bottom-5 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 select-none lg:flex',
-        isNextHeadingEncountered
+        isNextHeadingEncountered || isCurrentSectionLong
           ? 'invisible opacity-0'
           : 'visible opacity-100',
         className,
