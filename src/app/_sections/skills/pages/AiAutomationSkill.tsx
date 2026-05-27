@@ -27,6 +27,7 @@ export function AiAutomationSkill({
               title="code-to-notion"
               description="Node CLI that uploads codebases to Notion, retaining filesystem structure and Git data. Built to give my Notion AI agents complete code context alongside docs."
               cardSpan="full"
+              cardMinHeight="13rem"
               href="https://github.com/lpke/code-to-notion"
               showGithubIndicator
               image="/images/skills/notion-ai.png"
@@ -52,8 +53,9 @@ export function AiAutomationSkill({
             <SkillCard
               eyebrow="My IDE Setup"
               title="Neovim + Codex ACP & Copilot"
-              description="I use a heavily-customised config, written in Lua, that enables cross-provider model/adapter support for efficient in-editor agentic workflows."
+              description="I maintain a highly personalised Lua config for Neovim that enables cross-provider model, adapter (ACP/HTTP), and MCP support right from my editor."
               cardSpan="full"
+              cardMinHeight="13rem"
               href="https://github.com/lpke/nvim"
               showGithubIndicator
               image="/images/skills/nvim-codecompanion.png"
@@ -84,21 +86,24 @@ export function AiAutomationSkill({
               title="aspyn"
               description="Local pipeline engine that gives your scripts a memory. Stateful step runners, change detection, crash recovery, and scheduling."
               cardSpan="full"
+              cardMinHeight="13rem"
               href="https://github.com/lpke/aspyn-legacy"
               showGithubIndicator
-              image="/images/skills/aspyn-cli.png"
+              image="/images/skills/aspen_trees.jpg"
               imageAlt="aspyn CLI screenshot"
               imageFit="cover"
-              imagePosition="right"
+              imagePosition={{
+                base: 'top',
+                md: 'right',
+              }}
               imageSize={{
-                base: '6.5rem',
                 md: '45%',
                 lg: '40%',
                 1250: '45%',
               }}
               imageObjectPosition={{
-                base: '18% top',
-                md: 'left top',
+                base: '90% 90%',
+                md: '90% 94%',
               }}
               imageObjectScale={{
                 base: 3,
@@ -113,6 +118,8 @@ export function AiAutomationSkill({
                 'Codex',
                 'GitHub Copilot',
                 'Claude',
+                'ACP',
+                'MCP',
                 'Ollama',
                 'Bash',
                 'Lua',
