@@ -1,6 +1,6 @@
 'use client';
 
-import { isValidElement, type CSSProperties } from 'react';
+import { isValidElement, type CSSProperties, type MouseEvent } from 'react';
 import {
   SKILL_CARD_CLASS_NAMES,
   SKILL_CARD_IMAGE_DEFAULT_SIZES,
@@ -221,19 +221,26 @@ function SkillCardRoot({
 
   if (effectiveHref) {
     return (
-      <a
-        href={effectiveHref}
-        target="_blank"
-        rel="noreferrer"
-        aria-label={ariaLabel}
-        className={cardClassName}
-        style={style}
-      >
+      <article aria-label={ariaLabel} className={cardClassName} style={style}>
         {!cardless && (
           <SurfaceOverlay className="bg-[color:color-mix(in_srgb,var(--skill-accent)_7%,rgba(255,255,255,0.045))] opacity-0 transition-opacity duration-200 group-hover/skill-card:opacity-100" />
         )}
-        {body}
-      </a>
+        <a
+          href={effectiveHref}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={ariaLabel ?? getLinkAriaLabel(title)}
+          className="focus-visible:ring-offset-surface-container absolute inset-0 z-0 rounded-[inherit] outline-none focus-visible:z-30 focus-visible:ring-2 focus-visible:ring-[var(--skill-accent)] focus-visible:ring-offset-2"
+        />
+        <div
+          onClick={(event) => {
+            handleLinkedCardClick(event, effectiveHref);
+          }}
+          className="h-full"
+        >
+          {body}
+        </div>
+      </article>
     );
   }
 
@@ -241,6 +248,28 @@ function SkillCardRoot({
     <article aria-label={ariaLabel} className={cardClassName} style={style}>
       {body}
     </article>
+  );
+}
+
+function getLinkAriaLabel(title: SkillCardResolvedBaseProps['title']) {
+  return typeof title === 'string' ? title : 'Open skill card link';
+}
+
+function handleLinkedCardClick(
+  event: MouseEvent<HTMLDivElement>,
+  href: string,
+) {
+  if (event.defaultPrevented || isNestedInteractiveTarget(event.target)) {
+    return;
+  }
+
+  window.open(href, '_blank', 'noopener,noreferrer');
+}
+
+function isNestedInteractiveTarget(target: EventTarget | null) {
+  return (
+    target instanceof Element &&
+    Boolean(target.closest('a, button, input, select, textarea, summary'))
   );
 }
 

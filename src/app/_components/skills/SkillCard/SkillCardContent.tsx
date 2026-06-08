@@ -59,6 +59,7 @@ export function SkillCardContent({
     <div
       className={cx(
         'relative min-w-0',
+        '[--skill-card-eyebrow-color:color-mix(in_srgb,var(--skill-accent)_44%,white)]',
         hasImage && cardPaddingClassName,
         hasImage && imagePosition === 'top' && 'pt-4 lg:pt-5',
         hasImage &&
@@ -72,7 +73,7 @@ export function SkillCardContent({
           <div className="flex min-w-0 items-center gap-2">
             {icon && <span className="text-[var(--skill-accent)]">{icon}</span>}
             {eyebrow && (
-              <span className="font-label min-w-0 truncate text-[11px] font-bold tracking-widest text-[color:color-mix(in_srgb,var(--skill-accent)_44%,white)] uppercase">
+              <span className="font-label min-w-0 truncate text-[11px] font-bold tracking-widest text-[var(--skill-card-eyebrow-color)] uppercase">
                 {eyebrow}
               </span>
             )}
@@ -102,6 +103,7 @@ export function SkillCardContent({
             'text-on-surface-variant leading-relaxed',
             title ? 'mt-2' : '',
             'text-sm lg:text-[15px]',
+            '[&_a]:relative [&_a]:z-30 [&_a]:font-normal [&_a]:text-[color:color-mix(in_srgb,var(--skill-card-eyebrow-color)_84%,transparent)] [&_a]:underline [&_a]:decoration-[color:color-mix(in_srgb,currentColor_45%,transparent)] [&_a]:underline-offset-[3px] [&_a]:transition-colors [&_a:hover]:text-white',
           )}
         >
           {description}
